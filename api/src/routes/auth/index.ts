@@ -8,9 +8,9 @@ import {
   createUserSchema,
   loginSchema,
   usersTable,
-} from "../../db/usersSchema";
-import { validateData } from "../../middlewares/validationMiddleware";
-import { db } from "../../db";
+} from "../../db/usersSchema.js";
+import { validateData } from "../../middlewares/validationMiddleware.js";
+import { db } from "../../db/index.js";
 
 const router = Router();
 
