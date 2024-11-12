@@ -42,10 +42,14 @@ export const insertOrderSchema = createInsertSchema(ordersTable).omit({
 
 export const insertOrderItemsSchema = createInsertSchema(orderItemsTable).omit({
   id: true,
-  orderId: true
-})
+  orderId: true,
+});
 
 export const insertOrderWithItemsSchema = z.object({
   order: insertOrderSchema,
   items: z.array(insertOrderItemsSchema),
+});
+
+export const updateOrderSchema = createInsertSchema(ordersTable).pick({
+  status: true,
 });
