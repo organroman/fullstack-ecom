@@ -1,12 +1,24 @@
+import { Stack } from "expo-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+
 import "@/global.css";
 
-import { Stack } from "expo-router";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   return (
-    <GluestackUIProvider>
-      <Stack />
-    </GluestackUIProvider>
+    <QueryClientProvider client={queryClient}>
+      <GluestackUIProvider>
+        <Stack>
+          <Stack.Screen name="index" options={{ title: "Shop" }} />
+          <Stack.Screen
+            name="product/[id]"
+            options={{ title: "Product details" }}
+          />
+        </Stack>
+      </GluestackUIProvider>
+    </QueryClientProvider>
   );
 }
