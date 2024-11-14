@@ -1,4 +1,5 @@
 import express, { json, urlencoded } from "express";
+import cors from "cors";
 
 import productsRoutes from "./routes/products/index.js";
 import ordersRoutes from "./routes/orders/index.js";
@@ -11,6 +12,11 @@ const port = 3000;
 const app = express();
 app.use(urlencoded({ extended: false }));
 app.use(json());
+app.use(
+  cors({
+    origin: "http://localhost:8081",
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World 11");
