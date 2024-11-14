@@ -4,16 +4,14 @@ import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
+import { Product } from "@/types/product";
+
 
 interface ProductListItemProps {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  price: number;
+  product: Product;
 }
 
-const ProductListItem = ({ product }) => {
+const ProductListItem = ({ product }: ProductListItemProps) => {
   return (
     <Link href={`/product/${product.id}`} asChild>
       <Pressable className="flex-1">

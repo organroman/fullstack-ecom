@@ -12,6 +12,7 @@
   "dependencies": {
     "@expo/html-elements": "0.4.2",
     "@gluestack-ui/button": "^1.0.8",
+    "@gluestack-ui/icon": "^0.1.23",
     "@gluestack-ui/image": "^0.1.11",
     "@gluestack-ui/nativewind-utils": "1.0.23",
     "@gluestack-ui/overlay": "^0.1.16",
@@ -23,6 +24,7 @@
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.24",
     "expo-status-bar": "~1.12.1",
+    "lucide-react-native": "^0.456.0",
     "nativewind": "4.0.36",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -33,7 +35,8 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "13.4.0",
     "react-native-web": "~0.19.10",
-    "tailwindcss": "^3.4.14"
+    "tailwindcss": "^3.4.14",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

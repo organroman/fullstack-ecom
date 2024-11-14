@@ -10,10 +10,15 @@ import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 
-import { fetchProductById } from "../api/products";
+import { fetchProductById } from "../../api/products";
+import useCart from "@/store/cartStore";
 
 const ProductDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+
+  const addProduct = useCart((state) => state.addProduct);
+  const cartItems = useCart((state) => state.items);
+  console.log("🚀 ~ cartItems:", cartItems)
 
   const {
     data: product,
@@ -23,6 +28,10 @@ const ProductDetailsScreen = () => {
     queryKey: ["products", id],
     queryFn: () => fetchProductById(Number(id)),
   });
+
+  const addToCart = () => {
+    addProduct(product);
+  };
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -55,7 +64,9 @@ const ProductDetailsScreen = () => {
         </VStack>
         <Box className="flex-col sm:flex-row">
           <Button className="px-4 py-2 mr-0 mb-3 sm:mr-3 sm:mb-0 sm:flex-1">
-            <ButtonText size="sm">Add to cart</ButtonText>
+            <ButtonText size="sm" onPress={addToCart}>
+              Add to cart
+            </ButtonText>
           </Button>
           <Button
             variant="outline"
