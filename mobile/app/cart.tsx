@@ -1,4 +1,5 @@
-import { FlatList, View } from "react-native";
+import { FlatList } from "react-native";
+import { Link } from "expo-router";
 
 import { Text } from "@/components/ui/text";
 import { HStack } from "@/components/ui/hstack";
@@ -6,7 +7,6 @@ import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 
 import useCart from "@/store/cartStore";
-import { Link } from "expo-router";
 
 export default function Cart() {
   const items = useCart((state) => state.items);
