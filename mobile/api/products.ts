@@ -1,4 +1,4 @@
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+import { API_URL } from "./config";
 
 export async function listProducts() {
   const res = await fetch(`${API_URL}/products`);

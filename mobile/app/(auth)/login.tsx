@@ -1,29 +1,43 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, Redirect } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 import { EyeIcon, EyeOffIcon } from "lucide-react-native";
 
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl } from "@/components/ui/form-control";
 import { Heading } from "@/components/ui/heading";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
-import { Link, Redirect } from "expo-router";
+
 import { login } from "@/api/auth";
 import { useAuth } from "@/store/authStore";
+import { LoginFormData } from "@/types/types";
+import { loginSchema } from "@/utils/schema";
 
 export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
   const setUser = useAuth((s) => s.setUser);
   const setToken = useAuth((s) => s.setToken);
   const isLoggedIn = useAuth((s) => !!s.token);
 
   const loginMutation = useMutation({
-    mutationFn: () => login(email, password),
+    mutationFn: async ({ email, password }: LoginFormData) => {
+      const data = await login(email, password);
+      return data;
+    },
+
     onSuccess: (data) => {
       if (data.user && data.token) {
         setUser(data.user);
@@ -32,6 +46,10 @@ export default function LoginScreen() {
     },
     onError: () => console.log("Error"),
   });
+
+  const onSubmit = (formData: LoginFormData) => {
+    loginMutation.mutate(formData);
+  };
 
   const handleShowPassword = () => {
     setShowPassword((showPassword) => {
@@ -50,15 +68,19 @@ export default function LoginScreen() {
         <VStack space="xs">
           <Text className="text-typography-500 leading-1">Email</Text>
           <Input>
-            <InputField value={email} onChangeText={setEmail} type="text" />
+            <InputField
+              value={watch("email")}
+              onChangeText={(text) => setValue("email", text)}
+              type="text"
+            />
           </Input>
         </VStack>
         <VStack space="xs">
           <Text className="text-typography-500 leading-1">Password</Text>
           <Input className="text-center">
             <InputField
-              value={password}
-              onChangeText={setPassword}
+              value={watch("password")}
+              onChangeText={(text) => setValue("password", text)}
               type={showPassword ? "text" : "password"}
             />
             <InputSlot className="pr-3" onPress={handleShowPassword}>
@@ -71,12 +93,14 @@ export default function LoginScreen() {
         </VStack>
         <VStack space="md">
           <Button
+            isDisabled={loginMutation.isPending}
             size="md"
-            onPress={() => {
-              loginMutation.mutate();
-            }}
+            onPress={handleSubmit(onSubmit)}
           >
-            <ButtonText>Login</ButtonText>
+            {loginMutation.isPending && <ButtonSpinner />}
+            <ButtonText>
+              {loginMutation.isPending ? "Please wait..." : "Login"}
+            </ButtonText>
           </Button>
           <Text className="text-sm text-gray-600">
             Don&apos;t have an account?{" "}

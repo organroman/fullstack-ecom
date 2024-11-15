@@ -1,20 +1,48 @@
 import { FlatList } from "react-native";
-import { Link } from "expo-router";
+import { Link, useSegments } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
 
 import { Text } from "@/components/ui/text";
-import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonText } from "@/components/ui/button";
 
+import CartItem from "@/components/CartItem";
+
 import useCart from "@/store/cartStore";
+import { createOrder } from "@/api/orders";
 
 export default function Cart() {
   const items = useCart((state) => state.items);
 
   const resetCart = useCart((state) => state.resetCart);
 
+  const totalAmount = items.reduce((total, item) => {
+    return total + item.quantity * item.product.price;
+  }, 0);
+
+  const segments = useSegments();
+  console.log("path", segments);
+
+  const createOrderMutation = useMutation({
+    mutationFn: () =>
+      createOrder(
+        items.map((item) => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+          price: item.product.price,
+        }))
+      ),
+    onSuccess: (data) => {
+      resetCart();
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const onCheckout = async () => {
-    resetCart();
+    createOrderMutation.mutate();
   };
 
   if (items.length === 0) {
@@ -24,7 +52,7 @@ export default function Cart() {
         <Text>But it&apos;s always not to late to fill it</Text>
         <Link href="/" asChild>
           <Button>
-            <ButtonText>In the shop</ButtonText>
+            <ButtonText>Go to the shop</ButtonText>
           </Button>
         </Link>
       </VStack>
@@ -35,19 +63,14 @@ export default function Cart() {
     <FlatList
       data={items}
       contentContainerClassName="gap-2 mx-auto w-full max-w-[960px] p-2"
-      renderItem={({ item }) => (
-        <HStack className="bg-white p-4 ">
-          <VStack space="sm">
-            <Text className="font-bold">{item.product.name}</Text>
-            <Text>${item.product.price}</Text>
-          </VStack>
-          <Text className="ml-auto">{item.quantity}</Text>
-        </HStack>
-      )}
+      renderItem={({ item }) => <CartItem item={item} />}
       ListFooterComponent={() => (
-        <Button onPress={onCheckout}>
-          <ButtonText>Checkout</ButtonText>
-        </Button>
+        <VStack space="sm">
+          <Text className="font-bold">Total: ${totalAmount}</Text>
+          <Button onPress={onCheckout}>
+            <ButtonText>Checkout</ButtonText>
+          </Button>
+        </VStack>
       )}
     />
   );

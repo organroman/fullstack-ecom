@@ -21,7 +21,7 @@ export async function signUp(req: Request, res: Response) {
 
     res.status(201).json(user);
   } catch (error) {
-    res.status(500).send("Something went wrong");
+    res.status(500).send({ message: "Something went wrong", error: error });
   }
 }
 

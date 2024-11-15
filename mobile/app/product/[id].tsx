@@ -8,17 +8,27 @@ import { VStack } from "@/components/ui/vstack";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 
 import { fetchProductById } from "../../api/products";
 import useCart from "@/store/cartStore";
+import { HeartIcon } from "lucide-react-native";
+import { useFavorite } from "@/store/favoriteStore";
+import { cn } from "@/utils/utils";
 
 const ProductDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const addProduct = useCart((state) => state.addProduct);
+  const deleteProduct = useCart((state) => state.deleteProduct);
+  const toggleFavorite = useFavorite((s) => s.toggleProduct);
   const cartItems = useCart((state) => state.items);
-  console.log("🚀 ~ cartItems:", cartItems)
+  const favoriteItems = useFavorite((state) => state.items);
+
+  const isInCart = cartItems.some((item) => item.product.id === parseInt(id));
+  const isInFavorite = favoriteItems.some(
+    (item) => item.product.id === parseInt(id)
+  );
 
   const {
     data: product,
@@ -33,6 +43,10 @@ const ProductDetailsScreen = () => {
     addProduct(product);
   };
 
+  const deleteFromCart = () => {
+    deleteProduct(product);
+  };
+
   if (isLoading) {
     return <ActivityIndicator />;
   }
@@ -44,7 +58,7 @@ const ProductDetailsScreen = () => {
   return (
     <Box className="flex-1 items-center p-3">
       <Stack.Screen options={{ title: product?.name }} />
-      <Card className="p-5 rounded-lg max-w-[960px] w-full flex-1">
+      <Card className="p-5 rounded-lg max-w-[960px] w-full flex-1 relative">
         <Image
           source={{
             uri: product.image,
@@ -53,6 +67,16 @@ const ProductDetailsScreen = () => {
           alt={`${product.name} image`}
           resizeMode="contain"
         />
+        <Button
+          onPress={() => toggleFavorite(product)}
+          className="absolute top-2 right-4"
+          variant="link"
+        >
+          <ButtonIcon
+            className={cn(isInFavorite && "text-red-500")}
+            as={HeartIcon}
+          />
+        </Button>
         <Text className="text-sm font-normal mb-2 text-typography-700">
           {product.name}
         </Text>
@@ -63,17 +87,13 @@ const ProductDetailsScreen = () => {
           <Text size="sm">{product.description}</Text>
         </VStack>
         <Box className="flex-col sm:flex-row">
-          <Button className="px-4 py-2 mr-0 mb-3 sm:mr-3 sm:mb-0 sm:flex-1">
-            <ButtonText size="sm" onPress={addToCart}>
-              Add to cart
-            </ButtonText>
-          </Button>
           <Button
-            variant="outline"
-            className="px-4 py-2 border-outline-300 sm:flex-1"
+            action={isInCart ? "negative" : "primary"}
+            onPress={isInCart ? deleteFromCart : addToCart}
+            className="px-4 py-2 mr-0 mb-3 sm:mr-3 sm:mb-0 sm:flex-1"
           >
-            <ButtonText size="sm" className="text-typography-600">
-              Wishlist
+            <ButtonText size="sm">
+              {isInCart ? "Delete from cart" : "Add to cart"}
             </ButtonText>
           </Button>
         </Box>

@@ -19,6 +19,7 @@
     "@gluestack-ui/nativewind-utils": "1.0.23",
     "@gluestack-ui/overlay": "^0.1.16",
     "@gluestack-ui/toast": "^1.0.8",
+    "@hookform/resolvers": "^3.9.1",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@tanstack/react-query": "^5.59.20",
     "babel-plugin-module-resolver": "^5.0.2",
@@ -31,6 +32,7 @@
     "nativewind": "4.0.36",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.53.2",
     "react-native": "0.74.5",
     "react-native-css-interop": "0.0.36",
     "react-native-reanimated": "^3.16.1",
@@ -39,6 +41,7 @@
     "react-native-svg": "13.4.0",
     "react-native-web": "~0.19.10",
     "tailwindcss": "^3.4.14",
+    "zod": "^3.23.8",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
