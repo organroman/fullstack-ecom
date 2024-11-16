@@ -14,7 +14,7 @@ app.use(urlencoded({ extended: false }));
 app.use(json());
 app.use(
   cors({
-    origin: "http://localhost:8081",
+    origin: ["http://localhost:8081", "http://localhost:3001"],
   })
 );
 
