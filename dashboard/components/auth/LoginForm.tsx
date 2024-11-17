@@ -96,6 +96,7 @@ const LoginForm = () => {
                   <FormControl>
                     <Input
                       {...field}
+                      type="password"
                       name="password"
                       placeholder="Enter your email"
                     />
@@ -119,6 +120,11 @@ const LoginForm = () => {
                   "Login"
                 )}
               </Button>
+              {loginMutation.isError && (
+                <span className="text-sm text-red-500">
+                  {loginMutation.error.message}
+                </span>
+              )}
             </div>
           </form>
         </Form>

@@ -11,7 +11,12 @@ export async function login(email: string, password: string) {
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error("Failed to login");
+    const error = data?.error;
+    const message = error.includes("Wrong username or password")
+      ? "Wrong username or password"
+      : "Failed to login";
+
+    throw new Error(message);
   }
   return data;
 }
@@ -32,7 +37,12 @@ export async function register(
   const data = await res.json();
 
   if (!res.ok) {
-    throw new Error("Failed to register");
+    const error = data?.error.detail;
+    const message = error.includes("already exists")
+      ? "User already exists"
+      : "Failed to register";
+
+    throw new Error(message);
   }
   return data;
 }

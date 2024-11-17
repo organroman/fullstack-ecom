@@ -136,6 +136,7 @@ const RegisterForm = () => {
                     <Input
                       {...field}
                       name="password"
+                      type="password"
                       placeholder="Enter your email"
                     />
                   </FormControl>
@@ -154,6 +155,7 @@ const RegisterForm = () => {
                       {...field}
                       name="address"
                       placeholder="Enter your delivery address"
+                      
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />
@@ -175,6 +177,11 @@ const RegisterForm = () => {
                   "Sign Up"
                 )}
               </Button>
+              {registerMutation.isError && (
+                <span className="text-sm text-red-500">
+                  {registerMutation.error.message}
+                </span>
+              )}
             </div>
           </form>
         </Form>
