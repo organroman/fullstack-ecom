@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
@@ -21,8 +21,7 @@ import { Button } from "../ui/button";
 
 import { LoginFormData } from "@/types/types";
 import { loginSchema } from "@/lib/schema";
-import { login } from "@/api/auth";
-import { useAuth } from "@/store/authStore";
+import { handleLogin } from "./actions";
 
 const LoginForm = () => {
   const form = useForm<LoginFormData>({
@@ -33,35 +32,25 @@ const LoginForm = () => {
     },
   });
 
-  const router = useRouter();
-
-  const setUser = useAuth((s) => s.setUser);
-  const setToken = useAuth((s) => s.setToken);
-
-  const isLoggedIn = useAuth((s) => !!s.token);
-
   const loginMutation = useMutation({
     mutationFn: async ({ email, password }: LoginFormData) => {
-      const data = await login(email, password);
+      const data = await handleLogin(email, password);
       return data;
     },
 
-    onSuccess: (data) => {
-      if (data.user && data.token) {
-        setUser(data.user);
-        setToken(data.token);
-      }
+    onSuccess: () => {
+      toast.success("Logged in");
     },
-    onError: () => console.log("Error"),
+    onError: (error) => {
+      toast.error(error.message);
+      console.log("Error");
+    },
   });
 
   const onSubmit = (formData: LoginFormData) => {
     loginMutation.mutate(formData);
   };
 
-  if (isLoggedIn) {
-    router.push("/dashboard");
-  }
   return (
     <Card className="w-full h-full md:w-[487px] border-none">
       <CardHeader className="flex items-center justify-center text-center p-7">

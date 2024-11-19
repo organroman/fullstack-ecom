@@ -3,14 +3,16 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 import { IUser } from "@/types/types";
 
+
 type State = {
   user: IUser | null;
   token: string | null;
+  isHydrated: boolean;
 };
 
 type Action = {
-  setUser: (user: any) => void;
-  setToken: (token: string) => void;
+  setUser: (user: IUser | null) => void;
+  setToken: (token: string | null) => void;
 };
 
 export const useAuth = create(
@@ -18,13 +20,16 @@ export const useAuth = create(
     (set) => ({
       user: null,
       token: null,
+      isHydrated: false,
 
       setUser: (user) => set({ user }),
       setToken: (token) => set({ token }),
     }),
     {
       name: "auth-store",
-      storage: createJSONStorage(() => localStorage),
+      // storage: createJSONStorage(() =>
+      //   typeof window !== "undefined" ? localStorage : memoryStorage
+      // ),
     }
   )
 );

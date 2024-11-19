@@ -1,5 +1,5 @@
-import { fetchProductById } from "@/api/products";
-import ProductCard from "@/components/products/ProductCard";
+import { fetchProductById } from "@/features/products/api/products";
+import ProductCard from "@/features/products/ProductCard";
 
 const ProductDetailsPage = async ({
   params: { productId },
@@ -8,7 +8,7 @@ const ProductDetailsPage = async ({
 }) => {
   const product = await fetchProductById(Number(productId));
 
-  return <ProductCard product={product} />;
+  return <ProductCard product={product} isShowDescription />;
 };
 
 export default ProductDetailsPage;

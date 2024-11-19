@@ -1,4 +1,5 @@
-import { API_URL } from "./config";
+import { API_URL } from "@/api/config";
+import { Product } from "@/types/types";
 
 export async function listProducts() {
   const res = await fetch(`${API_URL}/products`);
@@ -20,4 +21,16 @@ export async function fetchProductById(id: number) {
   }
 
   return data;
+}
+
+export async function createProduct(product: Product) {
+  const res = await fetch(`${API_URL}/products`, {
+    method: "POST",
+    body: JSON.stringify({
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+    }),
+  });
 }

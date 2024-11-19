@@ -1,19 +1,21 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
+import { HeartIcon } from "lucide-react";
+
 import useCart from "@/store/cartStore";
 import { useFavorite } from "@/store/favoriteStore";
 import { Product } from "@/types/types";
-import { Card } from "../ui/card";
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "../ui/button";
-import { HeartIcon } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
   product: Product;
+  isShowDescription: boolean;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, isShowDescription }: ProductCardProps) => {
   const addProduct = useCart((state) => state.addProduct);
   const deleteProduct = useCart((state) => state.addProduct);
   const toggleFavorites = useFavorite((state) => state.toggleProduct);
@@ -38,9 +40,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <Link href={`/dashboard/products/${product.id}`}>
         <Image
           src={product.image}
-            width={240}
-        //   fill
-            height={240}
+          width={240}
+          //   fill
+          height={240}
           className="mb-6 h-[240px] rounded-md w-auto object-fit"
           alt={`${product.name} image`}
         />
@@ -48,6 +50,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <p className="text-sm font-normal mb-2 text-typography-700">
         {product.name}
       </p>
+      {isShowDescription && (
+        <p className="text-sm font-normal mb-2 text-typography-700">
+          {product.description}
+        </p>
+      )}
       <h3 className="mb-4">${product.price}</h3>
       <div className=" flex justify-between w-full">
         <Button

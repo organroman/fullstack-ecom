@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { db } from "../../db/index.js";
 import { orderItemsTable, ordersTable } from "../../db/ordersSchema.js";
 import { eq } from "drizzle-orm";
+import { productsTable } from "../../db/productsSchema.js";
+import { usersTable } from "../../db/usersSchema.js";
 
 export async function createOrder(req: Request, res: Response) {
   try {
@@ -52,19 +54,50 @@ export async function gerOrderById(req: Request, res: Response) {
     const id = parseInt(req.params.id);
 
     const orderWithItems = await db
-      .select()
+      .select({
+        order: ordersTable,
+        user: usersTable,
+        item: orderItemsTable,
+        product: productsTable,
+      })
       .from(ordersTable)
       .where(eq(ordersTable.id, id))
-      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId));
+      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId))
+      .leftJoin(productsTable, eq(orderItemsTable.productId, productsTable.id))
+      .leftJoin(usersTable, eq(ordersTable.userId, usersTable.id));
+
+    if (!orderWithItems.length) {
+      return res.status(404).send({ message: "Order not found" });
+    }
+
+    const mapOrder = (orderData: (typeof orderWithItems)[0]) => ({
+      id: orderData.order.id,
+      createdAt: orderData.order.createdAt,
+      status: orderData.order.status,
+    });
+
+    const mapItem = (itemData: (typeof orderWithItems)[0]) => ({
+      id: itemData.item?.id,
+      quantity: itemData.item?.quantity,
+      price: itemData.item?.price,
+      product: itemData.product,
+    });
+
+    const mapUser = (userData: (typeof orderWithItems)[0]) => ({
+      id: userData.user?.id,
+      name: userData.user?.name,
+      role: userData.user?.role,
+      email: userData.user?.email,
+      address: userData.user?.address,
+    });
 
     const mergedOrder = {
-      ...orderWithItems[0].orders,
-      items: orderWithItems.map((oi) => oi.order_items),
+      ...mapOrder(orderWithItems[0]),
+      items: orderWithItems.map(mapItem),
+      user: mapUser(orderWithItems[0]),
     };
 
-    if (!mergedOrder) {
-      res.status(404).send({ message: "Order not found " });
-    } else res.json(mergedOrder);
+    res.json(mergedOrder);
   } catch (e) {
     res.status(500).send(e);
   }

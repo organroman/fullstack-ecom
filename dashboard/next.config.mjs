@@ -3,7 +3,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["notjustdev-dummy.s3.us-east-2.amazonaws.com"],
+    domains: ["notjustdev-dummy.s3.us-east-2.amazonaws.com", "www.apple.com"],
   },
 };
 
