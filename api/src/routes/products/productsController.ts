@@ -1,13 +1,23 @@
 import _ from "lodash";
 import { Request, Response } from "express";
-import { eq } from "drizzle-orm";
+import { eq, ilike, or } from "drizzle-orm";
 
 import { db } from "../../db/index.js";
 import { productsTable } from "../../db/productsSchema.js";
 
 export async function listProducts(req: Request, res: Response) {
   try {
-    const products = await db.select().from(productsTable);
+    const searchPhrase = req.query.search || "";
+
+    const products = await db
+      .select()
+      .from(productsTable)
+      .where(
+        // or(
+        ilike(productsTable.name, `%${searchPhrase}%`)
+        // ilike(productsTable.description, `${searchPhrase}`)
+        // )
+      );
     res.json(products);
   } catch (e) {
     res.status(500).send(e);

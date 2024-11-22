@@ -27,11 +27,11 @@ export interface IUser {
 }
 
 export enum EOrderStatuses {
-  new = "New",
-  cancelled = "Cancelled",
-  paid = "Paid",
-  shipped = "Shipped",
-  delivered = "Delivered",
+  "New",
+  "Cancelled",
+  "Paid",
+  "Shipped",
+  "Delivered",
 }
 export interface IOrderItem {
   id: number;
@@ -45,6 +45,13 @@ export interface IOrder {
   createdAt: Date;
   status: EOrderStatuses;
   user: IUser;
+  items: IOrderItem[];
+}
+
+export interface IUsersOrder {
+  id: number;
+  createdAt: Date;
+  status: EOrderStatuses;
   items: IOrderItem[];
 }
 

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import { db } from "../../db/index.js";
 import { orderItemsTable, ordersTable } from "../../db/ordersSchema.js";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { productsTable } from "../../db/productsSchema.js";
 import { usersTable } from "../../db/usersSchema.js";
 
@@ -43,13 +43,14 @@ export async function createOrder(req: Request, res: Response) {
 export async function listOrders(req: Request, res: Response) {
   try {
     const orders = await db.select().from(ordersTable);
+    console.log("🚀 ~ orders:", orders);
     res.json(orders);
   } catch (error) {
     res.status(500).send(error);
   }
 }
 
-export async function gerOrderById(req: Request, res: Response) {
+export async function getOrderById(req: Request, res: Response) {
   try {
     const id = parseInt(req.params.id);
 
@@ -67,7 +68,8 @@ export async function gerOrderById(req: Request, res: Response) {
       .leftJoin(usersTable, eq(ordersTable.userId, usersTable.id));
 
     if (!orderWithItems.length) {
-      return res.status(404).send({ message: "Order not found" });
+      res.status(404).send({ message: "Order not found" });
+      return;
     }
 
     const mapOrder = (orderData: (typeof orderWithItems)[0]) => ({
@@ -98,6 +100,104 @@ export async function gerOrderById(req: Request, res: Response) {
     };
 
     res.json(mergedOrder);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+}
+
+export async function gerOrderByIdAndUserId(req: Request, res: Response) {
+  try {
+    const userId = parseInt(req.params.userId);
+    const orderId = parseInt(req.params.orderId);
+
+    const orderWithItems = await db
+      .select({
+        order: ordersTable,
+        item: orderItemsTable,
+        product: productsTable,
+      })
+      .from(ordersTable)
+      .where(and(eq(ordersTable.userId, userId), eq(ordersTable.id, orderId)))
+      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId))
+      .leftJoin(productsTable, eq(orderItemsTable.productId, productsTable.id));
+
+    if (!orderWithItems.length) {
+      res.status(404).send({ message: "Order not found" });
+      return;
+    }
+
+    const mapOrder = (orderData: (typeof orderWithItems)[0]) => ({
+      id: orderData.order.id,
+      createdAt: orderData.order.createdAt,
+      status: orderData.order.status,
+    });
+
+    const mapItem = (itemData: (typeof orderWithItems)[0]) => ({
+      id: itemData.item?.id,
+      quantity: itemData.item?.quantity,
+      price: itemData.item?.price,
+      product: itemData.product,
+    });
+
+    const mergedOrder = {
+      ...mapOrder(orderWithItems[0]),
+      items: orderWithItems.map(mapItem),
+    };
+
+    res.json(mergedOrder);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
+export async function gerOrdersByUserId(req: Request, res: Response) {
+  try {
+    const userId = parseInt(req.params.userId);
+
+    const ordersWithItems = await db
+      .select({
+        order: ordersTable,
+        item: orderItemsTable,
+        product: productsTable,
+      })
+      .from(ordersTable)
+      .where(eq(ordersTable.userId, userId))
+      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId))
+      .leftJoin(productsTable, eq(orderItemsTable.productId, productsTable.id));
+
+    if (!ordersWithItems.length) {
+      res.status(404).send({ message: "Order not found" });
+      return;
+    }
+
+    const ordersMap = new Map<number, any>();
+
+    ordersWithItems.forEach((row) => {
+      const orderId = row.order.id;
+
+      if (!ordersMap.has(orderId)) {
+        ordersMap.set(orderId, {
+          id: orderId,
+          createdAt: row.order.createdAt,
+          status: row.order.status,
+          userId: row.order.userId,
+          items: [],
+        });
+      }
+
+      const item = {
+        id: row.item?.id,
+        quantity: row.item?.quantity,
+        price: row.item?.price,
+        product: row.product,
+      };
+
+      ordersMap.get(orderId).items.push(item);
+    });
+
+    const mergedOrders = Array.from(ordersMap.values());
+
+    res.status(200).json(mergedOrders);
   } catch (e) {
     res.status(500).send(e);
   }

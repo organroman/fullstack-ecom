@@ -44,7 +44,7 @@ export default function LoginScreen() {
         setToken(data.token);
       }
     },
-    onError: () => console.log("Error"),
+    onError: (error) => console.log(error.message),
   });
 
   const onSubmit = (formData: LoginFormData) => {
@@ -58,7 +58,7 @@ export default function LoginScreen() {
   };
 
   if (isLoggedIn) {
-    return <Redirect href="/" />;
+    return <Redirect href="home" />;
   }
 
   return (

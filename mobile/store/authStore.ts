@@ -12,6 +12,8 @@ type State = {
 type Action = {
   setUser: (user: any) => void;
   setToken: (token: string) => void;
+  removeUser: () => void;
+  removeToken: () => void;
 };
 
 export const useAuth = create(
@@ -22,6 +24,8 @@ export const useAuth = create(
 
       setUser: (user) => set({ user }),
       setToken: (token) => set({ token }),
+      removeUser: () => set({ user: null }),
+      removeToken: () => set({ token: null }),
     }),
     {
       name: "auth-store",

@@ -10,11 +10,11 @@ import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 
-import { fetchProductById } from "../../api/products";
 import useCart from "@/store/cartStore";
 import { HeartIcon } from "lucide-react-native";
 import { useFavorite } from "@/store/favoriteStore";
 import { cn } from "@/utils/utils";
+import { fetchProductById } from "@/api/products";
 
 const ProductDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();

@@ -1,7 +1,7 @@
 import { API_URL } from "./config";
 
-export async function listProducts() {
-  const res = await fetch(`${API_URL}/products`);
+export async function listProducts(query?: string) {
+  const res = await fetch(`${API_URL}/products/?${query}`);
   const data = await res.json();
 
   if (!res.ok) {

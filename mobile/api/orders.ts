@@ -4,6 +4,10 @@ import { API_URL } from "./config";
 export async function createOrder(items: any[]) {
   const token = useAuth.getState().token;
 
+  if (!token) {
+    throw new Error("Unathorized");
+  }
+
   const res = await fetch(`${API_URL}/orders`, {
     method: "POST",
     headers: {
@@ -20,6 +24,50 @@ export async function createOrder(items: any[]) {
 
   if (!res.ok) {
     console.log(data);
+    throw new Error("Error");
+  }
+
+  return data;
+}
+
+export async function getUserOrders(userId: number) {
+  const token = useAuth.getState().token;
+
+  if (!token) {
+    throw new Error("Unathorized");
+  }
+
+  const res = await fetch(`${API_URL}/orders/user/${userId}`, {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: token,
+    },
+  });
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error("Error");
+  }
+
+  return data;
+}
+
+export async function getUserOrder(userId: number, orderId: number) {
+  const token = useAuth.getState().token;
+
+  if (!token) {
+    throw new Error("Unathorized");
+  }
+
+  const res = await fetch(`${API_URL}/orders/${orderId}/user/${userId}`, {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: token,
+    },
+  });
+  const data = await res.json();
+
+  if (!res.ok) {
     throw new Error("Error");
   }
 

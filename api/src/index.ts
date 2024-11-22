@@ -1,5 +1,6 @@
 import express, { json, urlencoded } from "express";
 import cors from "cors";
+import qs from "qs";
 
 import productsRoutes from "./routes/products/index.js";
 import ordersRoutes from "./routes/orders/index.js";
@@ -17,6 +18,9 @@ app.use(
     origin: ["http://localhost:8081", "http://localhost:3001"],
   })
 );
+app.set("query parser", function (str: string) {
+  return qs.parse(str);
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World 11");

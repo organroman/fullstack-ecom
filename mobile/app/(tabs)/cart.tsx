@@ -1,5 +1,5 @@
-import { FlatList } from "react-native";
-import { Link, useSegments } from "expo-router";
+import { FlatList, View } from "react-native";
+import { Link } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 
 import { Text } from "@/components/ui/text";
@@ -19,9 +19,6 @@ export default function Cart() {
   const totalAmount = items.reduce((total, item) => {
     return total + item.quantity * item.product.price;
   }, 0);
-
-  const segments = useSegments();
-  console.log("path", segments);
 
   const createOrderMutation = useMutation({
     mutationFn: () =>
@@ -60,18 +57,20 @@ export default function Cart() {
   }
 
   return (
-    <FlatList
-      data={items}
-      contentContainerClassName="gap-2 mx-auto w-full max-w-[960px] p-2"
-      renderItem={({ item }) => <CartItem item={item} />}
-      ListFooterComponent={() => (
-        <VStack space="sm">
-          <Text className="font-bold">Total: ${totalAmount}</Text>
-          <Button onPress={onCheckout}>
-            <ButtonText>Checkout</ButtonText>
-          </Button>
-        </VStack>
-      )}
-    />
+    <View className="flex-1 h-full">
+      <FlatList
+        data={items}
+        contentContainerClassName="gap-2 mx-auto w-full max-w-[960px] p-2 flex-1"
+        renderItem={({ item }) => <CartItem item={item} />}
+        ListFooterComponent={() => (
+          <VStack space="sm">
+            <Text className="font-bold">Total: ${totalAmount}</Text>
+            <Button onPress={onCheckout}>
+              <ButtonText>Checkout</ButtonText>
+            </Button>
+          </VStack>
+        )}
+      />
+    </View>
   );
 }

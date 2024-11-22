@@ -1,4 +1,6 @@
+import { IUser } from "@/types/types";
 import { API_URL } from "./config";
+import { useAuth } from "@/store/authStore";
 
 export async function login(email: string, password: string) {
   const res = await fetch(`${API_URL}/auth/login`, {
@@ -9,9 +11,10 @@ export async function login(email: string, password: string) {
     body: JSON.stringify({ email, password }),
   });
   const data = await res.json();
+  console.log("🚀 ~ data:", data);
 
   if (!res.ok) {
-    throw new Error("Failed to login");
+    throw new Error(data);
   }
   return data;
 }
@@ -28,6 +31,36 @@ export async function register(name: string, email: string, password: string) {
 
   if (!res.ok) {
     throw new Error("Failed to register");
+  }
+  return data;
+}
+
+export async function updateUser(
+  id: number,
+  name: string,
+  email: string,
+  phone: string,
+  address: string
+) {
+  const token = useAuth.getState().token;
+
+  if (!token) {
+    throw new Error("Unathorized");
+  }
+
+  const res = await fetch(`${API_URL}/auth/user/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json",
+      Authorization: token,
+    },
+    body: JSON.stringify({ name, email, phone, address }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error("Failed to update user");
   }
   return data;
 }
