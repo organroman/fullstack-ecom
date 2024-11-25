@@ -26,3 +26,7 @@ export const updateUserSchema = createInsertSchema(usersTable)
     id: true,
   })
   .partial();
+
+export const changePasswordSchema = createInsertSchema(usersTable).pick({
+  password: true,
+});

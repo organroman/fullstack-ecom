@@ -5,6 +5,7 @@ import qs from "qs";
 import productsRoutes from "./routes/products/index.js";
 import ordersRoutes from "./routes/orders/index.js";
 import authRoutes from "./routes/auth/index.js";
+import usersRoutes from "./routes/users/index.js";
 
 import serverless from "serverless-http";
 
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 app.use("/products", productsRoutes);
 app.use("/orders", ordersRoutes);
 app.use("/auth", authRoutes);
+app.use("/users", usersRoutes);
 
 if (process.env.NODE_ENV === "dev") {
   app.listen(port, () => {

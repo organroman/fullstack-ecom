@@ -1,4 +1,9 @@
-import { loginSchema, signUpSchema, updateUserSchema } from "@/utils/schema";
+import {
+  changePasswordSchema,
+  loginSchema,
+  signUpSchema,
+  updateUserSchema,
+} from "@/utils/schema";
 import { z } from "zod";
 
 export type Product = {
@@ -43,3 +48,4 @@ export interface IUserOrder {
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
+export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>;

@@ -1,14 +1,12 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, Redirect } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
-import { EyeIcon, EyeOffIcon } from "lucide-react-native";
 
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl } from "@/components/ui/form-control";
 import { Heading } from "@/components/ui/heading";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 
@@ -16,9 +14,9 @@ import { login } from "@/api/auth";
 import { useAuth } from "@/store/authStore";
 import { LoginFormData } from "@/types/types";
 import { loginSchema } from "@/utils/schema";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function LoginScreen() {
-  const [showPassword, setShowPassword] = useState(false);
   const {
     handleSubmit,
     formState: { errors },
@@ -51,14 +49,8 @@ export default function LoginScreen() {
     loginMutation.mutate(formData);
   };
 
-  const handleShowPassword = () => {
-    setShowPassword((showPassword) => {
-      return !showPassword;
-    });
-  };
-
   if (isLoggedIn) {
-    return <Redirect href="home" />;
+    return <Redirect href="index" />;
   }
 
   return (
@@ -66,7 +58,7 @@ export default function LoginScreen() {
       <VStack space="xl">
         <Heading className="text-typography-900 leading-3 pt-3">Login</Heading>
         <VStack space="xs">
-          <Text className="text-typography-500 leading-1">Email</Text>
+          <Text className="text-typography-500 leading-1 text-sm">Email</Text>
           <Input>
             <InputField
               value={watch("email")}
@@ -75,22 +67,12 @@ export default function LoginScreen() {
             />
           </Input>
         </VStack>
-        <VStack space="xs">
-          <Text className="text-typography-500 leading-1">Password</Text>
-          <Input className="text-center">
-            <InputField
-              value={watch("password")}
-              onChangeText={(text) => setValue("password", text)}
-              type={showPassword ? "text" : "password"}
-            />
-            <InputSlot className="pr-3" onPress={handleShowPassword}>
-              <InputIcon
-                as={showPassword ? EyeIcon : EyeOffIcon}
-                className="text-darkBlue-500"
-              />
-            </InputSlot>
-          </Input>
-        </VStack>
+        <PasswordInput
+          label="Password"
+          value={watch("password")}
+          onChange={(text) => setValue("password", text)}
+          error={errors.password && errors.password.message}
+        />
         <VStack space="md">
           <Button
             isDisabled={loginMutation.isPending}

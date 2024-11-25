@@ -17,3 +17,14 @@ export const updateUserSchema = z.object({
   phone: z.string().min(5, "Invalid phone"),
   address: z.string().min(5, "Invalid address"),
 });
+
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z.string().min(4, "Old password is required"),
+    password: z.string().min(6, "Password should be at least 6 characters"),
+    confirmPassword: z.string().min(6, "Confirm password is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Confirm password must match password",
+  });

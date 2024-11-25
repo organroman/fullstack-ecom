@@ -2,7 +2,6 @@ import { ActivityIndicator, FlatList, SafeAreaView } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 
 import { useBreakpointValue } from "@/components/ui/utils/use-break-point-value";
-import ProductListItem from "../../components/ProductListItem";
 
 import { Text } from "@/components/ui/text";
 
@@ -12,6 +11,7 @@ import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react-native";
 import { VStack } from "@/components/ui/vstack";
 import { useEffect, useState } from "react";
+import ProductListItem from "@/components/ProductListItem";
 
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value);

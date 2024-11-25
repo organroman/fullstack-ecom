@@ -55,23 +55,3 @@ export async function login(req: Request, res: Response) {
     res.status(500).send("Something went wrong");
   }
 }
-
-export async function updateUser(req: Request, res: Response) {
-  try {
-    const id = parseInt(req.params.id);
-    console.log("🚀 ~ id:", id);
-    const updatedFields = req.cleanBody;
-
-    const [updatedUser] = await db
-      .update(usersTable)
-      .set(updatedFields)
-      .where(eq(usersTable.id, id))
-      .returning();
-
-    if (!updatedUser) {
-      res.status(404).send({ message: "User not found" });
-    } else res.status(200).json(updatedUser);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-}

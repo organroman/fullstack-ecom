@@ -6,6 +6,7 @@ import { Button, ButtonText } from "./ui/button";
 import { useAuth } from "@/store/authStore";
 
 import { IUser } from "@/types/types";
+import { Link } from "expo-router";
 
 interface ProfileInfoProps {
   user: IUser;
@@ -40,9 +41,11 @@ const ProfileInfo = ({ user }: ProfileInfoProps) => {
       </VStack>
 
       <VStack className="px-4 py-6 gap-3">
-        <Button variant="outline">
-          <ButtonText>Change password</ButtonText>
-        </Button>
+        <Link href="profile/change-password" asChild>
+          <Button variant="outline">
+            <ButtonText>Change password</ButtonText>
+          </Button>
+        </Link>
         <Button action="negative" onPress={handleLogOut}>
           <ButtonText>Log out</ButtonText>
         </Button>

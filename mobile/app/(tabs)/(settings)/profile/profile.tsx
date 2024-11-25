@@ -14,7 +14,8 @@ import UserUpdateForm from "@/components/UserUpdateForm";
 import { useAuth } from "@/store/authStore";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { UpdateUserSchema } from "@/types/types";
-import { updateUser } from "@/api/auth";
+import { updateUser } from "@/api/users";
+
 
 export default function ProfileScreen() {
   const router = useRouter();

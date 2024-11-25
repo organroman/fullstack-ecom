@@ -18,7 +18,7 @@ import { useAuth } from "@/store/authStore";
 import { useFavorite } from "@/store/favoriteStore";
 import { cn } from "@/utils/utils";
 
-export default function RootLayout() {
+export default function TabsLayout() {
   const cartItemsNum = useCart((state) => state.items.length);
   const favoriteItemsNum = useFavorite((state) => state.items.length);
   const isLoggedIn = useAuth((s) => !!s.token);
@@ -28,7 +28,7 @@ export default function RootLayout() {
   return (
     <Tabs>
       <Tabs.Screen
-        name="index"
+        name="(products)"
         options={{
           title: "Home",
           headerShown: false,
@@ -41,8 +41,8 @@ export default function RootLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="product/[id]"
+      {/* <Tabs.Screen
+        name="products/[id]"
         options={{
           href: null,
           headerLeft: () => (
@@ -56,7 +56,7 @@ export default function RootLayout() {
             </Button>
           ),
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="cart"
         options={{

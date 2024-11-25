@@ -35,32 +35,4 @@ export async function register(name: string, email: string, password: string) {
   return data;
 }
 
-export async function updateUser(
-  id: number,
-  name: string,
-  email: string,
-  phone: string,
-  address: string
-) {
-  const token = useAuth.getState().token;
 
-  if (!token) {
-    throw new Error("Unathorized");
-  }
-
-  const res = await fetch(`${API_URL}/auth/user/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-type": "application/json",
-      Authorization: token,
-    },
-    body: JSON.stringify({ name, email, phone, address }),
-  });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error("Failed to update user");
-  }
-  return data;
-}

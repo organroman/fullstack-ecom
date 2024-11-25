@@ -39,7 +39,13 @@ export default function SettingsLayout() {
         }}
       />
       <Stack.Screen
-        name="profile"
+        name="profile/profile"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="profile/change-password"
         options={{
           headerShown: false,
         }}

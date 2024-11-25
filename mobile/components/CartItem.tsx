@@ -10,7 +10,7 @@ import {
 import { HStack } from "./ui/hstack";
 import { Image } from "./ui/image";
 import { VStack } from "./ui/vstack";
-import { Button, ButtonIcon, ButtonText } from "./ui/button";
+import { Button, ButtonIcon } from "./ui/button";
 
 import useCart from "@/store/cartStore";
 
@@ -40,7 +40,7 @@ const CartItem = ({ item }: CartItemProps) => {
 
   return (
     <HStack className="bg-white p-4 w-full items-center justify-between relative">
-      <Link href={`/product/${item.product.id}`} asChild>
+      <Link href={`/(products)/${item.product.id}`} asChild>
         <Pressable>
           <HStack space="sm">
             <Image

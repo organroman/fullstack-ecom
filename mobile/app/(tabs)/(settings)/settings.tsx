@@ -31,7 +31,7 @@ const SettingsGeneralScreen = () => {
       </HStack>
       <VStack className="border-b border-blue-500 p-2 py-4 gap-3">
         <Link
-          href="/profile"
+          href="/profile/profile"
           className="flex items-center justify-start"
           asChild
         >
