@@ -1,9 +1,9 @@
 import {
   integer,
   pgTable,
-  varchar,
   timestamp,
   doublePrecision,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import z from "zod";
@@ -11,10 +11,18 @@ import z from "zod";
 import { usersTable } from "./usersSchema";
 import { productsTable } from "./productsSchema";
 
+export const orderStatusEnum = pgEnum("orderStatus", [
+  "NEW",
+  "PROCESSING",
+  "CANCELLED",
+  "SHIPPED",
+  "SENT",
+]);
+
 export const ordersTable = pgTable("orders", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   createdAt: timestamp().notNull().defaultNow(),
-  status: varchar({ length: 50 }).notNull().default("New"),
+  status: orderStatusEnum().notNull().default("NEW"),
 
   userId: integer()
     .references(() => usersTable.id)

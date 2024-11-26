@@ -1,9 +1,10 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Response, Request, NextFunction } from "express";
+import { rolesEnum } from "../db/usersSchema";
 
 interface TokenPayload extends JwtPayload {
   userId: string;
-  role: string;
+  role: typeof rolesEnum;
 }
 
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
@@ -34,7 +35,7 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
 export function verifySeller(req: Request, res: Response, next: NextFunction) {
   const role = req.role;
 
-  if (role !== "seller") {
+  if (role !== "SALES MANAGER") {
     res.status(401).json({ error: "Access denied" });
 
     return;

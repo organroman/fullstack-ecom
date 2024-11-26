@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { updateUserSchema } from "../../db/usersSchema.js";
+import { changePasswordSchema, updateUserSchema } from "../../db/usersSchema.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
 import { verifyToken } from "../../middlewares/authMiddleware";
 import { changePassword, updateUser } from "./usersController.js";
@@ -11,7 +11,7 @@ router.put("/:id", verifyToken, validateData(updateUserSchema), updateUser);
 router.put(
   "/:id/change-password",
   verifyToken,
-  validateData(updateUserSchema),
+  validateData(changePasswordSchema),
   changePassword
 );
 
