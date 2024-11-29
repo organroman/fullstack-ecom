@@ -14,11 +14,11 @@ import {
 import { SafeAreaView, Image, View } from "react-native";
 
 const SettingsGeneralScreen = () => {
-  // const isLoggedIn = useAuth((s) => !!s.token);
+  const isLoggedIn = useAuth((s) => !!s.token);
 
-  // if (!isLoggedIn) {
-  //   return <Redirect href="(tabs)" />;
-  // }
+  if (!isLoggedIn) {
+    return <Redirect href="(products)" />;
+  }
 
   return (
     <SafeAreaView>

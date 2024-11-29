@@ -1,7 +1,7 @@
 import { loginSchema, signUpSchema } from "@/lib/schema";
 import { z } from "zod";
 
-export type Product = {
+export type ProductType = {
   id: number;
   name: string;
   description: string;
@@ -10,20 +10,28 @@ export type Product = {
 };
 
 export interface ICartItem {
-  product: Product;
+  product: ProductType;
   quantity: number;
 }
 
 export interface IFavoriteItem {
-  product: Product;
+  product: ProductType;
+}
+
+export enum Roles {
+  ADMIN = "ADMIN",
+  CUSTOMER = "CUSTOMER",
+  SALES_MANAGER = "SALES MANAGER", // Consistent naming with enum keys
 }
 
 export interface IUser {
   id: number;
   email: string;
-  role: string;
+  role: Roles;
   name: string;
   address: string;
+  createdAt: string;
+  phone: string;
 }
 
 export enum EOrderStatuses {
@@ -37,7 +45,7 @@ export interface IOrderItem {
   id: number;
   quantity: number;
   price: number;
-  product: Product;
+  product: ProductType;
 }
 
 export interface IOrder {

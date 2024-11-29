@@ -50,7 +50,7 @@ export default function LoginScreen() {
   };
 
   if (isLoggedIn) {
-    return <Redirect href="index" />;
+    return <Redirect href="(products)" />;
   }
 
   return (

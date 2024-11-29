@@ -5,7 +5,7 @@ export async function createOrder(items: any[]) {
   const token = useAuth.getState().token;
 
   if (!token) {
-    throw new Error("Unathorized");
+    throw new Error("Unauthorized");
   }
 
   const res = await fetch(`${API_URL}/orders`, {
@@ -34,7 +34,7 @@ export async function getUserOrders(userId: number) {
   const token = useAuth.getState().token;
 
   if (!token) {
-    throw new Error("Unathorized");
+    throw new Error("Unauthorized");
   }
 
   const res = await fetch(`${API_URL}/orders/user/${userId}`, {

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import { Request, Response } from "express";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 
 import { db } from "../../db/index.js";
 import { usersTable } from "../../db/usersSchema.js";
@@ -28,10 +28,7 @@ export async function updateUser(req: Request, res: Response) {
 export async function changePassword(req: Request, res: Response) {
   try {
     const id = parseInt(req.params.id);
-    console.log("🚀 ~ id:", id);
     let { oldPassword, password } = req.body;
-    console.log("🚀 ~ oldPassword:", oldPassword);
-    console.log("clean body", req.cleanBody);
     password = await bcryptjs.hash(password, 10);
 
     const [user] = await db
@@ -50,7 +47,6 @@ export async function changePassword(req: Request, res: Response) {
       res.status(401).json({ error: "Wrong old password" });
       return;
     }
-    console.log("🚀 ~ isMatch:", isMatch);
 
     const token = jwt.sign(
       { userId: user.id, role: user.role },
@@ -69,5 +65,53 @@ export async function changePassword(req: Request, res: Response) {
     res.status(200).json({ updatedUser, token });
   } catch (error) {
     res.status(500).send("Something went wrong");
+  }
+}
+
+export async function listUsers(req: Request, res: Response) {
+  try {
+    const userRole = req.role;
+
+    if (userRole !== "ADMIN") {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const page = Number(req.query.page as string) || 1;
+    const limit = Number(req.query.limit as string) || 10;
+    const offset = (page - 1) * limit;
+
+    const users = await db
+      .select()
+      .from(usersTable)
+      .limit(limit)
+      .offset(offset);
+
+    const totalUsers = await db.select({ count: count() }).from(usersTable);
+    const totalPages = Math.ceil(totalUsers[0].count / limit);
+
+    const usersWoPass = users.map(
+      ({ id, email, phone, name, role, address, createdAt }) => {
+        return {
+          id,
+          email,
+          phone,
+          name,
+          role,
+          address,
+          createdAt,
+        };
+      }
+    );
+
+    res.status(200).json({
+      users: usersWoPass,
+      total: totalUsers[0].count,
+      page,
+      limit,
+      totalPages,
+    });
+  } catch (error) {
+    res.status(500).send(error);
   }
 }

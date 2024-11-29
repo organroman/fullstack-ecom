@@ -34,9 +34,13 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
 
 export function verifySeller(req: Request, res: Response, next: NextFunction) {
   const role = req.role;
+  const allowedRoles = ["ADMIN", "SALES MANAGER"];
 
-  if (role !== "SALES MANAGER") {
-    res.status(401).json({ error: "Access denied" });
+  if (!allowedRoles.includes(role)) {
+    res.status(401).json({
+      error: "Access denied",
+      message: `Role '${role}' is not authorized to perform this action.`,
+    });
 
     return;
   }

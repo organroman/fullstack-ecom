@@ -1,5 +1,5 @@
 import { fetchProductById } from "@/features/products/api/products";
-import ProductCard from "@/features/products/ProductCard";
+import ProductCard from "@/features/products/components/ProductCard";
 
 const ProductDetailsPage = async ({
   params: { productId },

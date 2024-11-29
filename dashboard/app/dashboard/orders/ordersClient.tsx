@@ -33,30 +33,32 @@ const OrdersClient = () => {
   }
 
   return (
-    <Table className="w-full">
-      <TableHeader>
-        <TableRow>
-          <TableHead>Id</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Status</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {orders.map((order: IOrder) => (
-          <TableRow key={order.id}>
-            <TableCell>
-              <Link href={`/dashboard/orders/${order.id}`} className="w-full">
-                {order.id}
-              </Link>
-            </TableCell>
-            <TableCell>
-              {dayjs(order.createdAt).format("DD.MM.YYYY HH:mm")}
-            </TableCell>
-            <TableCell>{order.status}</TableCell>
+    <div className="rounded-md border">
+      <Table className="w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Id</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Status</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {orders.map((order: IOrder) => (
+            <TableRow key={order.id}>
+              <TableCell>
+                <Link href={`/dashboard/orders/${order.id}`} className="w-full">
+                  {order.id}
+                </Link>
+              </TableCell>
+              <TableCell>
+                {dayjs(order.createdAt).format("DD.MM.YYYY HH:mm")}
+              </TableCell>
+              <TableCell>{order.status}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

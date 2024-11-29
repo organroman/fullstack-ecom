@@ -23,6 +23,7 @@ import { LoginFormData } from "@/types/types";
 import { loginSchema } from "@/lib/schema";
 import { handleLogin } from "./actions";
 
+
 const LoginForm = () => {
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -40,6 +41,7 @@ const LoginForm = () => {
 
     onSuccess: () => {
       toast.success("Logged in");
+   
     },
     onError: (error) => {
       toast.error(error.message);

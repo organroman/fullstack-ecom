@@ -22,9 +22,10 @@ const OrderIdScreen = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const user = useAuth((s) => s.user);
+  const token = useAuth((s) => !!s.token);
 
-  if (!user) {
-    return <Redirect href="/home" />;
+  if (!token || !user) {
+    return <Redirect href="/(products)" />;
   }
 
   const {
@@ -37,7 +38,7 @@ const OrderIdScreen = () => {
   });
 
   if (!order) {
-    return <Redirect href={"/home"} />;
+    return <Redirect href="/(products)" />;
   }
 
   if (isLoading) {

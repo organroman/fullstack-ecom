@@ -8,7 +8,11 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 import SideBar from "./SideBar";
 
-const MobileSidebar = () => {
+interface HeaderProps {
+  role: string;
+}
+
+const MobileSidebar = ({ role }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
@@ -24,7 +28,7 @@ const MobileSidebar = () => {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
-        <SideBar />
+        <SideBar role={role} />
       </SheetContent>
     </Sheet>
   );

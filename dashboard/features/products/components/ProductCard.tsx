@@ -6,12 +6,12 @@ import { HeartIcon } from "lucide-react";
 
 import useCart from "@/store/cartStore";
 import { useFavorite } from "@/store/favoriteStore";
-import { Product } from "@/types/types";
+import { ProductType } from "@/types/types";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
-  product: Product;
+  product: ProductType;
   isShowDescription: boolean;
 }
 
@@ -36,7 +36,7 @@ const ProductCard = ({ product, isShowDescription }: ProductCardProps) => {
   };
 
   return (
-    <Card className="p-5 rounded-lg flex-1 relative">
+    <Card className="p-5 rounded-lg flex-1 relative hover:border-blue-400 hover:shadow-lg transition">
       <Link href={`/dashboard/products/${product.id}`}>
         <Image
           src={product.image}

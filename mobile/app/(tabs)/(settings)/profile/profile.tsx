@@ -16,7 +16,6 @@ import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { UpdateUserSchema } from "@/types/types";
 import { updateUser } from "@/api/users";
 
-
 export default function ProfileScreen() {
   const router = useRouter();
 
@@ -27,6 +26,26 @@ export default function ProfileScreen() {
   const [editMode, setEditMode] = useState(false);
   const formSubmitRef = useRef<() => void | null>(null);
 
+  const updateUserMutation: UseMutationResult<
+    any,
+    Error,
+    UpdateUserSchema,
+    unknown
+  > = useMutation({
+    mutationFn: async ({ name, email, phone, address }: UpdateUserSchema) => {
+      if (!user?.id) {
+        throw new Error("User id is missing");
+      }
+      const data = await updateUser(user.id, name, email, phone, address);
+      return data;
+    },
+    onSuccess: (data) => {
+      setUser(data);
+      handleEditMode();
+    },
+    onError: (error) => console.log(error),
+  });
+
   const handleEditMode = () => {
     setEditMode((prev) => !prev);
   };
@@ -36,27 +55,10 @@ export default function ProfileScreen() {
       formSubmitRef.current?.();
     }
   };
-  if (!isLoggedIn || !user) {
-    return <Redirect href="home" />;
-  }
 
-  const updateUserMutation: UseMutationResult<
-    any,
-    Error,
-    UpdateUserSchema,
-    unknown
-  > = useMutation({
-    mutationFn: async ({ name, email, phone, address }: UpdateUserSchema) => {
-      const id = user.id;
-      const data = await updateUser(id, name, email, phone, address);
-      return data;
-    },
-    onSuccess: (data) => {
-      setUser(data);
-      handleEditMode();
-    },
-    onError: (error) => console.log(error),
-  });
+  if (!isLoggedIn || !user) {
+    return <Redirect href="(products)" />;
+  }
 
   return (
     <SafeAreaView>

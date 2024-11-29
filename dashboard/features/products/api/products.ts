@@ -1,8 +1,16 @@
 import { API_URL } from "@/api/config";
-import { Product } from "@/types/types";
+import { ProductType } from "@/types/types";
 
-export async function listProducts() {
-  const res = await fetch(`${API_URL}/products`);
+export async function listProducts(
+  page: number,
+  limit: number,
+  search?: string | ""
+) {
+  const query = search
+    ? `?page=${page}&limit=${limit}&search=${search}`
+    : `?page=${page}&limit=${limit}`;
+
+  const res = await fetch(`${API_URL}/products${query}`);
   const data = await res.json();
 
   if (!res.ok) {
@@ -23,14 +31,3 @@ export async function fetchProductById(id: number) {
   return data;
 }
 
-export async function createProduct(product: Product) {
-  const res = await fetch(`${API_URL}/products`, {
-    method: "POST",
-    body: JSON.stringify({
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      image: product.image,
-    }),
-  });
-}

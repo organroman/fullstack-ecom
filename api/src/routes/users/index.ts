@@ -1,9 +1,12 @@
 import { Router } from "express";
 
-import { changePasswordSchema, updateUserSchema } from "../../db/usersSchema.js";
+import {
+  changePasswordSchema,
+  updateUserSchema,
+} from "../../db/usersSchema.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
 import { verifyToken } from "../../middlewares/authMiddleware";
-import { changePassword, updateUser } from "./usersController.js";
+import { changePassword, listUsers, updateUser } from "./usersController.js";
 
 const router = Router();
 
@@ -14,5 +17,6 @@ router.put(
   validateData(changePasswordSchema),
   changePassword
 );
+router.get("/", verifyToken, listUsers);
 
 export default router;

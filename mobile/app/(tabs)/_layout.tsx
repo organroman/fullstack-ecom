@@ -39,24 +39,10 @@ export default function TabsLayout() {
               as={HomeIcon}
             />
           ),
+          // href: "(products)/index",
         }}
       />
-      {/* <Tabs.Screen
-        name="products/[id]"
-        options={{
-          href: null,
-          headerLeft: () => (
-            <Button
-              variant="link"
-              className="text-black"
-              onPress={() => router.back()}
-            >
-              <ButtonIcon as={ChevronLeftIcon} />
-              <ButtonText>Back</ButtonText>
-            </Button>
-          ),
-        }}
-      /> */}
+
       <Tabs.Screen
         name="cart"
         options={{
@@ -114,7 +100,7 @@ export default function TabsLayout() {
               as={UserIcon}
             />
           ),
-          href: isLoggedIn ? null : "(auth)",
+          href: isLoggedIn ? null : "(auth)/login",
         }}
       />
       <Tabs.Screen
@@ -128,7 +114,7 @@ export default function TabsLayout() {
               as={UserCog}
             />
           ),
-          href: isLoggedIn ? "(settings)" : null,
+          href: isLoggedIn ? "(settings)/settings" : null,
         }}
       />
     </Tabs>

@@ -1,4 +1,4 @@
-"use server";
+"use server"
 
 import { login, register } from "@/api/auth";
 import { cookies } from "next/headers";
@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 export async function handleLogin(email: string, password: string) {
   try {
     const res = await login(email, password);
+
 
     if (res.token) {
       cookies().set("auth-token", res.token);

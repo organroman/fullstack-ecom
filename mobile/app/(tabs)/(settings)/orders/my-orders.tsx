@@ -12,8 +12,9 @@ import { useAuth } from "@/store/authStore";
 
 const MyOrdersScreen = () => {
   const user = useAuth((s) => s.user);
+  const token = useAuth((s) => !!s.token);
 
-  if (!user) {
+  if (!user || !token) {
     return <Redirect href="home" />;
   }
 
@@ -29,7 +30,7 @@ const MyOrdersScreen = () => {
     error,
   } = useQuery({
     queryKey: ["user-orders"],
-    queryFn: async () => await getUserOrders(user.id),
+    queryFn: async () => await getUserOrders(user?.id),
   });
 
   if (isLoading) {

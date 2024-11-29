@@ -52,7 +52,7 @@ const ProductDetailsScreen = () => {
   }
 
   if (error) {
-    return <Text>Error in fetch product</Text>;
+    return <Text>!!!Error in fetch product</Text>;
   }
 
   return (

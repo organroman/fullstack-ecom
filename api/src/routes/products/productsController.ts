@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { Request, Response } from "express";
-import { eq, ilike, or } from "drizzle-orm";
+import { count, eq, ilike, or } from "drizzle-orm";
 
 import { db } from "../../db/index.js";
 import { productsTable } from "../../db/productsSchema.js";
@@ -8,6 +8,10 @@ import { productsTable } from "../../db/productsSchema.js";
 export async function listProducts(req: Request, res: Response) {
   try {
     const searchPhrase = req.query.search || "";
+
+    const page = Number(req.query.page as string) || 1;
+    const limit = Number(req.query.limit as string) || 10;
+    const offset = (page - 1) * limit;
 
     const products = await db
       .select()
@@ -17,8 +21,23 @@ export async function listProducts(req: Request, res: Response) {
         ilike(productsTable.name, `%${searchPhrase}%`)
         // ilike(productsTable.description, `${searchPhrase}`)
         // )
-      );
-    res.json(products);
+      )
+      .limit(limit)
+      .offset(offset);
+
+    const totalProducts = await db
+      .select({ count: count() })
+      .from(productsTable);
+
+    const totalPages = Math.ceil(totalProducts[0].count / limit);
+
+    res.status(200).json({
+      products,
+      total: totalProducts[0].count,
+      page,
+      totalPages,
+      limit,
+    });
   } catch (e) {
     res.status(500).send(e);
   }
@@ -43,7 +62,6 @@ export async function getProductById(req: Request, res: Response) {
 
 export async function createProduct(req: Request, res: Response) {
   try {
-    console.log(req.userId);
     const [product] = await db
       .insert(productsTable)
       .values(req.cleanBody)

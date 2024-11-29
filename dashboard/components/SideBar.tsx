@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { SettingsIcon, UsersIcon } from "lucide-react";
+import { cn, getRoleFromToken, hasPermission } from "@/lib/utils";
+import { NotebookTabsIcon, SettingsIcon, UsersIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,36 +12,58 @@ import {
   GoHomeFill,
 } from "react-icons/go";
 
+import { PiNotebookDuotone, PiNotebookFill } from "react-icons/pi";
+import { HiOutlineUsers, HiUsers } from "react-icons/hi2";
+import { IoSettingsOutline, IoSettingsSharp } from "react-icons/io5";
+import { PERMISSIONS } from "@/lib/permissions";
+import { useAuth } from "@/store/authStore";
+
 const routes = [
   {
     label: "Dashboard",
     href: "/dashboard",
     icon: GoHome,
     activeIcon: GoHomeFill,
+    permission: PERMISSIONS.dashboard,
   },
   {
     label: "Products",
     href: "/dashboard/products",
     icon: GoCheckCircle,
     activeIcon: GoCheckCircleFill,
+    permission: PERMISSIONS.products,
   },
 
   {
     label: "Orders",
     href: "/dashboard/orders",
-    icon: UsersIcon,
-    activeIcon: UsersIcon,
+    icon: PiNotebookDuotone,
+    activeIcon: PiNotebookFill,
+    permission: PERMISSIONS.orders,
+  },
+  {
+    label: "Users",
+    href: "/dashboard/users",
+    icon: HiOutlineUsers,
+    activeIcon: HiUsers,
+    permission: PERMISSIONS.users,
   },
   {
     label: "Settings",
     href: "/settings",
-    icon: SettingsIcon,
-    activeIcon: SettingsIcon,
+    icon: IoSettingsOutline,
+    activeIcon: IoSettingsSharp,
+    permission: PERMISSIONS.settings,
   },
 ];
 
-const SideBar = () => {
+type SideBarProps = {
+  role: string;
+};
+
+const SideBar = ({ role }: SideBarProps) => {
   const pathName = usePathname();
+
   return (
     <aside className="h-full bg-neutral-100 p-4 w-full">
       <Link href="/dashboard" className="flex flex-row items-center gap-2">
@@ -59,18 +81,20 @@ const SideBar = () => {
           const isActive = pathNameForCompare === route.href;
           const Icon = isActive ? route.activeIcon : route.icon;
           return (
-            <Link key={route.href} href={route.href}>
-              <div
-                className={cn(
-                  "flex items-center gap-2.5 p-2.5 rounded-md font-medium hover: text-primary transition text-neutral-500",
-                  isActive &&
-                    "bg-blue-200 shadow-sm hover:opacity-100 text-blue-800"
-                )}
-              >
-                <Icon className="size-5 text-blue-500" />
-                {route.label}
-              </div>
-            </Link>
+            hasPermission(route.permission, role) && (
+              <Link key={route.href} href={route.href}>
+                <div
+                  className={cn(
+                    "flex items-center gap-2.5 p-2.5 rounded-md font-medium hover: text-primary transition text-neutral-500",
+                    isActive &&
+                      "bg-blue-200 shadow-sm hover:opacity-100 text-blue-800"
+                  )}
+                >
+                  <Icon className="size-5 text-blue-500" />
+                  {route.label}
+                </div>
+              </Link>
+            )
           );
         })}
       </ul>

@@ -1,6 +1,6 @@
-import { IUser } from "@/types/types";
+
 import { API_URL } from "./config";
-import { useAuth } from "@/store/authStore";
+
 
 export async function login(email: string, password: string) {
   const res = await fetch(`${API_URL}/auth/login`, {
@@ -11,7 +11,6 @@ export async function login(email: string, password: string) {
     body: JSON.stringify({ email, password }),
   });
   const data = await res.json();
-  console.log("🚀 ~ data:", data);
 
   if (!res.ok) {
     throw new Error(data);

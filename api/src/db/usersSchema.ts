@@ -1,4 +1,11 @@
-import { integer, pgTable, varchar, text, pgEnum } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgTable,
+  varchar,
+  text,
+  pgEnum,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
 export const rolesEnum = pgEnum("roles", [
@@ -15,12 +22,12 @@ export const usersTable = pgTable("users", {
   role: rolesEnum().notNull().default("CUSTOMER"),
   name: varchar({ length: 255 }),
   address: text(),
+  createdAt: timestamp().notNull().defaultNow(),
 });
-// role: varchar({ length: 255 }).notNull().default("user"),
+
 
 export const createUserSchema = createInsertSchema(usersTable).omit({
   id: true,
-  // role: false,
 });
 
 export const loginSchema = createInsertSchema(usersTable).pick({

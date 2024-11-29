@@ -1,4 +1,3 @@
-
 import { Stack } from "expo-router";
 
 export default function ProductsLayout() {
@@ -14,7 +13,7 @@ export default function ProductsLayout() {
       <Stack.Screen
         name="[id]"
         options={{
-          title: "My orders",
+          title: "Product",
         }}
       />
     </Stack>

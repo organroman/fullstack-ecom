@@ -38,7 +38,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
   };
 
   return (
-    <Card className="p-5 rounded-lg flex-1 border border-blue-200">
+    <Card className="p-5 rounded-lg flex-1 border shadow-soft-1 border-neutral-100">
       <Link href={`/(products)/${product.id}`} asChild>
         <Pressable className="flex-1">
           <Image

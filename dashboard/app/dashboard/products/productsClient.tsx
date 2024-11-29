@@ -1,39 +1,67 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import LoadingPage from "@/app/loading";
-import ProductCard from "@/features/products/ProductCard";
-import { Product } from "@/types/types";
-import { listProducts } from "@/features/products/api/products";
-import { Card } from "@/components/ui/card";
-import { PlusIcon } from "lucide-react";
-import Link from "next/link";
+import { getDataFromLS } from "@/lib/utils";
+
+import ProductsGridView from "@/features/products/components/ProductsGridView";
+import ProductsTableView from "@/features/products/components/ProductsTableView";
+import ProductsHeader from "@/features/products/components/ProductsHeader";
 
 const ProductsClient = () => {
-  const {
-    data: products,
-    isPending,
-    error,
-  } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => await listProducts(),
-  });
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  if (isPending) {
-    return <LoadingPage />;
-  }
+  const [searchPhrase, setSearchPhrase] = useState("");
+
+  const view = searchParams.get("view") || "grid";
+
+  const updateQueryParams = (
+    newView: string,
+    newPage?: number,
+    newLimit?: number
+  ) => {
+    const params = new URLSearchParams(searchParams.toString());
+    newPage ? params.set("page", newPage?.toString()) : params.delete("page");
+    newLimit
+      ? params.set("limit", newLimit?.toString())
+      : params.delete("limit");
+    params.set("view", newView);
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    const storedView = getDataFromLS("products-view") || "grid";
+
+    if (!searchParams.get("view")) params.set("view", storedView);
+
+    if (params.toString() !== searchParams.toString()) {
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+  }, [searchParams, view, router]);
+
+  const handleView = () => {
+    const newView = view === "grid" ? "table" : "grid";
+
+    updateQueryParams(newView);
+    localStorage.setItem("products-view", JSON.stringify(newView));
+  };
 
   return (
-    <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 items-center gap-4">
-      <Link href="/dashboard/products/create" className="h-full w-full">
-        <Card className="p-5 rounded-lg flex-1 relative h-full flex items-center justify-center">
-          <PlusIcon className="size-7" />
-        </Card>
-      </Link>
-      {products?.map((product: Product) => (
-        <ProductCard key={product.id} product={product} isShowDescription={false}/>
-      ))}
+    <div className="flex flex-col gap-4 h-full">
+      <ProductsHeader
+        view={view}
+        handleView={handleView}
+        searchPhrase={searchPhrase}
+        setSearchPhrase={setSearchPhrase}
+      />
+      {view === "grid" ? (
+        <ProductsGridView />
+      ) : (
+        <ProductsTableView view={view} updateQueryParams={updateQueryParams} />
+      )}
     </div>
   );
 };
