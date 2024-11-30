@@ -1,25 +1,16 @@
 "use client";
 
-import { CreateProductFormData } from "@/types/types";
+import { ProductFormModalData } from "@/types/types";
 
 import { Dispatch, SetStateAction, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { LayoutGridIcon, Loader, SearchIcon, TableIcon } from "lucide-react";
+import { LayoutGridIcon, SearchIcon, TableIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Tooltip,
@@ -28,7 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import CreateProductForm from "./CreateProductForm";
+import CreateProductForm from "./ProductFormModal";
 
 import { handleCreateProduct } from "../actions";
 
@@ -59,30 +50,28 @@ const ProductsHeader = ({
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
-  const createProductMutation = useMutation<void, Error, CreateProductFormData>(
-    {
-      mutationFn: async ({
-        name,
-        description,
-        price,
-        image,
-      }: CreateProductFormData) => {
-        const data = await handleCreateProduct(name, description, image, price);
-        return data;
-      },
+  const createProductMutation = useMutation<void, Error, ProductFormModalData>({
+    mutationFn: async ({
+      name,
+      description,
+      price,
+      image,
+    }: ProductFormModalData) => {
+      const data = await handleCreateProduct(name, description, image, price);
+      return data;
+    },
 
-      onSuccess: () => {
-        toast.success("Product has been created");
-        setOpen(false);
-        queryClient.invalidateQueries({
-          queryKey: view === "table" ? ["products"] : ["products-infinite"],
-        });
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
-    }
-  );
+    onSuccess: () => {
+      toast.success("Product has been created");
+      setOpen(false);
+      queryClient.invalidateQueries({
+        queryKey: view === "table" ? ["products"] : ["products-infinite"],
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   return (
     <div className="flex items-center justify-end gap-4">
@@ -106,14 +95,15 @@ const ProductsHeader = ({
         <DialogTrigger asChild>
           <Button>Create Product</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-md">
+        <CreateProductForm productMutation={createProductMutation} />
+        {/* <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Create product</DialogTitle>
             <DialogDescription>
               Please fill in the fields and click "Save".
             </DialogDescription>
           </DialogHeader>
-          <CreateProductForm createProductMutation={createProductMutation} />
+          <CreateProductForm productMutation={createProductMutation} />
 
           <DialogFooter className="sm:justify-start w-full">
             <DialogClose asChild>
@@ -142,7 +132,7 @@ const ProductsHeader = ({
               )}
             </Button>
           </DialogFooter>
-        </DialogContent>
+        </DialogContent> */}
       </Dialog>
 
       <TooltipProvider>

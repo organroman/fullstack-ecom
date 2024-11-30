@@ -4,7 +4,7 @@ import LoadingPage from "@/app/loading";
 import { Button } from "@/components/ui/button";
 import { listUsers } from "@/features/users/api/users";
 import { columns } from "@/features/users/components/columns";
-import { DataTable } from "@/components/data-table";
+import { DataTable } from "@/components/DataTable";
 import { IUser } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";

@@ -1,8 +1,9 @@
 "use client";
 import { ProductType } from "@/types/types";
 
+import { Dispatch, SetStateAction } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
 
@@ -25,6 +26,9 @@ interface DeleteProductModalProps {
 
 const DeleteProductModal = ({ product, onClose }: DeleteProductModalProps) => {
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
+
+  const view = searchParams.get("view");
 
   const deleteProductMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -36,7 +40,7 @@ const DeleteProductModal = ({ product, onClose }: DeleteProductModalProps) => {
       toast.success("Product has been deleted");
       onClose(false);
       queryClient.invalidateQueries({
-        queryKey: ["products"],
+        queryKey: [view === "table" ? "products" : "products-infinite"],
       });
     },
     onError: (error) => {

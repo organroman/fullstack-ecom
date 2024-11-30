@@ -64,7 +64,8 @@ export interface IUsersOrder {
 }
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
-export interface CreateProductFormData {
+export interface ProductFormModalData {
+  id?: number;
   name: string;
   description: string;
   image: string;

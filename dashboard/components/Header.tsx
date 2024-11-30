@@ -49,7 +49,11 @@ const Header = ({ role }: HeaderProps) => {
   return (
     <nav className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-blue-300">
       <div className="flex items-center gap-5">
-        <Button onClick={goBack} className="text-md [&_svg]:size-5">
+        <Button
+          onClick={goBack}
+          className="text-md [&_svg]:size-5"
+          variant="outline"
+        >
           <ChevronLeftIcon />
           Back
         </Button>
@@ -62,7 +66,6 @@ const Header = ({ role }: HeaderProps) => {
         {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
         <AvatarFallback className="bg-black text-white">RO</AvatarFallback>
       </Avatar>
- 
     </nav>
   );
 };

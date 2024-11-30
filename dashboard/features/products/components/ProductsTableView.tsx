@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 
 import { listProducts } from "../api/products";
-import { DataTable } from "@/components/data-table";
+import { DataTable } from "@/components/DataTable";
 import { productColumns } from "./ProductsColumns";
 import LoadingPage from "@/app/loading";
 

@@ -54,9 +54,9 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <Table className="flex-grow-0">
-        <TableHeader>
+        <TableHeader className="w-full">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className="w-full">
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
@@ -79,9 +79,10 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className="h-12"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} className="px-4 py-1">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -98,7 +99,7 @@ export function DataTable<TData, TValue>({
 
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={columns.length}>
+            <TableCell colSpan={columns.length} className="px-4 py-2">
               <div className="flex items-center justify-between w-full">
                 <div>
                   <label>

@@ -59,3 +59,38 @@ export async function handleDeleteProduct(id: number) {
     throw error;
   }
 }
+
+export async function handleUpdateProduct(
+  id: number,
+  name: string,
+  description: string,
+  image: string,
+  price: string
+) {
+  const token = cookies().get("auth-token")?.value;
+  const priceNumber = parseFloat(price);
+
+  console.log("id:", id, "name:", name);
+
+  try {
+    const res = await fetch(`${API_URL}/products/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        name,
+        description,
+        price: priceNumber,
+        image,
+      }),
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
+  } catch (error) {
+    throw error;
+  }
+}
