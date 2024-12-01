@@ -1,3 +1,4 @@
+
 import { ALLOWED_ROLES } from "./../../utils/constants";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
@@ -47,13 +48,6 @@ export async function createOrder(req: Request, res: Response) {
   }
 }
 
-function isValidEnumValue<T extends string>(
-  value: string,
-  enumType: readonly T[]
-): value is T {
-  return enumType.includes(value as T);
-}
-
 export async function listOrders(req: Request, res: Response) {
   try {
     const token = req.header("Authorization");
@@ -68,16 +62,9 @@ export async function listOrders(req: Request, res: Response) {
     const role = decoded.role;
 
     const searchPhrase = ((req.query.search as string) || "").trim();
-    console.log("🚀 ~ searchPhrase:", searchPhrase);
     const isSearchNumeric = !isNaN(Number(searchPhrase));
-    console.log("🚀 ~ isSearchNumeric:", isSearchNumeric);
-    const sanitizedSearchPhrase = searchPhrase.toUpperCase();
-    console.log("🚀 ~ sanitizedSearchPhrase:", sanitizedSearchPhrase);
+    const status = req.query.status;
 
-    const isValidStatus = isValidEnumValue(
-      searchPhrase,
-      orderStatusEnum.enumValues
-    );
 
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
@@ -88,35 +75,32 @@ export async function listOrders(req: Request, res: Response) {
           .select()
           .from(ordersTable)
           .where(
-            searchPhrase
-              ? or(
-                  isValidStatus
-                    ? eq(ordersTable.status, searchPhrase as OrderStatusType)
-                    : undefined,
-                  isSearchNumeric
-                    ? eq(ordersTable.id, Number(searchPhrase))
-                    : undefined
-                )
-              : undefined
-          )
-      : db
-          .select()
-          .from(ordersTable)
-          .where(
             and(
-              eq(ordersTable.userId, userId),
               searchPhrase
-                ? or(
-                    isValidStatus
-                      ? eq(ordersTable.status, searchPhrase as OrderStatusType)
-                      : undefined,
-                    isSearchNumeric
-                      ? eq(ordersTable.id, Number(searchPhrase))
-                      : undefined
-                  )
+                ? isSearchNumeric
+                  ? eq(ordersTable.id, Number(searchPhrase))
+                  : undefined
+                : undefined,
+              status
+                ? eq(ordersTable.status, status as OrderStatusType)
                 : undefined
             )
-          );
+          )
+      : db.select().from(ordersTable).where(
+          // and(
+          eq(ordersTable.userId, userId)
+          //   searchPhrase
+          //     ? or(
+          //         isValidStatus
+          //           ? eq(ordersTable.status, searchPhrase as OrderStatusType)
+          //           : undefined,
+          //         isSearchNumeric
+          //           ? eq(ordersTable.id, Number(searchPhrase))
+          //           : undefined
+          //       )
+          //     : undefined
+          // )
+        );
 
     const orders = await query
       .orderBy(desc(ordersTable.createdAt))

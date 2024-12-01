@@ -35,11 +35,11 @@ export interface IUser {
 }
 
 export enum EOrderStatuses {
-  "New",
-  "Cancelled",
-  "Paid",
-  "Shipped",
-  "Delivered",
+  "NEW",
+  "PROCESSING",
+  "CANCELLED",
+  "SHIPPED",
+  "SENT",
 }
 export interface IOrderItem {
   id: number;

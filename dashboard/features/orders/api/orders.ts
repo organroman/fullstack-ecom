@@ -6,13 +6,25 @@ import { cookies } from "next/headers";
 export async function fetchOrders(
   page: number,
   limit: number,
-  search?: string | ""
+  search?: string | "",
+  status?: string | ""
 ) {
   const token = cookies().get("auth-token")?.value;
 
-  const query = search
-    ? `page=${page}&limit=${limit}&search=${search}`
-    : `page=${page}&limit=${limit}`;
+  const queryParams = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  });
+
+  if (search) {
+    queryParams.append("search", search);
+  }
+
+  if (status) {
+    queryParams.append("status", status);
+  }
+
+  const query = queryParams.toString();
 
   try {
     const response = await fetch(`${API_URL}/orders?${query}`, {

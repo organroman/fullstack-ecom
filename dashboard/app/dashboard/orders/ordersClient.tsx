@@ -33,10 +33,11 @@ const OrdersClient = () => {
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit") || 10);
   const search = searchParams.get("search") || "";
+  const status = searchParams.get("status") || "";
 
   const { data, isPending, error } = useQuery({
-    queryKey: ["orders", page, limit, search],
-    queryFn: async () => fetchOrders(page, limit, search),
+    queryKey: ["orders", page, limit, search, status],
+    queryFn: async () => fetchOrders(page, limit, search, status),
   });
 
   const { orders = [], totalPages = 0, totalItems = 0 } = data || {};
