@@ -22,6 +22,7 @@ import {
 import CreateProductForm from "./ProductFormModal";
 
 import { handleCreateProduct } from "../actions";
+import Search from "@/components/Search";
 
 interface ProductsHeaderProps {
   view: string;
@@ -75,22 +76,12 @@ const ProductsHeader = ({
 
   return (
     <div className="flex items-center justify-end gap-4">
-      <div className="relative h-10">
-        <Input
-          type="text"
-          value={searchPhrase}
-          onChange={(e) => setSearchPhrase(e.target.value)}
-          placeholder="Type for search"
-          className="w-[320px] border border-input rounded shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-transparent focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-blue-600"
-        />
-        <Button
-          variant="link"
-          onClick={() => updateQueryParams(searchPhrase)}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
-        >
-          <SearchIcon />
-        </Button>
-      </div>
+      <Search
+        searchPhrase={searchPhrase}
+        handleSearch={updateQueryParams}
+        onChange={setSearchPhrase}
+      />
+
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button>Create Product</Button>

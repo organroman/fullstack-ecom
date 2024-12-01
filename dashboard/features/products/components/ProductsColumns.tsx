@@ -22,6 +22,7 @@ export const productColumns: ColumnDef<ProductType>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const product = row.original;
+      
 
       return <ActionsMenu product={product} />;
     },

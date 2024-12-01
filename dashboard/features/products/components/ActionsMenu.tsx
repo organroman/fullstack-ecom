@@ -2,6 +2,9 @@ import { ProductFormModalData, ProductType } from "@/types/types";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 import {
   ExternalLinkIcon,
   MoreHorizontal,
@@ -18,13 +21,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 
 import DeleteProductModal from "./DeleteProductModal";
 import CreateProductForm from "./ProductFormModal";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
+
 import { handleUpdateProduct } from "../actions";
 
 const ActionsMenu = ({ product }: { product: ProductType }) => {

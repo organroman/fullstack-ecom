@@ -48,13 +48,13 @@ export interface IOrderItem {
   product: ProductType;
 }
 
-export interface IOrder {
+export type IOrder = {
   id: number;
   createdAt: Date;
   status: EOrderStatuses;
   user: IUser;
   items: IOrderItem[];
-}
+};
 
 export interface IUsersOrder {
   id: number;

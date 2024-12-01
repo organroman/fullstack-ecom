@@ -5,7 +5,6 @@ import { ProductFormModalData, ProductType } from "@/types/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UseMutationResult } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
 
 import {
   Form,
@@ -17,16 +16,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import {
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { createProductSchema } from "@/lib/schema";
+import { Textarea } from "@/components/ui/textarea";
+import Modal from "@/components/Modal";
 
 interface ProductFormModalProps {
   productMutation: UseMutationResult<
@@ -58,13 +50,19 @@ const ProductFormModal = ({
   };
 
   return (
-    <DialogContent className="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>{product ? "Edit" : "Create"} product</DialogTitle>
-        <DialogDescription>
-          Please {product ? "update" : "fill in"} the fields and click "Save".
-        </DialogDescription>
-      </DialogHeader>
+    <Modal
+      title={product ? "Edit product" : "Create product"}
+      descriptionFirst={
+        product
+          ? "Update the fields and click 'Save'"
+          : "fill in the fields and click 'Save'"
+      }
+      buttonActionTitle="Save"
+      buttonActionTitleContinuous="Saving"
+      submit
+      formId="create-product"
+      isPending={productMutation.isPending}
+    >
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -95,8 +93,9 @@ const ProductFormModal = ({
               <FormItem className="space-y-1">
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Input
+                  <Textarea
                     {...field}
+                    rows={10}
                     name="description"
                     placeholder="Enter product description"
                   />
@@ -142,35 +141,7 @@ const ProductFormModal = ({
           />
         </form>
       </Form>
-
-      <DialogFooter className="sm:justify-start w-full">
-        <DialogClose asChild>
-          <Button
-            type="button"
-            variant="secondary"
-            className="w-full"
-            disabled={productMutation.isPending}
-          >
-            Cancel
-          </Button>
-        </DialogClose>
-        <Button
-          type="submit"
-          form="create-product"
-          className="w-full"
-          disabled={productMutation.isPending}
-        >
-          {productMutation.isPending ? (
-            <div className="flex flex-row">
-              <Loader className="size-6 animate-spin text-muted-foreground mr-2" />
-              <span>Saving</span>
-            </div>
-          ) : (
-            "Save"
-          )}
-        </Button>
-      </DialogFooter>
-    </DialogContent>
+    </Modal>
   );
 };
 

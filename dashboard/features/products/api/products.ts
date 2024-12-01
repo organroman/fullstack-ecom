@@ -1,5 +1,5 @@
 import { API_URL } from "@/api/config";
-import { ProductType } from "@/types/types";
+
 
 export async function listProducts(
   page: number,

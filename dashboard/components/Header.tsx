@@ -62,9 +62,9 @@ const Header = ({ role }: HeaderProps) => {
         </h3>
       </div>
       <MobileSidebar role={role} />
-      <Avatar className="bg-black">
+      <Avatar className="bg-blue-500">
         {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-        <AvatarFallback className="bg-black text-white">RO</AvatarFallback>
+        <AvatarFallback className="bg-blue-500 text-white">RO</AvatarFallback>
       </Avatar>
     </nav>
   );

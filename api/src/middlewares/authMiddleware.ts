@@ -1,8 +1,9 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Response, Request, NextFunction } from "express";
 import { rolesEnum } from "../db/usersSchema";
+import { ALLOWED_ROLES } from "../utils/constants";
 
-interface TokenPayload extends JwtPayload {
+export interface TokenPayload extends JwtPayload {
   userId: string;
   role: typeof rolesEnum;
 }
@@ -34,9 +35,8 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
 
 export function verifySeller(req: Request, res: Response, next: NextFunction) {
   const role = req.role;
-  const allowedRoles = ["ADMIN", "SALES MANAGER"];
 
-  if (!allowedRoles.includes(role)) {
+  if (!ALLOWED_ROLES.includes(role)) {
     res.status(401).json({
       error: "Access denied",
       message: `Role '${role}' is not authorized to perform this action.`,

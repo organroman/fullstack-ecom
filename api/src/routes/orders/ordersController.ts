@@ -1,10 +1,18 @@
+import { ALLOWED_ROLES } from "./../../utils/constants";
+import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 
 import { db } from "../../db/index.js";
-import { orderItemsTable, ordersTable } from "../../db/ordersSchema.js";
-import { and, eq } from "drizzle-orm";
+import {
+  orderItemsTable,
+  ordersTable,
+  orderStatusEnum,
+} from "../../db/ordersSchema.js";
+import { and, desc, eq, or } from "drizzle-orm";
 import { productsTable } from "../../db/productsSchema.js";
 import { usersTable } from "../../db/usersSchema.js";
+import { TokenPayload } from "../../middlewares/authMiddleware.js";
+import { OrderStatusType, RoleType } from "../../types/express";
 
 export async function createOrder(req: Request, res: Response) {
   try {
@@ -39,12 +47,88 @@ export async function createOrder(req: Request, res: Response) {
   }
 }
 
-// if role is admin, return all orders else return only orders filtered by req.userId
+function isValidEnumValue<T extends string>(
+  value: string,
+  enumType: readonly T[]
+): value is T {
+  return enumType.includes(value as T);
+}
+
 export async function listOrders(req: Request, res: Response) {
   try {
-    const orders = await db.select().from(ordersTable);
-    console.log("🚀 ~ orders:", orders);
-    res.json(orders);
+    const token = req.header("Authorization");
+    if (!token) {
+      res.status(401).json({ error: "Access denied" });
+      return;
+    }
+
+    const decoded = jwt.verify(token, "your-secret") as TokenPayload;
+
+    const userId = Number(decoded.userId);
+    const role = decoded.role;
+
+    const searchPhrase = ((req.query.search as string) || "").trim();
+    console.log("🚀 ~ searchPhrase:", searchPhrase);
+    const isSearchNumeric = !isNaN(Number(searchPhrase));
+    console.log("🚀 ~ isSearchNumeric:", isSearchNumeric);
+    const sanitizedSearchPhrase = searchPhrase.toUpperCase();
+    console.log("🚀 ~ sanitizedSearchPhrase:", sanitizedSearchPhrase);
+
+    const isValidStatus = isValidEnumValue(
+      searchPhrase,
+      orderStatusEnum.enumValues
+    );
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const query = ALLOWED_ROLES.includes(role as RoleType)
+      ? db
+          .select()
+          .from(ordersTable)
+          .where(
+            searchPhrase
+              ? or(
+                  isValidStatus
+                    ? eq(ordersTable.status, searchPhrase as OrderStatusType)
+                    : undefined,
+                  isSearchNumeric
+                    ? eq(ordersTable.id, Number(searchPhrase))
+                    : undefined
+                )
+              : undefined
+          )
+      : db
+          .select()
+          .from(ordersTable)
+          .where(
+            and(
+              eq(ordersTable.userId, userId),
+              searchPhrase
+                ? or(
+                    isValidStatus
+                      ? eq(ordersTable.status, searchPhrase as OrderStatusType)
+                      : undefined,
+                    isSearchNumeric
+                      ? eq(ordersTable.id, Number(searchPhrase))
+                      : undefined
+                  )
+                : undefined
+            )
+          );
+
+    const orders = await query
+      .orderBy(desc(ordersTable.createdAt))
+      .limit(limit)
+      .offset(offset);
+
+    const totalOrders = await db.$count(ordersTable);
+    const totalPages = Math.ceil(totalOrders / limit);
+
+    res
+      .status(200)
+      .json({ orders, total: totalOrders, page, totalPages, limit });
   } catch (error) {
     res.status(500).send(error);
   }

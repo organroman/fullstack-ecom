@@ -3,10 +3,20 @@
 import { API_URL } from "@/api/config";
 import { cookies } from "next/headers";
 
-export async function fetchOrders() {
+export async function fetchOrders(
+  page: number,
+  limit: number,
+  search?: string | ""
+) {
   const token = cookies().get("auth-token")?.value;
+
+  const query = search
+    ? `page=${page}&limit=${limit}&search=${search}`
+    : `page=${page}&limit=${limit}`;
+
   try {
-    const response = await fetch(`${API_URL}/orders`, {
+    const response = await fetch(`${API_URL}/orders?${query}`, {
+      method: "GET",
       headers: {
         Authorization: token ?? "",
         "Content-type": "application/json",
@@ -15,8 +25,11 @@ export async function fetchOrders() {
 
     const data = await response.json();
 
+    console.log("RESPONSE", response);
+
     if (!response.ok) {
-      throw new Error("Failed to fetch orders");
+      console.log(response);
+      throw new Error(response.statusText);
     }
     return data;
   } catch (error) {
