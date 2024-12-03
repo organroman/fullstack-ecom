@@ -1,41 +1,83 @@
 "use client";
 
-import LoadingPage from "@/app/loading";
-import { Button } from "@/components/ui/button";
-import { listUsers } from "@/features/users/api/users";
-import { columns } from "@/features/users/components/columns";
-import { DataTable } from "@/components/DataTable";
-import { IUser } from "@/types/types";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+import LoadingPage from "@/app/loading";
+
+import { DataTable } from "@/components/DataTable";
+
+import { listUsers } from "@/features/users/api/users";
+import { usersColumns } from "@/features/users/components/UsersColumns";
+import UsersHeader from "@/features/users/components/UsersHeader";
 
 const UsersClient = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [searchPhrase, setSearchPhrase] = useState("");
+
+  const page = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit") || 10);
+  const search = searchParams.get("search") || "";
+  const role = searchParams.get("role") || "";
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => await listUsers(),
+    queryKey: ["users", page, limit, search, role],
+    queryFn: async () => await listUsers(page, limit, search, role),
   });
 
-  const router = useRouter();
+  const { users = [], totalPages, total } = data || {};
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (!searchParams.get("page")) params.set("page", page.toString());
+    if (!searchParams.get("limit")) params.set("limit", limit.toString());
+
+    if (params.toString() !== searchParams.toString()) {
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+  }, [searchParams, page, limit, router]);
+
+  const updateQueryParams = (newPage?: number, newLimit?: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    newPage ? params.set("page", newPage?.toString()) : params.delete("page");
+    newLimit
+      ? params.set("limit", newLimit?.toString())
+      : params.delete("limit");
+
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    updateQueryParams(newPage, limit);
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    updateQueryParams(page, newLimit);
+  };
 
   if (isLoading) {
     return <LoadingPage />;
   }
 
-  console.log(data);
   return (
-    <div className="container mx-auto py-5 flex flex-col gap-4">
-      {/* <Link href="/dashboard/users/create" className="self-end"> */}
-      <Button
-        onClick={() => router.push("/dashboard/users/create")}
-        className="self-end"
-      >
-        Create user
-      </Button>
-      {/* </Link> */}
-      <DataTable columns={columns} data={data.users} 
-    //   totalItems={data.total} 
+    <div className="flex flex-col gap-4 h-full">
+      <UsersHeader
+        searchPhrase={searchPhrase}
+        setSearchPhrase={setSearchPhrase}
+      />
+      <DataTable
+        columns={usersColumns}
+        data={users}
+        totalItems={total}
+        totalPages={totalPages}
+        onLimitChange={handleLimitChange}
+        onPageChange={handlePageChange}
+        currentPage={page}
+        currentLimit={limit}
       />
     </div>
   );

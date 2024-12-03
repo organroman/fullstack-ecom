@@ -21,6 +21,6 @@ export const createProductSchema = z.object({
     .min(1, "Price is required") // Ensure it's not empty
     .refine((val) => !isNaN(Number(val)), {
       message: "Price must be a valid number",
-    }) // Ensure valid numeric value
+    }) 
     .transform((val) => Number(val)),
 });

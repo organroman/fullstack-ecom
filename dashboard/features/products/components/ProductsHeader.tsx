@@ -7,11 +7,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { LayoutGridIcon, SearchIcon, TableIcon } from "lucide-react";
+import { LayoutGridIcon, TableIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+
 import {
   Tooltip,
   TooltipContent,
@@ -19,7 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import CreateProductForm from "./ProductFormModal";
+import ProductFormModal from "./ProductFormModal";
 
 import { handleCreateProduct } from "../actions";
 import Search from "@/components/Search";
@@ -86,44 +86,7 @@ const ProductsHeader = ({
         <DialogTrigger asChild>
           <Button>Create Product</Button>
         </DialogTrigger>
-        <CreateProductForm productMutation={createProductMutation} />
-        {/* <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Create product</DialogTitle>
-            <DialogDescription>
-              Please fill in the fields and click "Save".
-            </DialogDescription>
-          </DialogHeader>
-          <CreateProductForm productMutation={createProductMutation} />
-
-          <DialogFooter className="sm:justify-start w-full">
-            <DialogClose asChild>
-              <Button
-                type="button"
-                variant="secondary"
-                className="w-full"
-                disabled={createProductMutation.isPending}
-              >
-                Cancel
-              </Button>
-            </DialogClose>
-            <Button
-              type="submit"
-              form="create-product"
-              className="w-full"
-              disabled={createProductMutation.isPending}
-            >
-              {createProductMutation.isPending ? (
-                <div className="flex flex-row">
-                  <Loader className="size-6 animate-spin text-muted-foreground mr-2" />
-                  <span>Saving</span>
-                </div>
-              ) : (
-                "Save"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent> */}
+        <ProductFormModal productMutation={createProductMutation} />
       </Dialog>
 
       <TooltipProvider>

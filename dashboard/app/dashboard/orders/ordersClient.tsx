@@ -1,22 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
-import Link from "next/link";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 
 import LoadingPage from "@/app/loading";
 
 import { fetchOrders } from "@/features/orders/api/orders";
-import { IOrder } from "@/types/types";
+
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -37,7 +28,7 @@ const OrdersClient = () => {
 
   const { data, isPending, error } = useQuery({
     queryKey: ["orders", page, limit, search, status],
-    queryFn: async () => fetchOrders(page, limit, search, status),
+    queryFn: async () => await fetchOrders(page, limit, search, status),
   });
 
   const { orders = [], totalPages = 0, totalItems = 0 } = data || {};

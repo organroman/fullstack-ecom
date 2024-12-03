@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { IOrder } from "@/types/types";
 import dayjs from "dayjs";
+import OrderActionsMenu from "./OrderActionsMenu";
 
 export const ordersColumns: ColumnDef<IOrder>[] = [
   {
@@ -26,10 +27,11 @@ export const ordersColumns: ColumnDef<IOrder>[] = [
   {
     id: "actions",
     header: "Actions",
-    // cell: ({ row }) => {
-    //   const product = row.original;
 
-    //   return <ActionsMenu product={product} />;
-    // },
+    cell: ({ row }) => {
+      const order = row.original;
+
+      return <OrderActionsMenu order={order} />;
+    },
   },
 ];

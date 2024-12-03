@@ -1,8 +1,10 @@
 "use client";
 
+import { capitalizeFirstLetter } from "@/lib/utils";
 import { IUser, Roles } from "@/types/types";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import UserActionsMenu from "./UserActionsMenu";
 
 export type User = {
   users: IUser[];
@@ -14,10 +16,10 @@ export type User = {
 const rolesColor = {
   ADMIN: "text-blue-600",
   "SALES MANAGER": "text-green-700",
-  CUSTOMER: "text-gray-700",
+  CUSTOMER: "text-yellow-500",
 };
 
-export const columns: ColumnDef<IUser>[] = [
+export const usersColumns: ColumnDef<IUser>[] = [
   {
     accessorKey: "id",
     header: "Id",
@@ -34,9 +36,19 @@ export const columns: ColumnDef<IUser>[] = [
     cell: ({ row }) => {
       const role = row.getValue("role") as Roles;
 
-      return <span className={rolesColor[role]}>{role}</span>;
+      return (
+        <span className={rolesColor[role]}>{capitalizeFirstLetter(role)}</span>
+      );
     },
   },
   { accessorKey: "address", header: "Address" },
   { accessorKey: "phone", header: "Phone" },
+  {
+    accessorKey: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const user = row.original;
+      return <UserActionsMenu user={user} />;
+    },
+  },
 ];

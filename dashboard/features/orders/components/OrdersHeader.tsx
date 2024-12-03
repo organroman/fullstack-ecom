@@ -14,8 +14,9 @@ import {
 } from "@/components/ui/select";
 import { EOrderStatuses } from "@/types/types";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import OrderFormModal from "./OrderFormModal";
 
-interface ProductsHeaderProps {
+interface OrdersHeaderProps {
   searchPhrase: string;
   setSearchPhrase: Dispatch<SetStateAction<string>>;
 }
@@ -24,18 +25,15 @@ const orderStatuses = [
   "All",
   ...Object.keys(EOrderStatuses).filter((status) => isNaN(Number(status))),
 ];
-console.log("🚀 ~ orderStatuses:", orderStatuses);
 
-const OrdersHeader = ({
-  searchPhrase,
-  setSearchPhrase,
-}: ProductsHeaderProps) => {
+const OrdersHeader = ({ searchPhrase, setSearchPhrase }: OrdersHeaderProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const status = searchParams.get("status");
+
   const [open, setOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<string>("All");
-  console.log("🚀 ~ selectedStatus:", selectedStatus);
+  const [selectedStatus, setSelectedStatus] = useState<string>(status || "All");
 
   const updateQueryParams = (newSearch: string, newStatus?: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -52,12 +50,10 @@ const OrdersHeader = ({
   };
 
   const handleFilterChange = (status: string) => {
-    console.log("🚀 ~ status:", status);
     setSelectedStatus(status);
     updateQueryParams(searchPhrase, status);
-    // Trigger filter logic here, e.g., API call or local filtering
-    console.log("Selected Status:", status === "All" ? "No filter" : status);
   };
+
   return (
     <div className="flex items-center justify-end gap-4">
       <Search
@@ -83,7 +79,7 @@ const OrdersHeader = ({
         <DialogTrigger asChild>
           <Button>Create Order</Button>
         </DialogTrigger>
-        {/* <CreateProductForm productMutation={createProductMutation} /> */}
+        <OrderFormModal />
       </Dialog>
     </div>
   );

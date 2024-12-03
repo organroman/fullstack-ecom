@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import { Card } from "@/components/ui/card";
 
-import ActionsMenu from "./ActionsMenu";
+import ActionsMenu from "./ProductActionsMenu";
 
 interface ProductCardProps {
   product: ProductType;

@@ -1,10 +1,12 @@
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import { Request, Response } from "express";
-import { count, eq } from "drizzle-orm";
+import { ilike, eq, or, and } from "drizzle-orm";
 
 import { db } from "../../db/index.js";
 import { usersTable } from "../../db/usersSchema.js";
+import { TokenPayload } from "../../middlewares/authMiddleware.js";
+import { RoleType } from "../../types/express/index.js";
 
 export async function updateUser(req: Request, res: Response) {
   try {
@@ -70,9 +72,18 @@ export async function changePassword(req: Request, res: Response) {
 
 export async function listUsers(req: Request, res: Response) {
   try {
-    const userRole = req.role;
+    const token = req.header("Authorization");
 
-    if (userRole !== "ADMIN") {
+    if (!token) {
+      res.status(401).json({ error: "Access denied" });
+      return;
+    }
+
+    const decoded = jwt.verify(token, "your-secret") as TokenPayload;
+
+    const userRole = decoded.role;
+
+    if (userRole !== ("ADMIN" as RoleType)) {
       res.status(401).json({ error: "Unauthorized" });
       return;
     }
@@ -81,14 +92,34 @@ export async function listUsers(req: Request, res: Response) {
     const limit = Number(req.query.limit as string) || 10;
     const offset = (page - 1) * limit;
 
-    const users = await db
+    const searchPhrase = ((req.query.search as string) || "").trim();
+    const isSearchNumeric = !isNaN(Number(searchPhrase));
+    const filterRole = req.query.role as RoleType;
+
+    const query = db
       .select()
       .from(usersTable)
-      .limit(limit)
-      .offset(offset);
+      .where(
+        and(
+          filterRole ? eq(usersTable.role, filterRole) : undefined,
 
-    const totalUsers = await db.select({ count: count() }).from(usersTable);
-    const totalPages = Math.ceil(totalUsers[0].count / limit);
+          searchPhrase
+            ? isSearchNumeric
+              ? eq(usersTable.id, Number(searchPhrase))
+              : or(
+                  ilike(usersTable.name, `%${searchPhrase}%`),
+                  ilike(usersTable.email, `%${searchPhrase}%`),
+                  ilike(usersTable.address, `%${searchPhrase}%`),
+                  ilike(usersTable.phone, `$${searchPhrase}%`)
+                )
+            : undefined
+        )
+      );
+
+    const users = await query.limit(limit).offset(offset);
+
+    const totalUsers = await db.$count(usersTable);
+    const totalPages = Math.ceil(totalUsers / limit);
 
     const usersWoPass = users.map(
       ({ id, email, phone, name, role, address, createdAt }) => {
@@ -106,10 +137,10 @@ export async function listUsers(req: Request, res: Response) {
 
     res.status(200).json({
       users: usersWoPass,
-      total: totalUsers[0].count,
+      total: totalUsers,
       page,
-      limit,
       totalPages,
+      limit,
     });
   } catch (error) {
     res.status(500).send(error);

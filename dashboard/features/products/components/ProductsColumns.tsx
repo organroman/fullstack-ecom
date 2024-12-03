@@ -1,12 +1,11 @@
 import { ProductType } from "@/types/types";
 import { ColumnDef } from "@tanstack/react-table";
-import ActionsMenu from "./ActionsMenu";
+import ProductActionsMenu from "./ProductActionsMenu";
 
 export const productColumns: ColumnDef<ProductType>[] = [
   {
     accessorKey: "id",
     header: "Id",
-    
   },
   { accessorKey: "name", header: "Name" },
   {
@@ -22,9 +21,7 @@ export const productColumns: ColumnDef<ProductType>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const product = row.original;
-      
-
-      return <ActionsMenu product={product} />;
+      return <ProductActionsMenu product={product} />;
     },
   },
 ];
