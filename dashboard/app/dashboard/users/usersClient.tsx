@@ -68,16 +68,18 @@ const UsersClient = () => {
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
       />
-      <DataTable
-        columns={usersColumns}
-        data={users}
-        totalItems={total}
-        totalPages={totalPages}
-        onLimitChange={handleLimitChange}
-        onPageChange={handlePageChange}
-        currentPage={page}
-        currentLimit={limit}
-      />
+      <div className="h-full border overflow-y-auto rounded-md">
+        <DataTable
+          columns={usersColumns}
+          data={users}
+          totalItems={total}
+          totalPages={totalPages}
+          onLimitChange={handleLimitChange}
+          onPageChange={handlePageChange}
+          currentPage={page}
+          currentLimit={limit}
+        />
+      </div>
     </div>
   );
 };

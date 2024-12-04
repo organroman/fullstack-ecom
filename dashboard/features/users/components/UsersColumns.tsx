@@ -23,10 +23,6 @@ export const usersColumns: ColumnDef<IUser>[] = [
   {
     accessorKey: "id",
     header: "Id",
-    cell: ({ row }) => {
-      const id = row.getValue("id") as number;
-      return <Link href={`/dashboard/users/${id}`}>{id}</Link>;
-    },
   },
   { accessorKey: "name", header: "Name" },
   { accessorKey: "email", header: "Email" },

@@ -47,13 +47,6 @@ const routes = [
     activeIcon: HiUsers,
     permission: PERMISSIONS.users,
   },
-  {
-    label: "Settings",
-    href: "/settings",
-    icon: IoSettingsOutline,
-    activeIcon: IoSettingsSharp,
-    permission: PERMISSIONS.settings,
-  },
 ];
 
 type SideBarProps = {

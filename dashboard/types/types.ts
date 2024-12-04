@@ -26,12 +26,12 @@ export enum Roles {
 
 export interface IUser {
   id: number;
-  email: string;
   role: Roles;
   name: string;
+  email: string;
+  phone: string;
   address: string;
   createdAt: string;
-  phone: string;
 }
 
 export enum EOrderStatuses {
