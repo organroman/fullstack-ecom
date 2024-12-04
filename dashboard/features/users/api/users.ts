@@ -45,3 +45,24 @@ export async function listUsers(
     throw error;
   }
 }
+
+export async function getUser(userId: string) {
+  const token = cookies().get("auth-token")?.value;
+  try {
+    const response = await fetch(`${API_URL}/users/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: token ?? "",
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}

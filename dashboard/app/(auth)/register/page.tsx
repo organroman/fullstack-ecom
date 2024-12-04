@@ -1,7 +1,8 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import RegisterForm from "@/components/auth/RegisterForm";
+import RegisterForm from "@/features/auth/RegisterForm";
+
 
 const RegisterPage = () => {
   const usersToken = cookies().get("auth-token")?.value;

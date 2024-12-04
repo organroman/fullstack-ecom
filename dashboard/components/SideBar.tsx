@@ -1,7 +1,7 @@
 "use client";
 
-import { cn, getRoleFromToken, hasPermission } from "@/lib/utils";
-import { NotebookTabsIcon, SettingsIcon, UsersIcon } from "lucide-react";
+import { cn, hasPermission } from "@/lib/utils";
+
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,7 +16,6 @@ import { PiNotebookDuotone, PiNotebookFill } from "react-icons/pi";
 import { HiOutlineUsers, HiUsers } from "react-icons/hi2";
 import { IoSettingsOutline, IoSettingsSharp } from "react-icons/io5";
 import { PERMISSIONS } from "@/lib/permissions";
-import { useAuth } from "@/store/authStore";
 
 const routes = [
   {
@@ -65,10 +64,12 @@ const SideBar = ({ role }: SideBarProps) => {
   const pathName = usePathname();
 
   return (
-    <aside className="h-full bg-neutral-100 p-4 w-full">
+    <aside className="h-full p-4 w-full border-r">
       <Link href="/dashboard" className="flex flex-row items-center gap-2">
         <Image src="/logo.svg" alt="logo" width={48} height={48} />
-        <span className="text-2xl text-neutral-800">E-commerce</span>
+        <span className="text-2xl text-neutral-800 dark:text-slate-200">
+          E-commerce
+        </span>
       </Link>
       <ul className="flex flex-col my-4">
         {routes.map((route) => {
@@ -85,12 +86,12 @@ const SideBar = ({ role }: SideBarProps) => {
               <Link key={route.href} href={route.href}>
                 <div
                   className={cn(
-                    "flex items-center gap-2.5 p-2.5 rounded-md font-medium hover: text-primary transition text-neutral-500",
+                    "flex items-center gap-2.5 p-2.5 rounded-md font-medium hover: text-primary transition text-slate-700 dark:text-slate-300",
                     isActive &&
-                      "bg-blue-200 shadow-sm hover:opacity-100 text-blue-800"
+                      "bg-blue-200 dark:bg-blue-500 shadow-sm hover:opacity-100 text-blue-500 dark:text-slate-200"
                   )}
                 >
-                  <Icon className="size-5 text-blue-500" />
+                  <Icon className="size-5 text-blue-500 dark:text-slate-300" />
                   {route.label}
                 </div>
               </Link>

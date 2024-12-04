@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Loader } from "lucide-react";
 import { toast } from "sonner";
 
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -15,14 +15,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 import { LoginFormData } from "@/types/types";
 import { loginSchema } from "@/lib/schema";
 import { handleLogin } from "./actions";
-
+import { Button } from "@/components/ui/button";
 
 const LoginForm = () => {
   const form = useForm<LoginFormData>({
@@ -41,7 +40,6 @@ const LoginForm = () => {
 
     onSuccess: () => {
       toast.success("Logged in");
-   
     },
     onError: (error) => {
       toast.error(error.message);
@@ -54,7 +52,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="w-full h-full md:w-[487px] border-none">
+    <Card className="w-full h-full md:w-[487px] shadow-md dark:bg-slate-800">
       <CardHeader className="flex items-center justify-center text-center p-7">
         <CardTitle>Welcome back!</CardTitle>
       </CardHeader>

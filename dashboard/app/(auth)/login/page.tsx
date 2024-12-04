@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import LoginForm from "@/components/auth/LoginForm";
+import LoginForm from "@/features/auth/LoginForm";
 
 const LoginPage = () => {
   const usersToken = cookies().get("auth-token")?.value;

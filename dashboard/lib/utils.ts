@@ -11,11 +11,11 @@ export const hasPermission = (permission: string[], role: string) => {
 };
 
 interface TokenPayload extends JwtPayload {
-  // userId: string;
+  userId: string;
   role: string;
 }
 
-export const getRoleFromToken = (token: string) => {
+export const getRoleAndUserFromToken = (token: string) => {
   if (!token || typeof token !== "string") {
     throw new Error("Invalid token provided");
   }
@@ -26,7 +26,16 @@ export const getRoleFromToken = (token: string) => {
     throw new Error("Invalid token payload: missing role");
   }
 
-  return decoded.role;
+  if (!decoded.userId) {
+    throw new Error("Invalid token payload: missing user");
+  }
+
+  const data = {
+    role: decoded.role,
+    userId: decoded.userId,
+  };
+
+  return data;
 };
 
 export const getDataFromLS = (key: string) => {
@@ -46,4 +55,8 @@ export const getDataFromLS = (key: string) => {
 
 export const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
+export const removeCookie = (cookieName: string) => {
+  document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 };

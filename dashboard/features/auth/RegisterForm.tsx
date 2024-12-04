@@ -14,7 +14,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -22,9 +22,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 import { SignUpFormData } from "@/types/types";
 import { signUpSchema } from "@/lib/schema";
@@ -40,7 +40,6 @@ const RegisterForm = () => {
       address: "",
     },
   });
-
 
   const registerMutation = useMutation({
     mutationFn: async ({ name, email, password, address }: SignUpFormData) => {

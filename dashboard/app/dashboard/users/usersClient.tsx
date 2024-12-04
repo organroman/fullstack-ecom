@@ -27,7 +27,6 @@ const UsersClient = () => {
     queryKey: ["users", page, limit, search, role],
     queryFn: async () => await listUsers(page, limit, search, role),
   });
-
   const { users = [], totalPages, total } = data || {};
 
   useEffect(() => {

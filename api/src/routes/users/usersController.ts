@@ -146,3 +146,25 @@ export async function listUsers(req: Request, res: Response) {
     res.status(500).send(error);
   }
 }
+
+export async function getUserById(req: Request, res: Response) {
+  try {
+    const id = parseInt(req.params.id);
+
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id, id));
+
+    if (!user) {
+      res.status(404).send({ message: "User not found" });
+      return;
+    }
+
+    const { password, ...userWithoutPassword } = user;
+
+    res.status(200).json(userWithoutPassword);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}

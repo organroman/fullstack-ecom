@@ -2,9 +2,12 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import MobileSidebar from "./MobileSidebar";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+
 import { Button } from "./ui/button";
-import { ChevronLeftIcon } from "lucide-react";
+import { ChevronLeftIcon, Loader } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getUser } from "@/features/users/api/users";
+import AvatarMenu from "./AvatarMenu";
 
 const partsMap = {
   products: {
@@ -30,15 +33,24 @@ const defaultMap = {
 };
 
 interface HeaderProps {
-  role: string;
+  userData: {
+    role: string;
+    userId: string;
+  };
 }
 
-const Header = ({ role }: HeaderProps) => {
+const Header = ({ userData }: HeaderProps) => {
   const pathname = usePathname();
   const pathnameParts = pathname.split("/").splice(1);
   const pathnameKey = pathnameParts[1] as keyof typeof partsMap;
-
   const router = useRouter();
+
+  const { role, userId } = userData;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: async () => await getUser(userId),
+  });
 
   const goBack = () => {
     router.back();
@@ -62,10 +74,11 @@ const Header = ({ role }: HeaderProps) => {
         </h3>
       </div>
       <MobileSidebar role={role} />
-      <Avatar className="bg-blue-500">
-        {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-        <AvatarFallback className="bg-blue-500 text-white">RO</AvatarFallback>
-      </Avatar>
+      {isLoading ? (
+        <Loader className="animate-spin" />
+      ) : (
+        <AvatarMenu data={data} />
+      )}
     </nav>
   );
 };

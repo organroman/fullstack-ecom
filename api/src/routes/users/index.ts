@@ -6,7 +6,12 @@ import {
 } from "../../db/usersSchema.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
 import { verifyToken } from "../../middlewares/authMiddleware";
-import { changePassword, listUsers, updateUser } from "./usersController.js";
+import {
+  changePassword,
+  listUsers,
+  updateUser,
+  getUserById,
+} from "./usersController.js";
 
 const router = Router();
 
@@ -18,5 +23,6 @@ router.put(
   changePassword
 );
 router.get("/", verifyToken, listUsers);
+router.get("/:id", verifyToken, getUserById);
 
 export default router;
