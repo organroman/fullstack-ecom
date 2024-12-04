@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import jwt from "jsonwebtoken";
 
 import { db } from "../../db/index.js";
-import { usersTable } from "../../db/usersSchema.js";
+import { usersTable } from "../../db/schema/users.js";
 
 export async function signUp(req: Request, res: Response) {
   try {

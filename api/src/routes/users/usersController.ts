@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { ilike, eq, or, and } from "drizzle-orm";
 
 import { db } from "../../db/index.js";
-import { usersTable } from "../../db/usersSchema.js";
+import { usersTable } from "../../db/schema/users.js";
 import { TokenPayload } from "../../middlewares/authMiddleware.js";
 import { RoleType } from "../../types/express/index.js";
 

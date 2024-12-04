@@ -3,9 +3,10 @@ import { defineConfig } from "drizzle-kit";
 export default defineConfig({
   out: "./drizzle",
   schema: [
-    "./src/db/productsSchema.ts",
-    "./src/db/usersSchema.ts",
-    "./src/db/ordersSchema.ts",
+    "./src/db/schema",
+    // "./src/db/productsSchema.ts",
+    // "./src/db/usersSchema.ts",
+    // "./src/db/ordersSchema.ts",
   ],
   dialect: "postgresql",
   dbCredentials: {
@@ -13,4 +14,5 @@ export default defineConfig({
   },
   verbose: true,
   strict: true,
+
 });

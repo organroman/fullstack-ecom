@@ -11,7 +11,7 @@ import { validateData } from "../../middlewares/validationMiddleware.js";
 import {
   createProductSchema,
   updateProductSchema,
-} from "../../db/productsSchema.js";
+} from "../../db/schema/products.js";
 import { verifySeller, verifyToken } from "../../middlewares/authMiddleware.js";
 
 const router = Router();

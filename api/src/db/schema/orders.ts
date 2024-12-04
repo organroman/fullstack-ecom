@@ -8,8 +8,9 @@ import {
 import { createInsertSchema } from "drizzle-zod";
 import z from "zod";
 
-import { usersTable } from "./usersSchema";
-import { productsTable } from "./productsSchema";
+import { usersTable } from "./users";
+import { productsTable } from "./products";
+import { timestamps } from "../../utils/helpers";
 
 export const orderStatusEnum = pgEnum("orderStatus", [
   "NEW",
@@ -21,36 +22,38 @@ export const orderStatusEnum = pgEnum("orderStatus", [
 
 export const ordersTable = pgTable("orders", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  createdAt: timestamp().notNull().defaultNow(),
   status: orderStatusEnum().notNull().default("NEW"),
 
-  userId: integer()
+  user_id: integer()
     .references(() => usersTable.id)
     .notNull(),
+  ...timestamps,
 });
 
 export const orderItemsTable = pgTable("order_items", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  orderId: integer()
+  order_id: integer()
     .references(() => ordersTable.id)
     .notNull(),
-  productId: integer()
+  product_id: integer()
     .references(() => productsTable.id)
     .notNull(),
   quantity: integer().notNull(),
   price: doublePrecision().notNull(),
+  ...timestamps,
 });
 
 export const insertOrderSchema = createInsertSchema(ordersTable).omit({
   id: true,
-  userId: true,
+  user_id: true,
   status: true,
-  createdAt: true,
+  created_at: true,
+  updated_at: true,
 });
 
 export const insertOrderItemsSchema = createInsertSchema(orderItemsTable).omit({
   id: true,
-  orderId: true,
+  order_id: true,
 });
 
 export const insertOrderWithItemsSchema = z.object({

@@ -3,7 +3,7 @@ import { Router } from "express";
 import {
   insertOrderWithItemsSchema,
   updateOrderSchema,
-} from "../../db/ordersSchema.js";
+} from "../../db/schema/orders.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
 import { verifyToken } from "../../middlewares/authMiddleware.js";
 import {

@@ -8,10 +8,10 @@ import {
   orderItemsTable,
   ordersTable,
   orderStatusEnum,
-} from "../../db/ordersSchema.js";
+} from "../../db/schema/orders.js";
 import { and, desc, eq, or } from "drizzle-orm";
-import { productsTable } from "../../db/productsSchema.js";
-import { usersTable } from "../../db/usersSchema.js";
+import { productsTable } from "../../db/schema/products.js";
+import { usersTable } from "../../db/schema/users.js";
 import { TokenPayload } from "../../middlewares/authMiddleware.js";
 import { OrderStatusType, RoleType } from "../../types/express";
 

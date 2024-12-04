@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Response, Request, NextFunction } from "express";
-import { rolesEnum } from "../db/usersSchema";
+import { rolesEnum } from "../db/schema/users";
 import { ALLOWED_ROLES } from "../utils/constants";
 
 export interface TokenPayload extends JwtPayload {

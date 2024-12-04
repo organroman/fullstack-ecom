@@ -3,7 +3,7 @@ import { Router } from "express";
 import {
   changePasswordSchema,
   updateUserSchema,
-} from "../../db/usersSchema.js";
+} from "../../db/schema/users.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
 import { verifyToken } from "../../middlewares/authMiddleware";
 import {

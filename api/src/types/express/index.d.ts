@@ -1,5 +1,5 @@
-import { orderStatusEnum } from "../../db/ordersSchema";
-import { rolesEnum } from "./../../db/usersSchema";
+import { orderStatusEnum } from "../../db/schema/orders";
+import { rolesEnum } from "../../db/schema/users";
 import { Request } from "express";
 
 export type RoleType = (typeof rolesEnum)["_type"];
