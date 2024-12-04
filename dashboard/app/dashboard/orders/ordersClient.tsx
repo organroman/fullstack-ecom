@@ -1,18 +1,14 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-
-
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import LoadingPage from "@/app/loading";
 
-import { fetchOrders } from "@/features/orders/api/orders";
-
-
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import OrdersHeader from "@/features/orders/components/OrdersHeader";
 import { DataTable } from "@/components/DataTable";
+import OrdersHeader from "@/features/orders/components/OrdersHeader";
+import { fetchOrders } from "@/features/orders/api/orders";
 import { ordersColumns } from "@/features/orders/components/OrdersColumns";
 
 const OrdersClient = () => {
@@ -71,6 +67,7 @@ const OrdersClient = () => {
       <OrdersHeader
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
+        title="Orders"
       />
       <div className="h-full border overflow-y-auto rounded-md">
         <DataTable

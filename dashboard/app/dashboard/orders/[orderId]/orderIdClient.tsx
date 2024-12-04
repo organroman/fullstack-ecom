@@ -1,11 +1,15 @@
 "use client";
+import { IOrderItem } from "@/types/types";
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-
 import dayjs from "dayjs";
+
+import LoadingPage from "@/app/loading";
+
 import {
   Card,
   CardContent,
@@ -14,12 +18,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import LoadingPage from "@/app/loading";
+
 import {
   fetchOrderById,
   updateOrderStatus,
 } from "@/features/orders/api/orders";
-import { IOrderItem } from "@/types/types";
+
 import {
   Select,
   SelectContent,
@@ -27,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import OrdersHeader from "@/features/orders/components/OrdersHeader";
 
 const statuses = ["New", "Cancelled", "Paid", "Shipped", "Delivered"];
 
@@ -64,66 +69,74 @@ const OrderIdClient = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex flex-row flex-start justify-between">
-          <div>
-            <CardTitle className="text-lg">Order Details</CardTitle>
-            <div className="flex flex-row items-center gap-4 font-bold">
-              <CardDescription>Order #{orderId}</CardDescription>
-              <CardDescription>
-                {dayjs(order.createdAt).format("DD.MM.YYYY HH:mm")}
-              </CardDescription>
-
-              <Select
-                defaultValue={order?.status}
-                onValueChange={handleStatusChange}
-                disabled={updateOrderStatusMutation.isPending}
-              >
-                <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="Select a status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {statuses.map((status) => (
-                    <SelectItem key={status} value={status}>
-                      {status}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div>
-            <CardTitle className="text-lg">Customer Details</CardTitle>
+    <div className="flex flex-col gap-4 h-full">
+      <OrdersHeader title="Order details" />
+      <Card>
+        <CardHeader>
+          <div className="flex flex-row flex-start justify-between">
             <div>
-              <CardDescription>{order.user.name}</CardDescription>
-              <CardDescription>{order.user.email}</CardDescription>
-              <CardDescription>{order.user.address}</CardDescription>
+              <CardTitle className="text-lg">Order Details</CardTitle>
+              <div className="flex flex-row items-center gap-4 font-bold">
+                <CardDescription>Order #{orderId}</CardDescription>
+                <CardDescription>
+                  {dayjs(order.createdAt).format("DD.MM.YYYY HH:mm")}
+                </CardDescription>
+
+                <Select
+                  defaultValue={order?.status}
+                  onValueChange={handleStatusChange}
+                  disabled={updateOrderStatusMutation.isPending}
+                >
+                  <SelectTrigger className="w-[200px]">
+                    <SelectValue placeholder="Select a status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {statuses.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {status}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div>
+              <CardTitle className="text-lg">Customer Details</CardTitle>
+              <div>
+                <CardDescription>{order.user.name}</CardDescription>
+                <CardDescription>{order.user.email}</CardDescription>
+                <CardDescription>{order.user.address}</CardDescription>
+              </div>
             </div>
           </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <CardDescription className="font-semibold">Order items</CardDescription>
-        {order.items.map((item: IOrderItem) => (
-          <div className="flex flex-row items-center gap-6 py-2" key={item.id}>
-            <Image
-              src={item.product.image}
-              width={40}
-              height={40}
-              alt={item.product.name}
-            />
-            <CardDescription>{item.product.name}</CardDescription>
-            <CardDescription>{item.quantity}</CardDescription>
-            <CardDescription>{item.price}</CardDescription>
-          </div>
-        ))}
-      </CardContent>
-      <CardFooter>
-        <CardDescription>Total: {totalAmountOfOrder}</CardDescription>
-        <CardDescription></CardDescription>
-      </CardFooter>
-    </Card>
+        </CardHeader>
+        <CardContent>
+          <CardDescription className="font-semibold">
+            Order items
+          </CardDescription>
+          {order.items.map((item: IOrderItem) => (
+            <div
+              className="flex flex-row items-center gap-6 py-2"
+              key={item.id}
+            >
+              <Image
+                src={item.product.image}
+                width={40}
+                height={40}
+                alt={item.product.name}
+              />
+              <CardDescription>{item.product.name}</CardDescription>
+              <CardDescription>{item.quantity}</CardDescription>
+              <CardDescription>{item.price}</CardDescription>
+            </div>
+          ))}
+        </CardContent>
+        <CardFooter>
+          <CardDescription>Total: {totalAmountOfOrder}</CardDescription>
+          <CardDescription></CardDescription>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 

@@ -4,10 +4,10 @@ import { usePathname, useRouter } from "next/navigation";
 import MobileSidebar from "./MobileSidebar";
 
 import { Button } from "./ui/button";
-import { ChevronLeftIcon, Loader } from "lucide-react";
+import { ChevronLeftIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "@/features/users/api/users";
-import AvatarMenu from "./AvatarMenu";
+
 
 const partsMap = {
   products: {
@@ -58,6 +58,8 @@ const Header = ({ userData }: HeaderProps) => {
 
   const { plural, single } = partsMap[pathnameKey] || defaultMap;
 
+  //TODO: Check mobile sidebar and DELETE COMPONENT 
+
   return (
     <nav className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-blue-300">
       <div className="flex items-center gap-5">
@@ -74,11 +76,7 @@ const Header = ({ userData }: HeaderProps) => {
         </h3>
       </div>
       <MobileSidebar role={role} />
-      {isLoading ? (
-        <Loader className="animate-spin" />
-      ) : (
-        <AvatarMenu data={data} />
-      )}
+  
     </nav>
   );
 };

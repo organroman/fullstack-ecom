@@ -3,7 +3,6 @@
 import { capitalizeFirstLetter } from "@/lib/utils";
 import { IUser, Roles } from "@/types/types";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import UserActionsMenu from "./UserActionsMenu";
 
 export type User = {

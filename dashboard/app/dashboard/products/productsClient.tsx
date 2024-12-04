@@ -56,6 +56,7 @@ const ProductsClient = () => {
         handleView={handleView}
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
+        title="Products"
       />
       {view === "grid" ? (
         <ProductsGridView />

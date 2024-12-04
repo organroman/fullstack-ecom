@@ -5,17 +5,23 @@ import { cn, hasPermission } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import {
   GoCheckCircle,
   GoCheckCircleFill,
   GoHome,
   GoHomeFill,
 } from "react-icons/go";
+import { Loader } from "lucide-react";
 
 import { PiNotebookDuotone, PiNotebookFill } from "react-icons/pi";
 import { HiOutlineUsers, HiUsers } from "react-icons/hi2";
-import { IoSettingsOutline, IoSettingsSharp } from "react-icons/io5";
 import { PERMISSIONS } from "@/lib/permissions";
+
+import { getUser } from "@/features/users/api/users";
+
+import AvatarMenu from "./AvatarMenu";
+import { Separator } from "./ui/separator";
 
 const routes = [
   {
@@ -51,19 +57,34 @@ const routes = [
 
 type SideBarProps = {
   role: string;
+  userId: string;
 };
 
-const SideBar = ({ role }: SideBarProps) => {
+const SideBar = ({ role, userId }: SideBarProps) => {
   const pathName = usePathname();
 
+  const { data, isLoading } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: async () => await getUser(userId),
+  });
+
+  //TODO: Moibile Sidebar
+
   return (
-    <aside className="h-full p-4 w-full border-r">
+    <aside className="h-full p-4 py-8 w-full border-r flex flex-col gap-4">
       <Link href="/dashboard" className="flex flex-row items-center gap-2">
         <Image src="/logo.svg" alt="logo" width={48} height={48} />
         <span className="text-2xl text-neutral-800 dark:text-slate-200">
-          E-commerce
+          E-comm
         </span>
       </Link>
+      <Separator />
+      {isLoading ? (
+        <Loader className="animate-spin" />
+      ) : (
+        <AvatarMenu data={data} />
+      )}
+      <Separator />
       <ul className="flex flex-col my-4">
         {routes.map((route) => {
           const pathnameParts = pathName.split("/");

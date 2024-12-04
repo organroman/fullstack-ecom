@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { IOrder } from "@/types/types";
 import dayjs from "dayjs";
 import OrderActionsMenu from "./OrderActionsMenu";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 export const ordersColumns: ColumnDef<IOrder>[] = [
   {
@@ -22,6 +23,11 @@ export const ordersColumns: ColumnDef<IOrder>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+
+      return <span>{capitalizeFirstLetter(status)}</span>;
+    },
   },
 
   {

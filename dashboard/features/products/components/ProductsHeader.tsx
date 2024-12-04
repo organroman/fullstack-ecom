@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { LayoutGridIcon, TableIcon } from "lucide-react";
+import { ChevronLeftIcon, LayoutGridIcon, TableIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -25,10 +25,11 @@ import { handleCreateProduct } from "../actions";
 import Search from "@/components/Search";
 
 interface ProductsHeaderProps {
-  view: string;
-  handleView: () => void;
-  searchPhrase: string;
-  setSearchPhrase: Dispatch<SetStateAction<string>>;
+  view?: string;
+  handleView?: () => void;
+  searchPhrase?: string;
+  setSearchPhrase?: Dispatch<SetStateAction<string>>;
+  title: string;
 }
 
 const ProductsHeader = ({
@@ -36,6 +37,7 @@ const ProductsHeader = ({
   handleView,
   searchPhrase,
   setSearchPhrase,
+  title,
 }: ProductsHeaderProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -74,37 +76,52 @@ const ProductsHeader = ({
     },
   });
 
+  const goBack = () => {
+    router.back();
+  };
+
   return (
-    <div className="flex items-center justify-end gap-4">
-      <Search
-        searchPhrase={searchPhrase}
-        handleSearch={updateQueryParams}
-        onChange={setSearchPhrase}
-      />
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button>Create Product</Button>
-        </DialogTrigger>
-        <ProductFormModal productMutation={createProductMutation} />
-      </Dialog>
-
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="link"
-              onClick={handleView}
-              className="[&_svg]:size-6"
-            >
-              {view === "grid" ? <LayoutGridIcon /> : <TableIcon />}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" align="end">
-            <p>Switch to {view === "grid" ? "table" : "grid"} view</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+    <div className="flex flex-row items-center justify-between pt-4">
+      <div className="flex items-center gap-4">
+        <Button onClick={goBack} className="text-md [&_svg]:size-5">
+          <ChevronLeftIcon />
+          Back
+        </Button>
+        <h2 className="text-3xl">{title}</h2>
+      </div>
+      <div className="flex items-center justify-end gap-4">
+        {setSearchPhrase && (
+          <Search
+            searchPhrase={searchPhrase || ""}
+            handleSearch={updateQueryParams}
+            onChange={setSearchPhrase}
+          />
+        )}
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button>Create Product</Button>
+          </DialogTrigger>
+          <ProductFormModal productMutation={createProductMutation} />
+        </Dialog>
+        {view && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="link"
+                  onClick={handleView}
+                  className="[&_svg]:size-6"
+                >
+                  {view === "grid" ? <LayoutGridIcon /> : <TableIcon />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" align="end">
+                <p>Switch to {view === "grid" ? "table" : "grid"} view</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
     </div>
   );
 };

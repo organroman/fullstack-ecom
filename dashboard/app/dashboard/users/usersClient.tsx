@@ -67,6 +67,7 @@ const UsersClient = () => {
       <UsersHeader
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
+        title="Users"
       />
       <div className="h-full border overflow-y-auto rounded-md">
         <DataTable

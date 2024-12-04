@@ -48,14 +48,17 @@ const AvatarMenu = ({ data }: { data: IUser }) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Avatar className="cursor-pointer">
-            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-            <AvatarFallback className="bg-blue-500 text-white">
-              {avatarFallbackName}
-            </AvatarFallback>
-          </Avatar>
+          <div className="flex flex-row items-center gap-4">
+            <Avatar className="cursor-pointer">
+              {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+              <AvatarFallback className="bg-blue-500 text-white">
+                {avatarFallbackName}
+              </AvatarFallback>
+            </Avatar>
+            <p>{data.name}</p>
+          </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent side="right">
           <DropdownMenuItem
             onClick={() => router.push(`/dashboard/users/${data.id}`)}
           >
@@ -102,7 +105,6 @@ const AvatarMenu = ({ data }: { data: IUser }) => {
           descriptionFirst="Are you sure you want to logout?"
           buttonActionTitle="Logout"
           buttonActionTitleContinuous="Leaving"
-          //   actionId={product.id}
           action={() => handleLogout()}
           isPending={false}
           destructive
