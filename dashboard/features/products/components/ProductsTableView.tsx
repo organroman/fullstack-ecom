@@ -1,29 +1,18 @@
 "use client";
 
-import { ProductType } from "@/types/types";
-
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 
-import { listProducts } from "../api/products";
 import { DataTable } from "@/components/DataTable";
 import { productColumns } from "./ProductsColumns";
-import LoadingPage from "@/app/loading";
-
-type ProductsPromise = {
-  products: ProductType[];
-  totalPages: number;
-  totalItems: number;
-  limit: number;
-  page: number;
-};
+import { usePaginatedProducts } from "@/api/products/queries";
 
 interface ProductsTableViewProps {
   view: string;
   updateQueryParams: (
     newView: string,
-    newPag?: number,
+    newSearch?: string,
+    newPage?: number,
     newLimit?: number
   ) => void;
 }
@@ -39,10 +28,7 @@ const ProductsTableView = ({
   const limit = Number(searchParams.get("limit") || 10);
   const search = searchParams.get("search") || "";
 
-  const { data, isLoading, error } = useQuery<ProductsPromise>({
-    queryKey: ["products", page, limit, search],
-    queryFn: async () => await listProducts(page, limit, search),
-  });
+  const { data, isLoading, error } = usePaginatedProducts(page, limit, search);
   const { products = [], totalPages = 0, totalItems = 0 } = data || {};
 
   useEffect(() => {
@@ -55,19 +41,15 @@ const ProductsTableView = ({
     if (params.toString() !== searchParams.toString()) {
       router.replace(`?${params.toString()}`, { scroll: false });
     }
-  }, [searchParams, page, limit, view, router]);
+  }, [searchParams, page, limit, router]);
 
   const handlePageChange = (newPage: number) => {
-    updateQueryParams(view, newPage, limit);
+    updateQueryParams(view, search, newPage, limit);
   };
 
   const handleLimitChange = (newLimit: number) => {
-    updateQueryParams(view, page, newLimit);
+    updateQueryParams(view, search, page, newLimit);
   };
-
-  if (isLoading) {
-    return <LoadingPage />;
-  }
 
   return (
     <div className="h-full border overflow-y-auto rounded-md">
@@ -80,6 +62,7 @@ const ProductsTableView = ({
         onLimitChange={handleLimitChange}
         currentPage={page}
         currentLimit={limit}
+        isLoading={isLoading}
       />
     </div>
   );

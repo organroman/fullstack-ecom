@@ -18,10 +18,14 @@ export const productColumns: ColumnDef<ProductType>[] = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: () => <div className="text-right">Actions</div>,
     cell: ({ row }) => {
       const product = row.original;
-      return <ProductActionsMenu product={product} />;
+      return (
+        <div className="text-right">
+          <ProductActionsMenu product={product} />
+        </div>
+      );
     },
   },
 ];

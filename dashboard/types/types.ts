@@ -7,6 +7,31 @@ export type ProductType = {
   description: string;
   image: string;
   price: number;
+  created_at: string;
+};
+
+export enum Status {
+  ACTIVE = "ACTIVE",
+  ARCHIVED = "ARCHIVED",
+}
+
+export type View = "grid" | "table";
+
+export type Category = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  icon_url: string;
+  status: Status;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string;
+};
+
+export type Categories = {
+  categories: Category[];
 };
 
 export interface ICartItem {
@@ -21,7 +46,7 @@ export interface IFavoriteItem {
 export enum Roles {
   ADMIN = "ADMIN",
   CUSTOMER = "CUSTOMER",
-  SALES_MANAGER = "SALES MANAGER", // Consistent naming with enum keys
+  SALES_MANAGER = "SALES MANAGER",
 }
 
 export interface IUser {

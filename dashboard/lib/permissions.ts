@@ -4,4 +4,5 @@ export const PERMISSIONS = {
   orders: ["ADMIN", "SALES MANAGER"],
   products: ["ADMIN", "SALES MANAGER"],
   settings: ["ADMIN", "SALES MANAGER"],
+  categories: ["ADMIN", "SALES MANAGER"],
 };

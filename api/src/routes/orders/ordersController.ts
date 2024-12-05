@@ -7,7 +7,7 @@ import { db } from "../../db/index.js";
 import {
   orderItemsTable,
   ordersTable,
-  orderStatusEnum,
+
 } from "../../db/schema/orders.js";
 import { and, desc, eq, or } from "drizzle-orm";
 import { productsTable } from "../../db/schema/products.js";
@@ -88,7 +88,7 @@ export async function listOrders(req: Request, res: Response) {
           )
       : db.select().from(ordersTable).where(
           // and(
-          eq(ordersTable.userId, userId)
+          eq(ordersTable.user_id, userId)
           //   searchPhrase
           //     ? or(
           //         isValidStatus
@@ -103,7 +103,7 @@ export async function listOrders(req: Request, res: Response) {
         );
 
     const orders = await query
-      .orderBy(desc(ordersTable.createdAt))
+      .orderBy(desc(ordersTable.created_at))
       .limit(limit)
       .offset(offset);
 
@@ -131,9 +131,9 @@ export async function getOrderById(req: Request, res: Response) {
       })
       .from(ordersTable)
       .where(eq(ordersTable.id, id))
-      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId))
-      .leftJoin(productsTable, eq(orderItemsTable.productId, productsTable.id))
-      .leftJoin(usersTable, eq(ordersTable.userId, usersTable.id));
+      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.order_id))
+      .leftJoin(productsTable, eq(orderItemsTable.product_id, productsTable.id))
+      .leftJoin(usersTable, eq(ordersTable.user_id, usersTable.id));
 
     if (!orderWithItems.length) {
       res.status(404).send({ message: "Order not found" });
@@ -142,7 +142,7 @@ export async function getOrderById(req: Request, res: Response) {
 
     const mapOrder = (orderData: (typeof orderWithItems)[0]) => ({
       id: orderData.order.id,
-      createdAt: orderData.order.createdAt,
+      createdAt: orderData.order.created_at,
       status: orderData.order.status,
     });
 
@@ -185,9 +185,9 @@ export async function gerOrderByIdAndUserId(req: Request, res: Response) {
         product: productsTable,
       })
       .from(ordersTable)
-      .where(and(eq(ordersTable.userId, userId), eq(ordersTable.id, orderId)))
-      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId))
-      .leftJoin(productsTable, eq(orderItemsTable.productId, productsTable.id));
+      .where(and(eq(ordersTable.user_id, userId), eq(ordersTable.id, orderId)))
+      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.order_id))
+      .leftJoin(productsTable, eq(orderItemsTable.product_id, productsTable.id));
 
     if (!orderWithItems.length) {
       res.status(404).send({ message: "Order not found" });
@@ -196,7 +196,7 @@ export async function gerOrderByIdAndUserId(req: Request, res: Response) {
 
     const mapOrder = (orderData: (typeof orderWithItems)[0]) => ({
       id: orderData.order.id,
-      createdAt: orderData.order.createdAt,
+      createdAt: orderData.order.created_at,
       status: orderData.order.status,
     });
 
@@ -229,9 +229,9 @@ export async function gerOrdersByUserId(req: Request, res: Response) {
         product: productsTable,
       })
       .from(ordersTable)
-      .where(eq(ordersTable.userId, userId))
-      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.orderId))
-      .leftJoin(productsTable, eq(orderItemsTable.productId, productsTable.id));
+      .where(eq(ordersTable.user_id, userId))
+      .leftJoin(orderItemsTable, eq(ordersTable.id, orderItemsTable.order_id))
+      .leftJoin(productsTable, eq(orderItemsTable.product_id, productsTable.id));
 
     if (!ordersWithItems.length) {
       res.status(404).send({ message: "Order not found" });
@@ -246,9 +246,9 @@ export async function gerOrdersByUserId(req: Request, res: Response) {
       if (!ordersMap.has(orderId)) {
         ordersMap.set(orderId, {
           id: orderId,
-          createdAt: row.order.createdAt,
+          createdAt: row.order.created_at,
           status: row.order.status,
-          userId: row.order.userId,
+          userId: row.order.user_id,
           items: [],
         });
       }

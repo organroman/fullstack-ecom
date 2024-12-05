@@ -1,27 +1,15 @@
 import { ProductType } from "@/types/types";
 
-import React, { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Loader } from "lucide-react";
-import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { listProducts } from "../api/products";
-
-import ProductCard from "./ProductCard";
 import LoadingPage from "@/app/loading";
+import ProductCard from "./ProductCard";
+import { useInfiniteProducts } from "@/api/products/queries";
 
 const ProductsGridView = () => {
-
-  
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["products-infinite"],
-      queryFn: async ({ pageParam }) => await listProducts(pageParam, 10),
-      getNextPageParam: (lastPage) => {
-        const { page, totalPages } = lastPage;
-        return page < totalPages ? page + 1 : undefined;
-      },
-      initialPageParam: 1,
-    });
+    useInfiniteProducts();
 
   const allProducts = data?.pages.flatMap((page) => page.products) || [];
 

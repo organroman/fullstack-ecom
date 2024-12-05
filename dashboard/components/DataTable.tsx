@@ -16,6 +16,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Loader } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -29,6 +30,7 @@ export function DataTable<TData, TValue>({
   totalPages,
   currentPage,
   currentLimit,
+  isLoading,
   onPageChange,
   onLimitChange,
 }: DataTableProps<TData, TValue> & {
@@ -36,6 +38,7 @@ export function DataTable<TData, TValue>({
   currentLimit: number;
   totalItems: number;
   totalPages: number;
+  isLoading: boolean;
   onPageChange: (page: number) => void;
   onLimitChange: (limit: number) => void;
 }) {
@@ -53,7 +56,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <Table className="flex-grow-0">
+      <Table className="flex-grow-0 h-full">
         <TableHeader className="w-full">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="w-full">
@@ -73,28 +76,47 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
 
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-                className="h-12"
+        <TableBody className="h-full flex-grow flex-shrink-0">
+          {isLoading && (
+            <TableRow className="h-full">
+              <TableCell
+                colSpan={columns.length}
+                className="h-full w-full justify-center text-center"
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="px-4 py-1">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {/* <div className="flex justify-center items-center"> */}
+                  <Loader className="size-6 animate-spin inline" />
+                {/* </div> */}
               </TableCell>
             </TableRow>
           )}
+          {!isLoading &&
+            (table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className="h-12"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="px-4 py-1">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
 
         <TableFooter>

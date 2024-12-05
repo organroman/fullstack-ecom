@@ -45,7 +45,6 @@ const ProductFormModal = ({
   });
 
   const onSubmit = (formData: ProductFormModalData) => {
-    console.log("submitting form data", formData);
     productMutation.mutate(formData);
   };
 

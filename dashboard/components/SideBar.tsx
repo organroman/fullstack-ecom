@@ -6,22 +6,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
 import {
   GoCheckCircle,
   GoCheckCircleFill,
   GoHome,
   GoHomeFill,
 } from "react-icons/go";
-import { Loader } from "lucide-react";
+import { MdOutlineCategory, MdCategory } from "react-icons/md";
 
 import { PiNotebookDuotone, PiNotebookFill } from "react-icons/pi";
 import { HiOutlineUsers, HiUsers } from "react-icons/hi2";
 import { PERMISSIONS } from "@/lib/permissions";
 
-import { getUser } from "@/features/users/api/users";
-
 import AvatarMenu from "./AvatarMenu";
 import { Separator } from "./ui/separator";
+import { useUserById } from "@/api/users/queries";
 
 const routes = [
   {
@@ -53,6 +53,13 @@ const routes = [
     activeIcon: HiUsers,
     permission: PERMISSIONS.users,
   },
+  {
+    label: "Categories",
+    href: "/dashboard/categories",
+    icon: MdOutlineCategory,
+    activeIcon: MdCategory,
+    permission: PERMISSIONS.categories,
+  },
 ];
 
 type SideBarProps = {
@@ -63,15 +70,12 @@ type SideBarProps = {
 const SideBar = ({ role, userId }: SideBarProps) => {
   const pathName = usePathname();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["user", userId],
-    queryFn: async () => await getUser(userId),
-  });
+  const { data, isLoading } = useUserById(Number(userId));
 
   //TODO: Moibile Sidebar
 
   return (
-    <aside className="h-full p-4 py-8 w-full border-r flex flex-col gap-4">
+    <aside className="h-full p-4 py-8 w-full border-r flex flex-col gap-4 dark:bg-zinc-900 bg-zinc-100">
       <Link href="/dashboard" className="flex flex-row items-center gap-2">
         <Image src="/logo.svg" alt="logo" width={48} height={48} />
         <span className="text-2xl text-neutral-800 dark:text-slate-200">

@@ -32,12 +32,15 @@ export const ordersColumns: ColumnDef<IOrder>[] = [
 
   {
     id: "actions",
-    header: "Actions",
-
+    header: () => <div className="text-right">Actions</div>,
     cell: ({ row }) => {
       const order = row.original;
 
-      return <OrderActionsMenu order={order} />;
+      return (
+        <div className="text-right">
+          <OrderActionsMenu order={order} />
+        </div>
+      );
     },
   },
 ];

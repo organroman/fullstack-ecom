@@ -1,9 +1,5 @@
 "use client";
 import { IOrderItem } from "@/types/types";
-
-import { useState } from "react";
-import { toast } from "sonner";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import dayjs from "dayjs";
@@ -20,41 +16,28 @@ import {
 } from "@/components/ui/card";
 
 import {
-  fetchOrderById,
-  updateOrderStatus,
-} from "@/features/orders/api/orders";
-
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import OrdersHeader from "@/features/orders/components/OrdersHeader";
+import Header from "@/components/Header";
+import OrderFormModal from "@/features/orders/components/OrderFormModal";
+
+import { useDialog } from "@/hooks/use-modal";
+import { useOrderById, useUpdateOrderStatus } from "@/api/orders/queries";
 
 const statuses = ["New", "Cancelled", "Paid", "Shipped", "Delivered"];
 
 const OrderIdClient = () => {
   const { orderId } = useParams();
-  const [selectedStatus, setSelectedStatus] = useState("");
+  const { dialogOpen, setDialogOpen } = useDialog();
 
-  const {
-    data: order,
-    isPending,
-    error,
-  } = useQuery({
-    queryKey: ["product"],
-    queryFn: async () => fetchOrderById(Number(orderId)),
-  });
+  const { data: order, isLoading, error } = useOrderById(Number(orderId));
+  const { updateStatus } = useUpdateOrderStatus(Number(orderId));
 
-  const updateOrderStatusMutation = useMutation({
-    mutationFn: () => updateOrderStatus(Number(orderId), selectedStatus),
-    onSuccess: () => toast.success("Order status updated"),
-    onError: (error) => toast.error(error.message),
-  });
-
-  if (isPending) {
+  if (isLoading) {
     return <LoadingPage />;
   }
 
@@ -64,13 +47,18 @@ const OrderIdClient = () => {
   );
 
   const handleStatusChange = (status: string) => {
-    setSelectedStatus(status);
-    updateOrderStatusMutation.mutate();
+    updateStatus.mutate(status);
   };
 
   return (
     <div className="flex flex-col gap-4 h-full">
-      <OrdersHeader title="Order details" />
+      <Header
+        title="Order details"
+        dialogButtonLabel="Create order"
+        dialogContent={<OrderFormModal />}
+        dialogOpen={dialogOpen}
+        dialogHandleOpen={setDialogOpen}
+      />
       <Card>
         <CardHeader>
           <div className="flex flex-row flex-start justify-between">
@@ -85,7 +73,7 @@ const OrderIdClient = () => {
                 <Select
                   defaultValue={order?.status}
                   onValueChange={handleStatusChange}
-                  disabled={updateOrderStatusMutation.isPending}
+                  disabled={updateStatus.isPending}
                 >
                   <SelectTrigger className="w-[200px]">
                     <SelectValue placeholder="Select a status" />

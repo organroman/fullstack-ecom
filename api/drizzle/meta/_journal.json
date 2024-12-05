@@ -57,6 +57,13 @@
       "when": 1733331391242,
       "tag": "0007_harsh_saracen",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1733389337035,
+      "tag": "0008_easy_sway",
+      "breakpoints": true
     }
   ]
 }

@@ -5,7 +5,37 @@ import { API_URL } from "@/api/config";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function handleCreateProduct(
+export async function fetchProducts(
+  page: number,
+  limit: number,
+  search?: string | ""
+) {
+  const query = search
+    ? `?page=${page}&limit=${limit}&search=${search}`
+    : `?page=${page}&limit=${limit}`;
+
+  const res = await fetch(`${API_URL}/products${query}`);
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error("Error");
+  }
+
+  return data;
+}
+
+export async function fetchProductById(id: number) {
+  const res = await fetch(`${API_URL}/products/${id}`);
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error("Error");
+  }
+
+  return data;
+}
+
+export async function createProduct(
   name: string,
   description: string,
   image: string,
@@ -38,7 +68,7 @@ export async function handleCreateProduct(
   }
 }
 
-export async function handleDeleteProduct(id: number) {
+export async function deleteProduct(id: number) {
   const token = cookies().get("auth-token")?.value;
 
   try {
@@ -60,7 +90,7 @@ export async function handleDeleteProduct(id: number) {
   }
 }
 
-export async function handleUpdateProduct(
+export async function updateProduct(
   id: number,
   name: string,
   description: string,

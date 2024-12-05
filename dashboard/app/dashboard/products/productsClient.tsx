@@ -1,24 +1,39 @@
 "use client";
 
+import { View } from "@/types/types";
+
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { getDataFromLS } from "@/lib/utils";
+import Header from "@/components/Header";
 
+import ProductFormModal from "@/features/products/components/ProductFormModal";
 import ProductsGridView from "@/features/products/components/ProductsGridView";
 import ProductsTableView from "@/features/products/components/ProductsTableView";
-import ProductsHeader from "@/features/products/components/ProductsHeader";
+
+import { getDataFromLS } from "@/lib/utils";
+import { useDialog } from "@/hooks/use-modal";
+import { useCreateProduct } from "@/api/products/queries";
 
 const ProductsClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
-  const [searchPhrase, setSearchPhrase] = useState("");
+  const view = (searchParams.get("view") || "table") as View;
 
-  const view = searchParams.get("view") || "grid";
+  const [searchPhrase, setSearchPhrase] = useState<string>("");
+  const { dialogOpen, setDialogOpen, closeDialog } = useDialog();
+  const { createProductMutation } = useCreateProduct({
+    view,
+    closeDialog,
+    queryClient,
+  });
 
   const updateQueryParams = (
     newView: string,
+    newSearch?: string,
     newPage?: number,
     newLimit?: number
   ) => {
@@ -27,7 +42,13 @@ const ProductsClient = () => {
     newLimit
       ? params.set("limit", newLimit?.toString())
       : params.delete("limit");
+
     params.set("view", newView);
+
+    newSearch
+      ? params.set("search", newSearch?.toString())
+      : params.delete("search");
+
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -40,7 +61,7 @@ const ProductsClient = () => {
     if (params.toString() !== searchParams.toString()) {
       router.replace(`?${params.toString()}`, { scroll: false });
     }
-  }, [searchParams, view, router]);
+  }, [searchParams, router]);
 
   const handleView = () => {
     const newView = view === "grid" ? "table" : "grid";
@@ -49,15 +70,27 @@ const ProductsClient = () => {
     localStorage.setItem("products-view", JSON.stringify(newView));
   };
 
+  const handleSearch = (newSearch: string) => {
+    updateQueryParams(view, newSearch);
+  };
+
   return (
     <div className="flex flex-col gap-4 h-full">
-      <ProductsHeader
-        view={view}
-        handleView={handleView}
+      <Header
+        title="Products"
+        entityView={view}
+        handleEntityView={handleView}
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
-        title="Products"
+        onSearch={handleSearch}
+        dialogButtonLabel="Create product"
+        dialogContent={
+          <ProductFormModal productMutation={createProductMutation} />
+        }
+        dialogOpen={dialogOpen}
+        dialogHandleOpen={setDialogOpen}
       />
+
       {view === "grid" ? (
         <ProductsGridView />
       ) : (

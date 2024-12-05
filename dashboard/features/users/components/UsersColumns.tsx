@@ -40,10 +40,14 @@ export const usersColumns: ColumnDef<IUser>[] = [
   { accessorKey: "phone", header: "Phone" },
   {
     accessorKey: "actions",
-    header: "Actions",
+    header: () => <div className="text-right">Actions</div>,
     cell: ({ row }) => {
       const user = row.original;
-      return <UserActionsMenu user={user} />;
+      return (
+        <div className="text-right">
+          <UserActionsMenu user={user} />
+        </div>
+      );
     },
   },
 ];

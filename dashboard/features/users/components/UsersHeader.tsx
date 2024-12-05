@@ -28,7 +28,7 @@ const UsersHeader = ({
 
   const role = searchParams.get("role") || "";
 
-  const [open, setOpen] = useState<boolean>(false);
+  // const [open, setOpen] = useState<boolean>(false);
 
   const updateQueryParams = (newSearch: string, newRole?: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -77,7 +77,9 @@ const UsersHeader = ({
             />
           </>
         )}
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog
+        // open={open} onOpenChange={setOpen}
+        >
           <DialogTrigger asChild>
             <Button>Create User</Button>
           </DialogTrigger>

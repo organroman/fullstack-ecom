@@ -46,7 +46,7 @@ export async function listUsers(
   }
 }
 
-export async function getUser(userId: string) {
+export async function fetchUserById(userId: number) {
   const token = cookies().get("auth-token")?.value;
   try {
     const response = await fetch(`${API_URL}/users/${userId}`, {

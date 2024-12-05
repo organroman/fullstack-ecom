@@ -1,4 +1,6 @@
 "use client";
+import dayjs from "dayjs";
+import { PencilIcon } from "lucide-react";
 
 import LoadingPage from "@/app/loading";
 import { Button } from "@/components/ui/button";
@@ -8,11 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import UserRolesSelector from "@/components/UserRolesSelector";
-import { getUser } from "@/features/users/api/users";
-import { IUser } from "@/types/types";
-import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
-import { PencilIcon } from "lucide-react";
+
+import { useUserById } from "@/api/users/queries";
 
 interface UserIdClientProps {
   userId: string;
@@ -21,14 +20,7 @@ interface UserIdClientProps {
 }
 
 const UserIdClient = ({ userId, isAllowedToEdit, role }: UserIdClientProps) => {
-  const {
-    data: user,
-    isLoading,
-    error,
-  } = useQuery<any, Error, IUser>({
-    queryKey: ["user", userId],
-    queryFn: async () => await getUser(userId),
-  });
+  const { data: user, isLoading, error } = useUserById(Number(userId));
 
   if (isLoading) {
     return <LoadingPage />;
@@ -38,7 +30,7 @@ const UserIdClient = ({ userId, isAllowedToEdit, role }: UserIdClientProps) => {
     return <p>Error of fetch user</p>;
   }
 
-  console.log(user?.createdAt)
+  console.log(user?.createdAt);
 
   return (
     <Card className="mx-auto max-w-[768px] sm:max-w[460px] border shadow-md dark:shadow-slate-500">

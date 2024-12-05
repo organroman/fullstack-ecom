@@ -20,7 +20,7 @@ const RecentSales = () => {
       <CardContent className="flex flex-col gap-10">
         <RecentSalesCard
           name="Olivia Martin"
-          avatarUrl="/img/avatar-girl.png"
+          avatarUrl="/img/avatar-girl-1.png"
           email="olivia.martin@mail.com"
           amount="1,999.00"
         />

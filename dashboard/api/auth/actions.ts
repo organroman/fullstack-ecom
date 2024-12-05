@@ -7,7 +7,6 @@ export async function handleLogin(email: string, password: string) {
   try {
     const res = await login(email, password);
 
-
     if (res.token) {
       cookies().set("auth-token", res.token);
     }

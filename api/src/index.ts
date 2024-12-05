@@ -10,14 +10,14 @@ import categoriesRoutes from "./routes/categories/index.js";
 
 import serverless from "serverless-http";
 
-const port = 3000;
+const port = 8000;
 
 const app = express();
 app.use(urlencoded({ extended: false }));
 app.use(json());
 app.use(
   cors({
-    origin: ["http://localhost:8081", "http://localhost:3001"],
+    origin: ["http://localhost:8081", "http://localhost:3000"],
   })
 );
 app.set("query parser", function (str: string) {
@@ -25,7 +25,17 @@ app.set("query parser", function (str: string) {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello World 11");
+  res.json({
+    message: "E-commerce API",
+    version: "1.0.0",
+    endpoints: {
+      products: "/products",
+      orders: "/orders",
+      auth: "/auth",
+      users: "/users",
+      categories: "/categories",
+    },
+  });
 });
 
 app.use("/products", productsRoutes);

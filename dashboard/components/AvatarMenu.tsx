@@ -27,13 +27,13 @@ import Modal from "./Modal";
 
 import { removeCookie } from "@/lib/utils";
 
-const AvatarMenu = ({ data }: { data: IUser }) => {
+const AvatarMenu = ({ data }: { data: IUser | undefined }) => {
   const { setTheme } = useTheme();
   const router = useRouter();
 
   const [isOpenLogoutDialog, setIsOpenLogoutDialog] = useState<boolean>(false);
 
-  const userNameArr = data.name?.split(" ") || [];
+  const userNameArr = data?.name?.split(" ") || [];
   const name = userNameArr[0]?.charAt(0).toUpperCase() || "";
   const surname = userNameArr[1].charAt(0).toUpperCase() || "";
   const avatarFallbackName = name + surname;
@@ -55,12 +55,12 @@ const AvatarMenu = ({ data }: { data: IUser }) => {
                 {avatarFallbackName}
               </AvatarFallback>
             </Avatar>
-            <p>{data.name}</p>
+            <p>{data?.name}</p>
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right">
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/users/${data.id}`)}
+            onClick={() => router.push(`/dashboard/users/${data?.id}`)}
           >
             <div className="flex flex-row items-center gap-2 px-2">
               <UserRoundPenIcon /> <span className="mx-2">View profile</span>

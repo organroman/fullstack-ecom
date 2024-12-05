@@ -1,17 +1,19 @@
-import Modal from "@/components/Modal";
-import { IUser } from "@/types/types";
+import { Category } from "@/types/types";
+
 import React from "react";
 
-interface UserFormModalProps {
-  user?: IUser;
+import Modal from "@/components/Modal";
+
+interface CategoryFormModalProps {
+  category?: Category;
 }
 
-const UsersFormModal = ({ user }: UserFormModalProps) => {
+const CategoryFormModal = ({ category }: CategoryFormModalProps) => {
   return (
     <Modal
-      title={user ? "Edit user" : "Create user"}
+      title={category ? "Edit category" : "Create category"}
       descriptionFirst={
-        user
+        category
           ? "Update the fields and click 'Save'"
           : "fill in the fields and click 'Save'"
       }
@@ -21,9 +23,9 @@ const UsersFormModal = ({ user }: UserFormModalProps) => {
       formId="create-product"
       isPending={false} // TODO: replace with mutation pending
     >
-      User Form
+      Category Form
     </Modal>
   );
 };
 
-export default UsersFormModal;
+export default CategoryFormModal;
