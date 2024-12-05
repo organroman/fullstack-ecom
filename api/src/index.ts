@@ -7,6 +7,7 @@ import ordersRoutes from "./routes/orders/index.js";
 import authRoutes from "./routes/auth/index.js";
 import usersRoutes from "./routes/users/index.js";
 import categoriesRoutes from "./routes/categories/index.js";
+import uploadRoutes from "./routes/upload/index.js";
 
 import serverless from "serverless-http";
 
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
       auth: "/auth",
       users: "/users",
       categories: "/categories",
+      upload: "/upload",
     },
   });
 });
@@ -43,6 +45,7 @@ app.use("/orders", ordersRoutes);
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
 app.use("/categories", categoriesRoutes);
+app.use("/upload", uploadRoutes);
 
 if (process.env.NODE_ENV === "dev") {
   app.listen(port, () => {
