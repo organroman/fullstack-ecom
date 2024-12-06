@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Status } from "@/types/types";
 
 export const signUpSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -21,6 +22,21 @@ export const createProductSchema = z.object({
     .min(1, "Price is required") // Ensure it's not empty
     .refine((val) => !isNaN(Number(val)), {
       message: "Price must be a valid number",
-    }) 
+    })
+    .transform((val) => Number(val)),
+});
+
+export const categorySchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  slug: z.string().min(1, "Slug is required"),
+  description: z.string(),
+  icon_url: z.string().min(1, "Icon is required"),
+  status: z.nativeEnum(Status),
+  display_order: z
+    .string()
+    .min(1, "Order is required")
+    .refine((val) => val === null || !isNaN(Number(val)), {
+      message: "Order must be a valid number",
+    })
     .transform((val) => Number(val)),
 });

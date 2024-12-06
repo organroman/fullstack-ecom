@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchCategories } from ".";
+import { fetchCategories } from "..";
 
 export function useGetCategories(search: string) {
   return useQuery({
@@ -7,3 +7,5 @@ export function useGetCategories(search: string) {
     queryFn: async () => await fetchCategories(search),
   });
 }
+
+

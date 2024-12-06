@@ -1,4 +1,4 @@
-import { loginSchema, signUpSchema } from "@/lib/schema";
+import { categorySchema, loginSchema, signUpSchema } from "@/lib/schema";
 import { z } from "zod";
 
 export type ProductType = {
@@ -18,15 +18,15 @@ export enum Status {
 export type View = "grid" | "table";
 
 export type Category = {
-  id: number;
+  id?: number;
   name: string;
   slug: string;
   description: string;
   icon_url: string;
   status: Status;
   display_order: number;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
   deleted_at?: string;
 };
 
@@ -89,6 +89,15 @@ export interface IUsersOrder {
 }
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
+
+export type CategoryFormModalData = {
+  name: string;
+  slug: string;
+  description: string;
+  icon_url: string;
+  status: Status;
+  display_order: string;
+};
 export interface ProductFormModalData {
   id?: number;
   name: string;

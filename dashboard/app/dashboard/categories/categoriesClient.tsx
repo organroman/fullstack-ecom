@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { DataTable } from "@/components/DataTable";
 import Header from "@/components/Header";
@@ -8,20 +9,24 @@ import Header from "@/components/Header";
 import { categoriesColumns } from "@/features/categories/components/CategoriesColumns";
 import CategoryFormModal from "@/features/categories/components/CategoryFormModal";
 
-import { useGetCategories } from "@/api/categories/queries";
+import { useGetCategories } from "@/api/categories/queries/useGetCategories";
 import { useDialog } from "@/hooks/use-modal";
 import { useUpdateQueryParams } from "@/hooks/use-update-query-params";
-
-
+import { useCreateCategory } from "@/api/categories/queries/useCreateCategory";
 
 const CategoriesClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
   const search = searchParams.get("search") || "";
 
-  const { dialogOpen, setDialogOpen } = useDialog();
+  const { dialogOpen, setDialogOpen, closeDialog } = useDialog();
   const { data, isLoading, error } = useGetCategories(search);
+  const { createCategoryMutation } = useCreateCategory({
+    closeDialog,
+    queryClient,
+  });
 
   const { categories = [] } = data || {};
   const {
@@ -43,7 +48,9 @@ const CategoriesClient = () => {
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
         onSearch={handleSearch}
-        dialogContent={<CategoryFormModal />}
+        dialogContent={
+          <CategoryFormModal categoryMutation={createCategoryMutation} />
+        }
         dialogButtonLabel="Create category"
         dialogHandleOpen={setDialogOpen}
         dialogOpen={dialogOpen}

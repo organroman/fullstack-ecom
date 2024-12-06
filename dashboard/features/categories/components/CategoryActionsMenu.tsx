@@ -10,8 +10,10 @@ import DropdownActionsMenu from "@/components/DropdownActionsMenu";
 import Modal from "@/components/Modal";
 import { useDialog } from "@/hooks/use-modal";
 import CategoryFormModal from "./CategoryFormModal";
+import { useUpdateCategory } from "@/api/categories/queries/useUpdateCategory";
 
 const CategoryActionMenu = ({ category }: { category: Category }) => {
+  const queryClient = useQueryClient();
   const {
     dialogOpen: isEditDialogOpen,
     openDialog: openEditDialog,
@@ -25,6 +27,11 @@ const CategoryActionMenu = ({ category }: { category: Category }) => {
     closeDialog: closeDeleteDialog,
     setDialogOpen: setDeleteDialogOpen,
   } = useDialog();
+
+  const { editCategoryMutation } = useUpdateCategory({
+    closeDialog: closeEditDialog,
+    queryClient,
+  });
 
   // const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   // const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -103,7 +110,7 @@ const CategoryActionMenu = ({ category }: { category: Category }) => {
       <Dialog open={isEditDialogOpen} onOpenChange={setEditDialogOpen}>
         <CategoryFormModal
           category={category}
-          // productMutation={editProductMutation}
+          categoryMutation={editCategoryMutation}
         />
       </Dialog>
     </>
