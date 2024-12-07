@@ -1,4 +1,10 @@
-import express, { json, urlencoded } from "express";
+import express, {
+  json,
+  urlencoded,
+  Request,
+  Response,
+  NextFunction,
+} from "express";
 import cors from "cors";
 import qs from "qs";
 
@@ -14,7 +20,8 @@ import serverless from "serverless-http";
 const port = 8000;
 
 const app = express();
-app.use(urlencoded({ extended: false }));
+
+app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(
   cors({
@@ -46,6 +53,11 @@ app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
 app.use("/categories", categoriesRoutes);
 app.use("/upload", uploadRoutes);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error("Unhandled error:", err);
+  res.status(500).json({ error: err.message || "File upload failed" });
+});
 
 if (process.env.NODE_ENV === "dev") {
   app.listen(port, () => {
