@@ -58,3 +58,46 @@ export async function createCategory(data: CategoryFormModalData) {
     throw error;
   }
 }
+
+export async function updateCategory(data: CategoryFormModalData) {
+  const token = cookies().get("auth-token")?.value;
+  try {
+    const res = await fetch(`${API_URL}/categories/${data.slug}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        ...data,
+        display_order: parseInt(data.display_order),
+      }),
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteCategory(id: string) {
+  const token = cookies().get("auth-token")?.value;
+
+  try {
+    const res = await fetch(`${API_URL}/categories/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
+  } catch (error) {
+    throw error;
+  }
+}

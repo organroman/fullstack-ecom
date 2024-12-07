@@ -1,27 +1,30 @@
-import { Category, CategoryFormModalData } from "@/types/types";
+import { CategoryFormModalData } from "@/types/types";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { createCategory } from "..";
+import { updateCategory } from "..";
 
 interface UseCategoryProps {
   closeDialog: () => void;
   queryClient: QueryClient;
 }
 
-//TODO: replace with update
+interface UseCategoryWithIdProps extends UseCategoryProps {
+  id: number;
+}
 
 export function useUpdateCategory({
   closeDialog,
   queryClient,
-}: UseCategoryProps) {
-  const editCategoryMutation = useMutation<void, Error, Category>({
-    mutationFn: async (payload: CategoryFormModalData) => {
-      const data = await createCategory(payload);
-      return data;
+}: UseCategoryWithIdProps) {
+  const editCategoryMutation = useMutation<void, Error, CategoryFormModalData>({
+    mutationFn: async (data) => {
+      console.log(data);
+      const res = await updateCategory(data);
+      return res;
     },
 
     onSuccess: () => {
-      toast.success("Category has been created");
+      toast.success("Category has been updated");
       closeDialog();
       queryClient.invalidateQueries({
         queryKey: ["categories"],

@@ -1,6 +1,6 @@
 import { Category, CategoryFormModalData, Status } from "@/types/types";
 
-import { UseMutationResult, useQueryClient } from "@tanstack/react-query";
+import { UseMutationResult } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -15,7 +15,12 @@ import { categorySchema } from "@/lib/schema";
 import UseFormUploader from "@/components/form/UseFormFileUploader";
 interface CategoryFormModalProps {
   category?: Category;
-  categoryMutation: UseMutationResult<void, Error, Category, unknown>;
+  categoryMutation: UseMutationResult<
+    void,
+    Error,
+    CategoryFormModalData,
+    unknown
+  >;
 }
 
 const CategoryFormModal = ({
@@ -36,14 +41,7 @@ const CategoryFormModal = ({
 
   const statuses = CATEGORY_STATUSES.filter((status) => status !== "All");
   const onSubmit = (formData: CategoryFormModalData) => {
-    const processedData = {
-      ...formData,
-      display_order: Number(formData.display_order),
-    };
-    categoryMutation.mutate(
-      { ...processedData },
-      { onSuccess: () => form.reset() }
-    );
+    categoryMutation.mutate(formData, { onSuccess: () => form.reset() });
   };
   return (
     <Modal

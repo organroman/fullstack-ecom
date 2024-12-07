@@ -1,8 +1,7 @@
-import { Category, ProductFormModalData } from "@/types/types";
+import { Category } from "@/types/types";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+
 
 import { Dialog } from "@/components/ui/dialog";
 import DropdownActionsMenu from "@/components/DropdownActionsMenu";
@@ -11,6 +10,7 @@ import Modal from "@/components/Modal";
 import { useDialog } from "@/hooks/use-modal";
 import CategoryFormModal from "./CategoryFormModal";
 import { useUpdateCategory } from "@/api/categories/queries/useUpdateCategory";
+import { useDeleteCategory } from "@/api/categories/queries/useDeleteCategory";
 
 const CategoryActionMenu = ({ category }: { category: Category }) => {
   const queryClient = useQueryClient();
@@ -31,57 +31,13 @@ const CategoryActionMenu = ({ category }: { category: Category }) => {
   const { editCategoryMutation } = useUpdateCategory({
     closeDialog: closeEditDialog,
     queryClient,
+    id: category.id,
   });
 
-  // const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  // const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-  // const editProductMutation = useMutation<void, Error, ProductFormModalData>({
-  //   mutationFn: async ({
-  //     name,
-  //     description,
-  //     price,
-  //     image,
-  //   }: ProductFormModalData) => {
-  //     const data = await handleUpdateProduct(
-  //       product.id,
-  //       name,
-  //       description,
-  //       image,
-  //       price
-  //     );
-  //     return data;
-  //   },
-
-  //   onSuccess: () => {
-  //     toast.success("Product has been deleted");
-  //     closeEditDialog();
-  //     queryClient.invalidateQueries({
-  //       queryKey: [view === "table" ? "products" : "products-infinite"],
-  //     });
-  //   },
-  //   onError: (error) => {
-  //     toast.error(error.message);
-  //   },
-  // });
-
-  // const deleteProductMutation = useMutation({
-  //   mutationFn: async (id: number) => {
-  //     const data = await handleDeleteProduct(id);
-  //     return data;
-  //   },
-
-  //   onSuccess: () => {
-  //     toast.success("Product has been deleted");
-  //     closeDeleteDialog();
-  //     queryClient.invalidateQueries({
-  //       queryKey: [view === "table" ? "products" : "products-infinite"],
-  //     });
-  //   },
-  //   onError: (error) => {
-  //     toast.error(error.message);
-  //   },
-  // });
+  const { deleteCategoryMutation } = useDeleteCategory({
+    closeDialog: closeDeleteDialog,
+    queryClient,
+  });
 
   return (
     <>
@@ -101,9 +57,8 @@ const CategoryActionMenu = ({ category }: { category: Category }) => {
           buttonActionTitle="Delete"
           buttonActionTitleContinuous="Deleting"
           actionId={category.id}
-          action={() => console.log("deleted")}
-          // isPending={deleteProductMutation.isPending}
-          isPending={false}
+          action={() => deleteCategoryMutation.mutate(category.slug)}
+          isPending={deleteCategoryMutation.isPending}
           destructive
         />
       </Dialog>

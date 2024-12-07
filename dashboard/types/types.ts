@@ -18,7 +18,7 @@ export enum Status {
 export type View = "grid" | "table";
 
 export type Category = {
-  id?: number;
+  id: number;
   name: string;
   slug: string;
   description: string;
@@ -91,6 +91,7 @@ export interface IUsersOrder {
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 
 export type CategoryFormModalData = {
+  id?: number | string;
   name: string;
   slug: string;
   description: string;

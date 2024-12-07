@@ -22,3 +22,10 @@ export const createCategorySchema = createInsertSchema(categoriesTable).omit({
   id: true,
   created_at: true,
 });
+
+export const updateCategorySchema = createInsertSchema(categoriesTable)
+  .omit({
+    id: true,
+    created_at: true,
+  })
+  .partial();

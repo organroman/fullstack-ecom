@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  useFormContext,
-  Controller,
   FieldValues,
   Path,
   Control,
 } from "react-hook-form";
+
 import {
   FormControl,
   FormField,
@@ -16,8 +15,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Button } from "../ui/button";
-import { Label } from "recharts";
-import { Input } from "../ui/input";
 import { useUploadImage } from "@/api/upload/queries/useUploadImage";
 
 type UseFormUploaderProps<T extends FieldValues> = {
