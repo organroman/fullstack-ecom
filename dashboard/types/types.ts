@@ -1,11 +1,13 @@
 import { categorySchema, loginSchema, signUpSchema } from "@/lib/schema";
+import { QueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 
 export type ProductType = {
   id: number;
   name: string;
   description: string;
-  image: string;
+  images: ProductImage[];
+  category_id: string;
   price: number;
   created_at: string;
 };
@@ -99,11 +101,28 @@ export type CategoryFormModalData = {
   status: Status;
   display_order: string;
 };
+
+export type ProductImage = {
+  id?: number;
+  image_link: string;
+};
 export interface ProductFormModalData {
   id?: number;
   name: string;
   description: string;
-  image: string;
+  images: ProductImage[];
+  category_id: string;
   price: string;
 }
 export type LoginFormData = z.infer<typeof loginSchema>;
+
+
+export interface UseProductProps {
+  view: View;
+  closeDialog: () => void;
+  queryClient: QueryClient;
+}
+
+export interface UseProductWithIdProps extends UseProductProps {
+  id: number;
+}

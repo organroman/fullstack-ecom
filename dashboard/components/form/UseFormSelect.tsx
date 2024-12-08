@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import { Control, FieldValues, Path } from "react-hook-form";
 import {
   FormControl,
@@ -7,21 +9,15 @@ import {
   FormMessage,
 } from "../ui/form";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { Select, SelectTrigger, SelectValue } from "../ui/select";
+
 
 type FormInputProps<T extends FieldValues> = {
-  name: Path<T>; 
+  name: Path<T>;
   label?: string;
   placeholder?: string;
   control: Control<T>;
-  selectItems: string[];
+  selectContent: ReactNode;
 };
 
 const UseFormSelect = <T extends FieldValues>({
@@ -29,7 +25,7 @@ const UseFormSelect = <T extends FieldValues>({
   label,
   placeholder,
   control,
-  selectItems,
+  selectContent,
 }: FormInputProps<T>) => (
   <FormField
     control={control}
@@ -43,13 +39,7 @@ const UseFormSelect = <T extends FieldValues>({
               <SelectValue placeholder={placeholder || "Make your choice"} />
             </SelectTrigger>
           </FormControl>
-          <SelectContent>
-            {selectItems.map((item) => (
-              <SelectItem key={item} value={item}>
-                {capitalizeFirstLetter(item)}
-              </SelectItem>
-            ))}
-          </SelectContent>
+          {selectContent}
         </Select>
         <FormMessage />
       </FormItem>

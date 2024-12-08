@@ -5,7 +5,7 @@ import { Loader } from "lucide-react";
 
 import LoadingPage from "@/app/loading";
 import ProductCard from "./ProductCard";
-import { useInfiniteProducts } from "@/api/products/queries";
+import { useInfiniteProducts } from "@/api/products/queries/useInfiniteProducts";
 
 const ProductsGridView = () => {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =

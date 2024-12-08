@@ -1,24 +1,29 @@
 "use client";
 
-import { ProductFormModalData, ProductType } from "@/types/types";
+import { Category, ProductFormModalData, ProductType } from "@/types/types";
 
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UseMutationResult } from "@tanstack/react-query";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 
 import { createProductSchema } from "@/lib/schema";
-import { Textarea } from "@/components/ui/textarea";
 import Modal from "@/components/Modal";
+import UseFormInput from "@/components/form/UseFormInput";
+import UseFormSelect from "@/components/form/UseFormSelect";
+import { useGetCategories } from "@/api/categories/queries/useGetCategories";
+import { useSearchParams } from "next/navigation";
+import { SelectContent, SelectItem } from "@/components/ui/select";
+import { Loader, MinusIcon, PlusIcon } from "lucide-react";
+import UseFormUploader from "@/components/form/UseFormFileUploader";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ProductFormModalProps {
   productMutation: UseMutationResult<
@@ -39,10 +44,36 @@ const ProductFormModal = ({
     defaultValues: {
       name: product ? product.name : "",
       description: product ? product.description : "",
-      image: product ? product.image : "",
+      images: product ? product.images : [{ image_link: "" }],
       price: product ? String(product.price) : "",
+      category_id: product ? product?.category_id : "",
     },
   });
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "images",
+  });
+
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search") || "";
+
+  const { data, isLoading } = useGetCategories(search);
+  const { categories = [] } = data || {};
+
+  const handleAppendUploader = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    append({
+      image_link: "",
+    });
+  };
+
+  const handleRemoveUploader = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    e.preventDefault();
+    remove(index);
+  };
 
   const onSubmit = (formData: ProductFormModalData) => {
     productMutation.mutate(formData);
@@ -68,76 +99,100 @@ const ProductFormModal = ({
           className="space-y-2"
           id="create-product"
         >
-          <FormField
+          <UseFormInput
             name="name"
             control={form.control}
-            render={({ field }) => (
-              <FormItem className="space-y-1">
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    name="name"
-                    placeholder="Enter product name"
-                  />
-                </FormControl>
-                <FormMessage className="text-xs" />
-              </FormItem>
-            )}
+            label="Name"
+            placeholder="Enter product name"
           />
-          <FormField
+          <UseFormSelect
+            name="category_id"
+            control={form.control}
+            label="Select category"
+            selectContent={
+              <SelectContent>
+                {isLoading ? (
+                  <Loader className="size-4 animate-spin" />
+                ) : (
+                  categories?.map((category: Category) => (
+                    <SelectItem
+                      key={category.slug}
+                      value={category.id.toString()}
+                    >
+                      {category.name}
+                    </SelectItem>
+                  ))
+                )}
+              </SelectContent>
+            }
+          />
+          <UseFormInput
             name="description"
             control={form.control}
-            render={({ field }) => (
-              <FormItem className="space-y-1">
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    {...field}
-                    rows={10}
-                    name="description"
-                    placeholder="Enter product description"
-                  />
-                </FormControl>
-                <FormMessage className="text-xs" />
-              </FormItem>
-            )}
+            label="Description"
+            placeholder="Enter product description"
+            fieldType="textarea"
+            rows={3}
           />
-          <FormField
-            name="image"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="space-y-1">
-                <FormLabel>Image</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    name="Image"
-                    placeholder="Paste product image URL"
-                  />
-                </FormControl>
-                <FormMessage className="text-xs" />
-              </FormItem>
-            )}
-          />
-          <FormField
+          <UseFormInput
             name="price"
             control={form.control}
-            render={({ field }) => (
-              <FormItem className="space-y-1">
-                <FormLabel>Price</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    name="Price"
-                    placeholder="Enter product price "
-                    type="text"
-                  />
-                </FormControl>
-                <FormMessage className="text-xs" />
-              </FormItem>
-            )}
+            label="Price"
+            placeholder="Enter product price "
           />
+
+          {fields.map((field, index) => (
+            <div key={field.id} className="flex flex-row items-end space-x-2">
+              <UseFormUploader
+                key={field.id}
+                control={form.control}
+                label="Images"
+                {...form.register(`images.${index}.image_link` as const)}
+                uploadedUrl={form.control._formValues.images[index].image_link}
+                arrayActions={
+                  <div className="flex flex-row items-center space-x-2">
+                    {fields.length - 1 === index && (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              onClick={(e) => handleAppendUploader(e)}
+                              className="w-9 h-9 bg-emerald-500 hover:bg-emerald-700"
+                              size="icon"
+                            >
+                              <PlusIcon className="w-9 h-9" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Add one more image uploader field</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
+                    {index > 0 && (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              variant="destructive"
+                              className="w-9 h-9"
+                              onClick={(e) => handleRemoveUploader(e, index)}
+                            >
+                              <MinusIcon className="p-0" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Remove image uploader field</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
+                  </div>
+                }
+              />
+            </div>
+          ))}
         </form>
       </Form>
     </Modal>

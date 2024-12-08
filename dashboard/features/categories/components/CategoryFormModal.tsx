@@ -9,10 +9,13 @@ import { Form } from "@/components/ui/form";
 import Modal from "@/components/Modal";
 import UseFormInput from "@/components/form/UseFormInput";
 import UseFormSelect from "@/components/form/UseFormSelect";
-
-import { CATEGORY_STATUSES } from "@/lib/constants";
-import { categorySchema } from "@/lib/schema";
 import UseFormUploader from "@/components/form/UseFormFileUploader";
+import { SelectContent, SelectItem } from "@/components/ui/select";
+
+import { categorySchema } from "@/lib/schema";
+import { CATEGORY_STATUSES } from "@/lib/constants";
+import { capitalizeFirstLetter } from "@/lib/utils";
+
 interface CategoryFormModalProps {
   category?: Category;
   categoryMutation: UseMutationResult<
@@ -88,7 +91,15 @@ const CategoryFormModal = ({
             control={form.control}
             label="Status"
             placeholder="Select a status"
-            selectItems={statuses}
+            selectContent={
+              <SelectContent>
+                {statuses.map((item) => (
+                  <SelectItem key={item} value={item}>
+                    {capitalizeFirstLetter(item)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            }
           />
           <UseFormInput
             name="display_order"
@@ -100,6 +111,7 @@ const CategoryFormModal = ({
             name="icon_url"
             control={form.control}
             label="Icon"
+            uploadedUrl={form.control._formValues.icon_url}
           />
         </form>
       </Form>

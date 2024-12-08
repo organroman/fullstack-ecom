@@ -1,11 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import {
-  FieldValues,
-  Path,
-  Control,
-} from "react-hook-form";
+import { ReactNode, useState } from "react";
+import { FieldValues, Path, Control } from "react-hook-form";
 
 import {
   FormControl,
@@ -23,6 +19,8 @@ type UseFormUploaderProps<T extends FieldValues> = {
   placeholder?: string;
   control: Control<T>;
   folderName?: string;
+  arrayActions?: ReactNode;
+  uploadedUrl?: string;
 };
 
 const UseFormUploader = <T extends FieldValues>({
@@ -30,6 +28,8 @@ const UseFormUploader = <T extends FieldValues>({
   label,
   control,
   folderName = "general",
+  arrayActions,
+  uploadedUrl,
 }: UseFormUploaderProps<T>) => {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -69,7 +69,7 @@ const UseFormUploader = <T extends FieldValues>({
   ) => {
     e.preventDefault();
 
-    if (control._formValues?.icon_url) {
+    if (uploadedUrl) {
       onChange("");
       return;
     }
@@ -85,8 +85,8 @@ const UseFormUploader = <T extends FieldValues>({
         <FormItem>
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
-            <>
-              {!file && !control._formValues?.icon_url && (
+            <div className="flex flex-row items-end space-x-2">
+              {!file && !uploadedUrl && (
                 <div className="w-fit">
                   <label className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded cursor-pointer hover:bg-blue-600">
                     Select File
@@ -100,10 +100,10 @@ const UseFormUploader = <T extends FieldValues>({
                 </div>
               )}
 
-              {((file && previewUrl) || control._formValues?.icon_url) && (
+              {((file && previewUrl) || uploadedUrl) && (
                 <div className="space-x-2 flex flex-row items-end">
                   <img
-                    src={previewUrl || control._formValues?.icon_url}
+                    src={previewUrl || uploadedUrl}
                     alt="Preview"
                     className="w-20 h-20 object-cover rounded"
                   />
@@ -120,12 +120,13 @@ const UseFormUploader = <T extends FieldValues>({
                       variant="secondary"
                       onClick={(e) => handleCancel(e, onChange)}
                     >
-                      {control._formValues?.icon_url ? "Change icon" : "Cancel"}
+                      {uploadedUrl ? "Change icon" : "Cancel"}
                     </Button>
                   </div>
                 </div>
               )}
-            </>
+              {arrayActions}
+            </div>
           </FormControl>
           <FormMessage />
         </FormItem>

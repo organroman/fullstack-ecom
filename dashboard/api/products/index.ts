@@ -1,6 +1,7 @@
 "use server";
 
 import { API_URL } from "@/api/config";
+import { ProductImage } from "@/types/types";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -35,22 +36,25 @@ export async function fetchProductById(id: number) {
   return data;
 }
 
-export async function createProduct(
-  name: string,
-  description: string,
-  image: string,
-  price: string
-) {
+interface CreateProductParams {
+  product: {
+    name: string;
+    description: string;
+    price: number;
+    category_id: number;
+  };
+  images: ProductImage[];
+}
+
+export async function createProduct({ product, images }: CreateProductParams) {
   const token = cookies().get("auth-token")?.value;
 
   try {
     const res = await fetch(`${API_URL}/products`, {
       method: "POST",
       body: JSON.stringify({
-        name,
-        description,
-        price,
-        image,
+        product,
+        images,
       }),
       headers: {
         Authorization: `${token}`,

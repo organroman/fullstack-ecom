@@ -8,8 +8,10 @@ import DropdownActionsMenu from "@/components/DropdownActionsMenu";
 
 import ProductForm from "./ProductFormModal";
 import Modal from "@/components/Modal";
-import { useDeleteProduct, useEditProduct } from "@/api/products/queries";
 import { useDialog } from "@/hooks/use-modal";
+
+import { useDeleteProduct } from "@/api/products/queries/useDeleteProduct";
+import { useEditProduct } from "@/api/products/queries/useEditProduct";
 
 const ProductActionsMenu = ({ product }: { product: ProductType }) => {
   const queryClient = useQueryClient();

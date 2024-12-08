@@ -14,7 +14,7 @@ import ProductsTableView from "@/features/products/components/ProductsTableView"
 
 import { getDataFromLS } from "@/lib/utils";
 import { useDialog } from "@/hooks/use-modal";
-import { useCreateProduct } from "@/api/products/queries";
+import { useCreateProduct } from "@/api/products/queries/useCreateProduct";
 
 const ProductsClient = () => {
   const router = useRouter();

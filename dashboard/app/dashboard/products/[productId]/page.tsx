@@ -9,9 +9,11 @@ import Header from "@/components/Header";
 import ProductCard from "@/features/products/components/ProductCard";
 import ProductFormModal from "@/features/products/components/ProductFormModal";
 
-import { useCreateProduct, useProductById } from "@/api/products/queries";
 import { useDialog } from "@/hooks/use-modal";
 import LoadingPage from "@/app/loading";
+
+import { useCreateProduct } from "@/api/products/queries/useCreateProduct";
+import { useProductById } from "@/api/products/queries/useProductById";
 
 const ProductDetailsPage = ({
   params: { productId },

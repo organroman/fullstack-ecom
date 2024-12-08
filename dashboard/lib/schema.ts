@@ -15,15 +15,18 @@ export const loginSchema = z.object({
 
 export const createProductSchema = z.object({
   name: z.string().min(1, "Name is required"),
+  category_id: z.string().min(1, "Category is required"),
   description: z.string().min(1, "Description is required"),
-  image: z.string().min(1, "Image is required"),
   price: z
     .string()
-    .min(1, "Price is required") // Ensure it's not empty
+    .min(1, "Price is required")
     .refine((val) => !isNaN(Number(val)), {
       message: "Price must be a valid number",
     })
     .transform((val) => Number(val)),
+  images: z.array(
+    z.object({ image_link: z.string().min(1, "Image is required") })
+  ),
 });
 
 export const categorySchema = z.object({

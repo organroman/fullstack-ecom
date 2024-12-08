@@ -17,6 +17,15 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Loader } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -83,9 +92,7 @@ export function DataTable<TData, TValue>({
                 colSpan={columns.length}
                 className="h-full w-full justify-center text-center"
               >
-                {/* <div className="flex justify-center items-center"> */}
-                  <Loader className="size-6 animate-spin inline" />
-                {/* </div> */}
+                <Loader className="size-6 animate-spin inline" />
               </TableCell>
             </TableRow>
           )}
@@ -123,21 +130,25 @@ export function DataTable<TData, TValue>({
           <TableRow>
             <TableCell colSpan={columns.length} className="px-4 py-2">
               <div className="flex items-center justify-between w-full">
-                <div>
-                  <label>
-                    Rows per page:
-                    <select
-                      value={currentLimit}
-                      onChange={(e) => onLimitChange(Number(e.target.value))}
-                    >
-                      {[5, 10, 15, 20].map((size) => (
-                        <option key={size} value={size}>
-                          {size}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
+                <Select
+                  value={currentLimit.toString()}
+                  onValueChange={(value) => onLimitChange(Number(value))}
+                >
+                  <SelectGroup className="flex flex-row items-center space-x-2 pl-0">
+                    <SelectLabel className="pl-0">Rows per page:</SelectLabel>
+                    <SelectTrigger className="w-16">
+                      <SelectValue />
+                    </SelectTrigger>
+                  </SelectGroup>
+                  <SelectContent>
+                    {[5, 10, 15, 20].map((size) => (
+                      <SelectItem value={size.toString()} key={size}>
+                        {size}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
                 <div className="flex items-center space-x-2">
                   <Button
                     variant="outline"
