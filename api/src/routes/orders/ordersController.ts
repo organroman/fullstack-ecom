@@ -34,7 +34,7 @@ export async function createOrder(req: Request, res: Response) {
 
     const orderItems = items.map((item: any) => ({
       ...item,
-      orderId: newOrder.id,
+      order_id: newOrder.id,
     }));
 
     const newOrderItems = await db

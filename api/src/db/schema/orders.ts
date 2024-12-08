@@ -1,7 +1,6 @@
 import {
   integer,
   pgTable,
-  timestamp,
   doublePrecision,
   pgEnum,
 } from "drizzle-orm/pg-core";

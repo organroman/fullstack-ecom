@@ -10,6 +10,7 @@ import {
 import { validateData } from "../../middlewares/validationMiddleware.js";
 import {
   createProductSchema,
+  createProductWithImagesSchema,
   updateProductSchema,
 } from "../../db/schema/products.js";
 import { verifySeller, verifyToken } from "../../middlewares/authMiddleware.js";
@@ -24,7 +25,7 @@ router.post(
   "/",
   verifyToken,
   verifySeller,
-  validateData(createProductSchema),
+  validateData(createProductWithImagesSchema),
   createProduct
 );
 

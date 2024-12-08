@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { count, eq, ilike } from "drizzle-orm";
 
 import { db } from "../../db/index.js";
-import { productsTable } from "../../db/schema/products.js";
+import { productImagesTable, productsTable } from "../../db/schema/products.js";
 
 export async function listProducts(req: Request, res: Response) {
   try {
@@ -59,14 +59,33 @@ export async function getProductById(req: Request, res: Response) {
     res.status(500).send(e);
   }
 }
+type ImageType = {
+  image_link: string;
+};
 
 export async function createProduct(req: Request, res: Response) {
   try {
-    const [product] = await db
+    const { product, images } = req.cleanBody;
+    console.log(req.cleanBody);
+    console.log("🚀 ~ images:", images);
+    console.log("🚀 ~ product:", product);
+
+    const [newProduct] = await db
       .insert(productsTable)
-      .values(req.cleanBody)
+      .values(product)
       .returning();
-    res.status(201).json(product);
+
+    const productImages = images.map((image: ImageType) => ({
+      ...image,
+      product_id: newProduct.id,
+    }));
+
+    const newProductImages = await db
+      .insert(productImagesTable)
+      .values(productImages)
+      .returning();
+
+    res.status(201).json({ ...newProduct, images: newProductImages });
   } catch (e) {
     res.status(500).send(e);
   }
@@ -76,6 +95,7 @@ export async function updateProduct(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);
     const updatedFields = req.cleanBody;
+    updatedFields.updated_at = new Date();
 
     const [product] = await db
       .update(productsTable)
