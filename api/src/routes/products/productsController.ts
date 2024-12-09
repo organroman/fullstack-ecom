@@ -1,3 +1,4 @@
+import { categoriesTable } from "./../../db/schema/categories";
 import _ from "lodash";
 import { Request, Response } from "express";
 import { count, eq, ilike } from "drizzle-orm";
@@ -5,6 +6,14 @@ import { count, eq, ilike } from "drizzle-orm";
 import { db } from "../../db/index.js";
 import { productImagesTable, productsTable } from "../../db/schema/products.js";
 
+type MappedProduct = {
+  id: number;
+  name: string;
+  description: string | null;
+  price: number;
+  category_id: number;
+  images: Image[];
+};
 export async function listProducts(req: Request, res: Response) {
   try {
     const searchPhrase = req.query.search || "";
@@ -13,7 +22,7 @@ export async function listProducts(req: Request, res: Response) {
     const limit = Number(req.query.limit as string) || 10;
     const offset = (page - 1) * limit;
 
-    const products = await db
+    const productsWithImages = await db
       .select()
       .from(productsTable)
       .where(
@@ -21,6 +30,10 @@ export async function listProducts(req: Request, res: Response) {
         ilike(productsTable.name, `%${searchPhrase}%`)
         // ilike(productsTable.description, `${searchPhrase}`)
         // )
+      )
+      .leftJoin(
+        productImagesTable,
+        eq(productsTable.id, productImagesTable.product_id)
       )
       .limit(limit)
       .offset(offset);
@@ -31,8 +44,52 @@ export async function listProducts(req: Request, res: Response) {
 
     const totalPages = Math.ceil(totalProducts[0].count / limit);
 
+    const mappedResults = productsWithImages.reduce<MappedProduct[]>(
+      (acc, row) => {
+        const existingProduct = acc.find(
+          (product) => product.id === row?.products?.id
+        );
+
+        if (existingProduct) {
+          if (row.product_images) {
+            const imageExists = existingProduct.images.some(
+              (img) => img.id === row.product_images?.id
+            );
+
+            if (!imageExists) {
+              existingProduct.images.push({
+                id: row.product_images.id,
+                image_link: row.product_images.image_link,
+                product_id: row.product_images.product_id,
+              });
+            }
+          }
+        } else {
+          acc.push({
+            id: row.products.id,
+            name: row.products.name,
+            description: row.products.description,
+            price: row.products.price,
+            category_id: row.products.category_id,
+            images: row.product_images
+              ? [
+                  {
+                    id: row.product_images.id,
+                    image_link: row.product_images.image_link,
+                    product_id: row.product_images.product_id,
+                  },
+                ]
+              : [],
+          });
+        }
+
+        return acc;
+      },
+      []
+    );
+
     res.status(200).json({
-      products,
+      products: mappedResults,
       total: totalProducts[0].count,
       page,
       totalPages,
@@ -66,9 +123,6 @@ type ImageType = {
 export async function createProduct(req: Request, res: Response) {
   try {
     const { product, images } = req.cleanBody;
-    console.log(req.cleanBody);
-    console.log("🚀 ~ images:", images);
-    console.log("🚀 ~ product:", product);
 
     const [newProduct] = await db
       .insert(productsTable)
@@ -91,24 +145,51 @@ export async function createProduct(req: Request, res: Response) {
   }
 }
 
+type Image = {
+  id: number;
+  product_id: number;
+  image_link: string;
+};
+
 export async function updateProduct(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);
-    const updatedFields = req.cleanBody;
-    updatedFields.updated_at = new Date();
+    const { product, images } = req.body;
 
-    const [product] = await db
+    product.updated_at = new Date();
+
+    const [updatedProduct] = await db
       .update(productsTable)
-      .set(updatedFields)
+      .set({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        category_id: product.category_id,
+        updated_at: product.updated_at,
+      })
       .where(eq(productsTable.id, id))
       .returning();
 
-    if (product) {
-      res.json(product);
+    const updatedImages = [];
+    for (const image of images) {
+      const updatedImage = await db
+        .update(productImagesTable)
+        .set({
+          image_link: image.image_link,
+          updated_at: new Date(),
+        })
+        .where(eq(productImagesTable.id, image.id))
+        .returning();
+      updatedImages.push(...updatedImage);
+    }
+
+    if (updatedProduct) {
+      res.json({ ...updatedProduct, images: updatedImages });
     } else {
       res.status(404).send({ message: "Product not found" });
     }
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 }
@@ -116,6 +197,17 @@ export async function updateProduct(req: Request, res: Response) {
 export async function deleteProduct(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);
+
+    const imagesToDelete = await db
+      .select()
+      .from(productImagesTable)
+      .where(eq(productImagesTable.product_id, id));
+
+    imagesToDelete.forEach(async (image: Image) => {
+      await db
+        .delete(productImagesTable)
+        .where(eq(productImagesTable.id, image.id));
+    });
 
     const [deletedProduct] = await db
       .delete(productsTable)
@@ -128,6 +220,7 @@ export async function deleteProduct(req: Request, res: Response) {
       res.status(404).send({ message: "Product not found" });
     }
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 }

@@ -29,6 +29,7 @@ const ProductsTableView = ({
   const search = searchParams.get("search") || "";
 
   const { data, isLoading, error } = usePaginatedProducts(page, limit, search);
+
   const { products = [], totalPages = 0, totalItems = 0 } = data || {};
 
   useEffect(() => {

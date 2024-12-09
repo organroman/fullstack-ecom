@@ -11,7 +11,6 @@ import {
 
 import { Select, SelectTrigger, SelectValue } from "../ui/select";
 
-
 type FormInputProps<T extends FieldValues> = {
   name: Path<T>;
   label?: string;
@@ -26,25 +25,29 @@ const UseFormSelect = <T extends FieldValues>({
   placeholder,
   control,
   selectContent,
-}: FormInputProps<T>) => (
-  <FormField
-    control={control}
-    name={name}
-    render={({ field }) => (
-      <FormItem>
-        {label && <FormLabel>{label}</FormLabel>}
-        <Select onValueChange={field.onChange} defaultValue={field.value}>
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder={placeholder || "Make your choice"} />
-            </SelectTrigger>
-          </FormControl>
-          {selectContent}
-        </Select>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-);
+}: FormInputProps<T>) => {
+  console.log(control._defaultValues);
+  console.log(control._fields);
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          {label && <FormLabel>{label}</FormLabel>}
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormControl>
+              <SelectTrigger>
+                <SelectValue placeholder={placeholder || "Make your choice"} />
+              </SelectTrigger>
+            </FormControl>
+            {selectContent}
+          </Select>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
 
 export default UseFormSelect;

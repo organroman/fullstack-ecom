@@ -45,7 +45,7 @@ const Modal = ({
   destructive,
 }: ModalProps) => {
   return (
-    <DialogContent className="sm:max-w-md">
+    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
       <DialogHeader className="flex flex-col justify-center text-center">
         <DialogTitle
           className={cn(
@@ -84,7 +84,7 @@ const Modal = ({
         >
           {isPending ? (
             <div className="flex flex-row items-center">
-              <Loader className="size-6 animate-spin text-muted-foreground mr-2" />
+              <Loader className="size-6 animate-spin text-slate-100 mr-2" />
               <span>{buttonActionTitleContinuous}</span>
             </div>
           ) : (

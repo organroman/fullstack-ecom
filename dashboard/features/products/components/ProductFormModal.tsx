@@ -46,7 +46,7 @@ const ProductFormModal = ({
       description: product ? product.description : "",
       images: product ? product.images : [{ image_link: "" }],
       price: product ? String(product.price) : "",
-      category_id: product ? product?.category_id : "",
+      category_id: product ? String(product?.category_id) : "",
     },
   });
   const { fields, append, remove } = useFieldArray({
@@ -76,7 +76,14 @@ const ProductFormModal = ({
   };
 
   const onSubmit = (formData: ProductFormModalData) => {
-    productMutation.mutate(formData);
+    productMutation.mutate({
+      id: Number(product?.id),
+      category_id: formData.category_id.toString(),
+      name: formData.name,
+      description: formData.description,
+      price: formData.price,
+      images: form.control._formValues.images,
+    });
   };
 
   return (
@@ -148,7 +155,10 @@ const ProductFormModal = ({
                 control={form.control}
                 label="Images"
                 {...form.register(`images.${index}.image_link` as const)}
-                uploadedUrl={form.control._formValues.images[index].image_link}
+                uploadedUrl={
+                  fields[index].image_link ||
+                  form.control._formValues.images[index].image_link
+                }
                 arrayActions={
                   <div className="flex flex-row items-center space-x-2">
                     {fields.length - 1 === index && (

@@ -138,7 +138,7 @@ export async function getOrderById(req: Request, res: Response) {
     if (!orderWithItems.length) {
       res.status(404).send({ message: "Order not found" });
       return;
-    }
+  }
 
     const mapOrder = (orderData: (typeof orderWithItems)[0]) => ({
       id: orderData.order.id,

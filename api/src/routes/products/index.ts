@@ -8,11 +8,7 @@ import {
   deleteProduct,
 } from "./productsController.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
-import {
-  createProductSchema,
-  createProductWithImagesSchema,
-  updateProductSchema,
-} from "../../db/schema/products.js";
+import { createProductWithImagesSchema } from "../../db/schema/products.js";
 import { verifySeller, verifyToken } from "../../middlewares/authMiddleware.js";
 
 const router = Router();
@@ -33,7 +29,7 @@ router.put(
   "/:id",
   verifyToken,
   verifySeller,
-  validateData(updateProductSchema),
+  validateData(createProductWithImagesSchema),
   updateProduct
 );
 

@@ -38,6 +38,7 @@ export async function fetchProductById(id: number) {
 
 interface CreateProductParams {
   product: {
+    id?: number;
     name: string;
     description: string;
     price: number;
@@ -94,26 +95,17 @@ export async function deleteProduct(id: number) {
   }
 }
 
-export async function updateProduct(
-  id: number,
-  name: string,
-  description: string,
-  image: string,
-  price: string
-) {
-  const token = cookies().get("auth-token")?.value;
-  const priceNumber = parseFloat(price);
+export async function updateProduct({ product, images }: CreateProductParams) {
 
-  console.log("id:", id, "name:", name);
+  const token = cookies().get("auth-token")?.value;
+
 
   try {
-    const res = await fetch(`${API_URL}/products/${id}`, {
+    const res = await fetch(`${API_URL}/products/${product.id}`, {
       method: "PUT",
       body: JSON.stringify({
-        name,
-        description,
-        price: priceNumber,
-        image,
+        product,
+        images,
       }),
       headers: {
         Authorization: `${token}`,

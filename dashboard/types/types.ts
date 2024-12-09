@@ -103,7 +103,7 @@ export type CategoryFormModalData = {
 };
 
 export type ProductImage = {
-  id?: number;
+  id?: string;
   image_link: string;
 };
 export interface ProductFormModalData {
@@ -115,7 +115,6 @@ export interface ProductFormModalData {
   price: string;
 }
 export type LoginFormData = z.infer<typeof loginSchema>;
-
 
 export interface UseProductProps {
   view: View;

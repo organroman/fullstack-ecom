@@ -48,8 +48,4 @@ export const createProductWithImagesSchema = z.object({
   images: z.array(createProductImagesSchema),
 });
 
-export const updateProductSchema = createInsertSchema(productsTable)
-  .omit({
-    id: true,
-  })
-  .partial();
+
