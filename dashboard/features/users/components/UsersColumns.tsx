@@ -1,9 +1,10 @@
 "use client";
 
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { capitalizeFirstLetter, cn } from "@/lib/utils";
 import { IUser, Roles } from "@/types/types";
 import { ColumnDef } from "@tanstack/react-table";
 import UserActionsMenu from "./UserActionsMenu";
+import { Badge } from "@/components/ui/badge";
 
 export type User = {
   users: IUser[];
@@ -13,9 +14,9 @@ export type User = {
 };
 
 const rolesColor = {
-  ADMIN: "text-blue-600",
-  "SALES MANAGER": "text-green-700",
-  CUSTOMER: "text-yellow-500",
+  ADMIN: "bg-yellow-600 hover:bg-yellow-600",
+  "SALES MANAGER": "bg-blue-400 hover:bg-blue-400 ",
+  CUSTOMER: "bg-zinc-700",
 };
 
 export const usersColumns: ColumnDef<IUser>[] = [
@@ -32,7 +33,9 @@ export const usersColumns: ColumnDef<IUser>[] = [
       const role = row.getValue("role") as Roles;
 
       return (
-        <span className={rolesColor[role]}>{capitalizeFirstLetter(role)}</span>
+        <Badge className={cn("text-primary", rolesColor[role])}>
+          {capitalizeFirstLetter(role)}
+        </Badge>
       );
     },
   },

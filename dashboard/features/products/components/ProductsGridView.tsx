@@ -9,7 +9,7 @@ import { useInfiniteProducts } from "@/api/products/queries/useInfiniteProducts"
 
 const ProductsGridView = () => {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteProducts();
+  useInfiniteProducts();
 
   const allProducts = data?.pages.flatMap((page) => page.products) || [];
 

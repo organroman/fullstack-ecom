@@ -23,7 +23,7 @@ function uploadMiddleWare() {
         }
         return {
           folder: folderName,
-          allowed_formats: ["jpg", "png", "svg", "jpeg"],
+          allowed_formats: ["jpg", "png", "svg", "jpeg", "webp"],
           public_id: `${Date.now()}-${file.originalname}`,
         };
       } catch (error) {

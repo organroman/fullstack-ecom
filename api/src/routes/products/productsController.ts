@@ -1,7 +1,6 @@
-import { categoriesTable } from "./../../db/schema/categories";
 import _ from "lodash";
 import { Request, Response } from "express";
-import { count, eq, ilike } from "drizzle-orm";
+import { and, count, eq, ilike, inArray } from "drizzle-orm";
 
 import { db } from "../../db/index.js";
 import { productImagesTable, productsTable } from "../../db/schema/products.js";
@@ -17,32 +16,40 @@ type MappedProduct = {
 export async function listProducts(req: Request, res: Response) {
   try {
     const searchPhrase = req.query.search || "";
+    const categoryId = req.query.status || "";
 
     const page = Number(req.query.page as string) || 1;
     const limit = Number(req.query.limit as string) || 10;
     const offset = (page - 1) * limit;
 
-    const productsWithImages = await db
+    const paginatedProducts = await db
+
       .select()
       .from(productsTable)
       .where(
-        // or(
-        ilike(productsTable.name, `%${searchPhrase}%`)
-        // ilike(productsTable.description, `${searchPhrase}`)
-        // )
-      )
-      .leftJoin(
-        productImagesTable,
-        eq(productsTable.id, productImagesTable.product_id)
+        and(
+          // or(
+          ilike(productsTable.name, `%${searchPhrase}%`),
+          // ilike(productsTable.description, `${searchPhrase}`)
+          // )
+          categoryId
+            ? eq(productsTable.category_id, Number(categoryId))
+            : undefined
+        )
       )
       .limit(limit)
       .offset(offset);
 
-    const totalProducts = await db
-      .select({ count: count() })
-      .from(productsTable);
+    const productIds = paginatedProducts.map((product) => product.id);
 
-    const totalPages = Math.ceil(totalProducts[0].count / limit);
+    const productsWithImages = await db
+      .select()
+      .from(productsTable)
+      .where(inArray(productsTable.id, productIds))
+      .leftJoin(
+        productImagesTable,
+        eq(productsTable.id, productImagesTable.product_id)
+      );
 
     const mappedResults = productsWithImages.reduce<MappedProduct[]>(
       (acc, row) => {
@@ -87,6 +94,12 @@ export async function listProducts(req: Request, res: Response) {
       },
       []
     );
+    const totalProducts = await db
+      .select({ count: count() })
+      .from(productsTable)
+      .where(ilike(productsTable.name, `%${searchPhrase}%`));
+
+    const totalPages = Math.ceil(totalProducts[0].count / limit);
 
     res.status(200).json({
       products: mappedResults,
@@ -111,7 +124,16 @@ export async function getProductById(req: Request, res: Response) {
 
     if (!product) {
       res.status(404).send({ message: "Product not found " });
-    } else res.json(product);
+      return;
+    }
+
+    const productImages = await db
+      .select()
+      .from(productImagesTable)
+      .where(eq(productImagesTable.product_id, Number(id)));
+
+    const productWithImages = { ...product, images: productImages };
+    res.status(200).json({ product: productWithImages });
   } catch (e) {
     res.status(500).send(e);
   }

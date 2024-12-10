@@ -2,6 +2,8 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Category } from "@/types/types";
 import { ColumnDef } from "@tanstack/react-table";
 import CategoryActionMenu from "./CategoryActionsMenu";
+import { Badge } from "@/components/ui/badge";
+import { capitalizeFirstLetter, cn } from "@/lib/utils";
 
 export const categoriesColumns: ColumnDef<Category>[] = [
   { accessorKey: "name", header: "Name" },
@@ -25,6 +27,21 @@ export const categoriesColumns: ColumnDef<Category>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const status = row.getValue<string>("status");
+      return (
+        <Badge
+          className={cn(
+            "text-primary font-normal",
+            status === "ACTIVE"
+              ? "bg-emerald-500 hover:bg-emerald-500"
+              : "bg-rose-500 hover:bg-rose-500"
+          )}
+        >
+          {capitalizeFirstLetter(status)}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: "display_order",

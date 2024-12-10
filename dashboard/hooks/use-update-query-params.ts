@@ -17,6 +17,7 @@ interface UseUpdateQueryParamsProps {
   router: AppRouterInstance;
   view?: View;
   role?: string;
+  category?: string;
 }
 
 interface UseUpdateQueryParams {
@@ -28,6 +29,7 @@ interface UseUpdateQueryParams {
   handleSearch: (newSearch: string) => void;
   handleView: () => void;
   handleRoleChange: (newRole: string) => void;
+  handleCategoryChange: (newCategory: string) => void;
 }
 
 interface UpdateQueryParam {
@@ -37,6 +39,7 @@ interface UpdateQueryParam {
   newView?: View;
   newStatus?: string;
   newRole?: string;
+  newCategory?: string;
 }
 
 export function useUpdateQueryParams({
@@ -47,6 +50,7 @@ export function useUpdateQueryParams({
   router,
   view,
   role,
+  category,
 }: UseUpdateQueryParamsProps): UseUpdateQueryParams {
   const [searchPhrase, setSearchPhrase] = useState<string>(search);
 
@@ -69,6 +73,11 @@ export function useUpdateQueryParams({
       if (!searchParams.get("role")) params.set("role", role.toString());
     } else params.delete("role");
 
+    if (category) {
+      if (!searchParams.get("categoryId"))
+        params.set("categoryId", category.toString());
+    } else params.delete("categoryId");
+
     if (params.toString() !== searchParams.toString()) {
       router.replace(`?${params.toString()}`, { scroll: false });
     }
@@ -81,6 +90,7 @@ export function useUpdateQueryParams({
     newSearch,
     newView,
     newStatus,
+    newCategory,
   }: UpdateQueryParam) => {
     const params = new URLSearchParams(searchParams.toString());
     newPage ? params.set("page", newPage?.toString()) : params.delete("page");
@@ -103,6 +113,11 @@ export function useUpdateQueryParams({
       (newRole === "All"
         ? params.delete("role")
         : params.set("role", newRole.toString()));
+
+    newCategory &&
+      (newCategory === "All"
+        ? params.delete("categoryId")
+        : params.set("categoryId", newCategory.toString()));
 
     router.push(`?${params.toString()}`, { scroll: false });
   };
@@ -134,6 +149,10 @@ export function useUpdateQueryParams({
     updateQueryParams({ newRole });
   }, []);
 
+  const handleCategoryChange = useCallback((newCategory: string) => {
+    updateQueryParams({ newCategory });
+  }, []);
+
   return {
     searchPhrase,
     setSearchPhrase,
@@ -143,5 +162,6 @@ export function useUpdateQueryParams({
     handleSearch,
     handleView,
     handleRoleChange,
+    handleCategoryChange,
   };
 }

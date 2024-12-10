@@ -89,6 +89,7 @@ const ProductsClient = () => {
         }
         dialogOpen={dialogOpen}
         dialogHandleOpen={setDialogOpen}
+      
       />
 
       {view === "grid" ? (

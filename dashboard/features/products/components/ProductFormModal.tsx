@@ -76,14 +76,19 @@ const ProductFormModal = ({
   };
 
   const onSubmit = (formData: ProductFormModalData) => {
-    productMutation.mutate({
-      id: Number(product?.id),
-      category_id: formData.category_id.toString(),
-      name: formData.name,
-      description: formData.description,
-      price: formData.price,
-      images: form.control._formValues.images,
-    });
+    productMutation.mutate(
+      {
+        id: Number(product?.id),
+        category_id: formData.category_id.toString(),
+        name: formData.name,
+        description: formData.description,
+        price: formData.price,
+        images: form.control._formValues.images,
+      },
+      {
+        onSuccess: () => form.control._reset(),
+      }
+    );
   };
 
   return (
