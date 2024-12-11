@@ -16,7 +16,6 @@ export async function uploadImage({
   const formData = new FormData();
 
   formData.append("file", file);
-  console.log("category", category);
 
   if (category) formData.append("category", category);
 

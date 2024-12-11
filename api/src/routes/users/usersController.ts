@@ -27,6 +27,24 @@ export async function updateUser(req: Request, res: Response) {
   }
 }
 
+export async function createUser(req: Request, res: Response) {
+  try {
+    const data = req.cleanBody;
+    data.password = await bcryptjs.hash(data.password, 10);
+
+    const [user] = await db
+      .insert(usersTable)
+      .values(req.cleanBody)
+      .returning();
+    //@ts-ignore
+    delete user.password;
+    res.status(201).json(user);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+}
+
 export async function changePassword(req: Request, res: Response) {
   try {
     const id = parseInt(req.params.id);
@@ -117,12 +135,13 @@ export async function listUsers(req: Request, res: Response) {
       );
 
     const users = await query.limit(limit).offset(offset);
+    console.log("🚀 ~ users:", users);
 
     const totalUsers = await db.$count(usersTable);
     const totalPages = Math.ceil(totalUsers / limit);
 
     const usersWoPass = users.map(
-      ({ id, email, phone, name, role, address, createdAt }) => {
+      ({ id, email, phone, name, role, address, created_at }) => {
         return {
           id,
           email,
@@ -130,7 +149,7 @@ export async function listUsers(req: Request, res: Response) {
           name,
           role,
           address,
-          createdAt,
+          created_at,
         };
       }
     );

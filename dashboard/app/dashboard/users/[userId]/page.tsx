@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { getRoleAndUserFromToken } from "@/lib/utils";
 
 import UserIdClient from "./userIdClient";
-import UsersHeader from "@/features/users/components/UsersHeader";
 
 const UserIdPage = ({ params }: { params: { userId: string } }) => {
   const token = cookies().get("auth-token")?.value;
@@ -17,7 +16,6 @@ const UserIdPage = ({ params }: { params: { userId: string } }) => {
 
   return (
     <div className="flex flex-col gap-4 h-full">
-      <UsersHeader title="User details" />
       <UserIdClient
         userId={params.userId}
         isAllowedToEdit={isAllowedToEdit}

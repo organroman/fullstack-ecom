@@ -11,12 +11,15 @@ import UserRolesSelector from "@/components/UserRolesSelector";
 import { useDialog } from "@/hooks/use-modal";
 import { useUpdateQueryParams } from "@/hooks/use-update-query-params";
 import { usePaginatedUsers } from "@/api/users/queries";
+import { useCreateUser } from "@/api/users/queries/useCreateUser";
+import { useQueryClient } from "@tanstack/react-query";
 
 const UsersClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
-  const { dialogOpen, setDialogOpen } = useDialog(false);
+  const { dialogOpen, setDialogOpen, closeDialog } = useDialog(false);
 
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit") || 10);
@@ -47,6 +50,8 @@ const UsersClient = () => {
   );
   const { users = [], totalPages, total } = data || {};
 
+  const { createUserMutation } = useCreateUser({ closeDialog, queryClient });
+
   const handleFilterChange = (role: string) => {
     handleRoleChange(role);
   };
@@ -61,7 +66,7 @@ const UsersClient = () => {
         dialogOpen={dialogOpen}
         dialogButtonLabel="Create user"
         dialogHandleOpen={setDialogOpen}
-        dialogContent={<UsersFormModal />}
+        dialogContent={<UsersFormModal userMutation={createUserMutation} />}
         filterComponent={
           <UserRolesSelector
             role={role}

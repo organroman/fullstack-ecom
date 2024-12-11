@@ -1,6 +1,7 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { userSchema } from "./schema";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -60,3 +61,6 @@ export const capitalizeFirstLetter = (str: string) => {
 export const removeCookie = (cookieName: string) => {
   document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 };
+
+export const getUserSchema = (isEditing: boolean) =>
+  isEditing ? userSchema.omit({ password: true }) : userSchema;

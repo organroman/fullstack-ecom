@@ -18,7 +18,6 @@ export function useUpdateCategory({
 }: UseCategoryWithIdProps) {
   const editCategoryMutation = useMutation<void, Error, CategoryFormModalData>({
     mutationFn: async (data) => {
-      console.log(data);
       const res = await updateCategory(data);
       return res;
     },

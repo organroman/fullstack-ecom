@@ -43,7 +43,6 @@ const LoginForm = () => {
     },
     onError: (error) => {
       toast.error(error.message);
-      console.log("Error");
     },
   });
 

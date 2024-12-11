@@ -2,18 +2,28 @@ import { Router } from "express";
 
 import {
   changePasswordSchema,
+  createUserSchema,
   updateUserSchema,
 } from "../../db/schema/users.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
-import { verifyToken } from "../../middlewares/authMiddleware";
+import { verifySeller, verifyToken } from "../../middlewares/authMiddleware";
 import {
   changePassword,
   listUsers,
   updateUser,
   getUserById,
+  createUser,
 } from "./usersController.js";
 
 const router = Router();
+
+router.post(
+  "/",
+  verifyToken,
+  verifySeller,
+  validateData(createUserSchema),
+  createUser
+);
 
 router.put("/:id", verifyToken, validateData(updateUserSchema), updateUser);
 router.put(
@@ -22,6 +32,7 @@ router.put(
   validateData(changePasswordSchema),
   changePassword
 );
+
 router.get("/", verifyToken, listUsers);
 router.get("/:id", verifyToken, getUserById);
 

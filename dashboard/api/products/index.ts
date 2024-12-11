@@ -85,8 +85,6 @@ export async function deleteProduct(id: number) {
       },
     });
 
-    console.log(res);
-
     if (!res.ok) {
       throw new Error(res.statusText);
     }

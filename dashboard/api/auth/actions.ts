@@ -22,12 +22,12 @@ export async function handleSignUp(
   address: string
 ) {
   try {
-    console.log("Calling register function...");
+
     const res = await register(email, password, name, address);
-    console.log("Register function returned:", res);
+
 
     if (res) {
-      console.log(res);
+
       const loginRes = await login(email, password);
       if (loginRes.token) {
         cookies().set("auth-token", res.token);

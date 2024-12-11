@@ -1,4 +1,4 @@
-import { categorySchema, loginSchema, signUpSchema } from "@/lib/schema";
+import { loginSchema, signUpSchema } from "@/lib/schema";
 import { QueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 
@@ -52,13 +52,14 @@ export enum Roles {
 }
 
 export interface IUser {
-  id: number;
+  id?: string;
   role: Roles;
   name: string;
   email: string;
   phone: string;
   address: string;
-  createdAt: string;
+  createdAt?: string;
+  password?: string;
 }
 
 export enum EOrderStatuses {
@@ -114,12 +115,26 @@ export interface ProductFormModalData {
   category_id: string;
   price: string;
 }
+
 export type LoginFormData = z.infer<typeof loginSchema>;
 
-export interface UseProductProps {
-  view: View;
+export type UserFormModalData = {
+  id?: string;
+  role: Roles;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  password?: string;
+};
+
+export interface UseQueryProps {
   closeDialog: () => void;
   queryClient: QueryClient;
+}
+
+export interface UseProductProps extends UseQueryProps {
+  view: View;
 }
 
 export interface UseProductWithIdProps extends UseProductProps {

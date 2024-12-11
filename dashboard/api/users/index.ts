@@ -1,6 +1,9 @@
 "use server";
+import { ALLOWED_ROLES } from "./../../../api/src/utils/constants";
 
 import { API_URL } from "@/api/config";
+import { getRoleAndUserFromToken } from "@/lib/utils";
+import { IUser } from "@/types/types";
 import { cookies } from "next/headers";
 
 export async function listUsers(
@@ -62,6 +65,57 @@ export async function fetchUserById(userId: number) {
       throw new Error(response.statusText);
     }
     return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function createUser(user: IUser) {
+  const token = cookies().get("auth-token")?.value;
+
+  if (!token) {
+    throw new Error("No token provided");
+  }
+
+  const { role } = getRoleAndUserFromToken(token);
+  if (!ALLOWED_ROLES.includes(role)) {
+    throw new Error(`${role} is not authorized to create user.`);
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/users`, {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateUser(user: IUser) {
+  const token = cookies().get("auth-token")?.value;
+
+  try {
+    const res = await fetch(`${API_URL}/users/${user.id}`, {
+      method: "PUT",
+      body: JSON.stringify({ ...user, id: Number(user.id) }),
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
   } catch (error) {
     throw error;
   }

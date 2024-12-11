@@ -26,8 +26,6 @@ const UseFormSelect = <T extends FieldValues>({
   control,
   selectContent,
 }: FormInputProps<T>) => {
-  console.log(control._defaultValues);
-  console.log(control._fields);
   return (
     <FormField
       control={control}

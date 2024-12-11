@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Status } from "@/types/types";
+import { Roles, Status } from "@/types/types";
 
 export const signUpSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -42,4 +42,13 @@ export const categorySchema = z.object({
       message: "Order must be a valid number",
     })
     .transform((val) => Number(val)),
+});
+
+export const userSchema = z.object({
+  role: z.nativeEnum(Roles),
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email().min(1, "Email is required"),
+  phone: z.string().min(1, "Phone is required"),
+  address: z.string(),
+  password: z.string().optional(),
 });

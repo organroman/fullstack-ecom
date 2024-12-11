@@ -37,10 +37,7 @@ export async function fetchOrders(
 
     const data = await response.json();
 
-    console.log("RESPONSE", response);
-
     if (!response.ok) {
-      console.log(response);
       throw new Error(response.statusText);
     }
     return data;

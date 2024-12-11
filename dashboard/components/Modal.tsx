@@ -8,15 +8,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
-import { UseMutationResult } from "@tanstack/react-query";
+
 import { cn } from "@/lib/utils";
 
 interface ModalProps {
   title: string;
   descriptionFirst: string;
   descriptionSecond?: string;
-  //   mutation: MutationRecord;
-  //   item?: null;
   buttonActionTitle: string;
   buttonActionTitleContinuous: string;
   children?: React.ReactNode;
@@ -32,8 +30,6 @@ const Modal = ({
   title,
   descriptionFirst,
   descriptionSecond,
-  //   mutation,
-  //   item,
   buttonActionTitle,
   buttonActionTitleContinuous,
   children,
