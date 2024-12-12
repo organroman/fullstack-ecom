@@ -7,50 +7,21 @@ import { Text } from "@/components/ui/text";
 
 import { listProducts } from "@/api/products";
 import { Box } from "@/components/ui/box";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { SearchIcon } from "lucide-react-native";
+
 import { VStack } from "@/components/ui/vstack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProductListItem from "@/components/ProductListItem";
+import { useLocalSearchParams } from "expo-router";
+import { SearchBar } from "@/components/ui/SearchBar";
+import { useDebounce } from "@/utils/utils";
 
-function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
-function SearchBar({ searchPhrase, setSearchPhrase }: any) {
-  return (
-    // <Box className="p-4 border-b border-blue-300">
-    <Input>
-      <InputSlot className="pl-3">
-        <InputIcon as={SearchIcon} />
-      </InputSlot>
-      <InputField
-        onChangeText={setSearchPhrase}
-        placeholder="Search..."
-        value={searchPhrase}
-        className="border-blue-200 focus:border-blue-500"
-      />
-    </Input>
-    // </Box>
-  );
-}
 
 export default function HomeScreen() {
   const [searchPhrase, setSearchPhrase] = useState("");
+  const { categoryId } = useLocalSearchParams();
+  console.log("🚀 ~ categoryId:", categoryId);
 
-  const searchQuery = `search=${searchPhrase}`;
+  const searchQuery = `search=${searchPhrase}&limit=10&page=1`;
 
   const debouncedSearchPhrase = useDebounce(searchQuery, 500);
 
@@ -62,29 +33,20 @@ export default function HomeScreen() {
         : listProducts(),
   });
 
+  console.log("🚀 ~ data:", data);
+
   const numColumns = useBreakpointValue({
     default: 2,
     sm: 3,
     xl: 4,
   });
 
-  // if (isLoading) {
-  //   return (
-  //     <SafeAreaView>
-  //       <VStack className="h-screen w-full items-center justify-center">
-  //         <ActivityIndicator />
-  //       </VStack>
-  //     </SafeAreaView>
-  //   );
-  // }
-
   if (error) {
     return <Text>Error fetching products</Text>;
   }
 
   return (
-    <SafeAreaView className=" bg-white flex-1">
-      {/* <VStack className="max-h-screen"> */}
+    <SafeAreaView className="bg-white flex-1">
       <Box className="p-4 border-b border-blue-300 flex-shrink-0">
         <SearchBar
           searchPhrase={searchPhrase}
@@ -99,7 +61,7 @@ export default function HomeScreen() {
         ) : (
           <FlatList
             key={numColumns}
-            data={data}
+            data={data.products}
             numColumns={numColumns}
             contentContainerClassName=" gap-2 max-w-[960px] w-full mx-auto bg-neutral-100"
             columnWrapperClassName="gap-2"
@@ -107,7 +69,6 @@ export default function HomeScreen() {
           />
         )}
       </Box>
-      {/* </VStack> */}
     </SafeAreaView>
   );
 }

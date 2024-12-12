@@ -61,39 +61,37 @@ export default function ProfileScreen() {
   }
 
   return (
-    <SafeAreaView>
-      <VStack>
-        <VStack className=" py-2 px-4 bg-neutral-100 border-b border-blue-300 gap-1">
-          <HStack className="items-center justify-between w-full  ">
-            <Button variant="link" onPress={() => router.back()}>
-              <ButtonIcon as={ChevronLeftIcon} size="lg" className="w-6 h-6" />
-            </Button>
-            <Button
-              variant="link"
-              onPress={() => (editMode ? handleSave() : handleEditMode())}
-              isDisabled={updateUserMutation.isPending}
-            >
-              <ButtonText>{editMode ? "Save" : "Edit"} </ButtonText>
-            </Button>
-          </HStack>
+    <SafeAreaView className="bg-zinc-100 dark:bg-zinc-900 flex-1">
+      <VStack className="h-full bg-white dark:bg-black flex-shrink-0">
+        {/* <VStack className="p-4 border-b-[0.5px] border-blue-500 bg-zinc-100 dark:bg-zinc-900 flex-shrink-0"> */}
+        <HStack className="p-4 items-center justify-between w-full border-b-[0.5px] border-blue-500">
+          <Button variant="link" onPress={() => router.back()}>
+            <ButtonIcon as={ChevronLeftIcon} size="lg" className="w-6 h-6" />
+          </Button>
           <Heading>My profile</Heading>
-        </VStack>
-
-        <VStack className="py-2">
-          {editMode ? (
-            <UserUpdateForm
-              currentInfo={user}
-              onFormSubmit={(submit) => {
-                //@ts-ignore
-                formSubmitRef.current = submit;
-              }}
-              updateUserMutation={updateUserMutation}
-            />
-          ) : (
-            <ProfileInfo user={user} />
-          )}
-        </VStack>
+          <Button
+            variant="link"
+            onPress={() => (editMode ? handleSave() : handleEditMode())}
+            isDisabled={updateUserMutation.isPending}
+          >
+            <ButtonText>{editMode ? "Save" : "Edit"} </ButtonText>
+          </Button>
+        </HStack>
+        {editMode ? (
+          <UserUpdateForm
+            currentInfo={user}
+            onFormSubmit={(submit) => {
+              //@ts-ignore
+              formSubmitRef.current = submit;
+            }}
+            updateUserMutation={updateUserMutation}
+          />
+        ) : (
+          <ProfileInfo user={user} />
+        )}
       </VStack>
+
+      <VStack className="py-2">{/* </VStack> */}</VStack>
     </SafeAreaView>
   );
 }

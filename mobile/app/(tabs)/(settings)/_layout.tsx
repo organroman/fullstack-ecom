@@ -1,23 +1,10 @@
-import { useAuth } from "@/store/authStore";
-import { Redirect, Stack } from "expo-router";
-import { SafeAreaView } from "react-native";
+
+import {Stack } from "expo-router";
+
 
 export default function SettingsLayout() {
   return (
-    <Stack
-      screenOptions={
-        {
-          // headerShown: false,
-          //   headerStyle: {
-          //     backgroundColor: "#f4511e",
-          //   },
-          //   headerTintColor: "#fff",
-          //   headerTitleStyle: {
-          //     fontWeight: "bold",
-          //   },
-        }
-      }
-    >
+    <Stack>
       <Stack.Screen
         name="settings"
         options={{

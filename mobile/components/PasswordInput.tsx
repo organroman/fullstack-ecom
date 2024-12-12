@@ -28,7 +28,7 @@ const PasswordInput = ({
 
   return (
     <VStack className="gap-1">
-      <Text className="text-typography-500 text-sm">{label}</Text>
+      <Text className="text-zinc-700 dark:text-slate-300 text-sm">{label}</Text>
       <Input>
         <InputField
           value={value}
@@ -39,7 +39,7 @@ const PasswordInput = ({
         <InputSlot className="pr-3" onPress={toggleShowPassword}>
           <InputIcon
             as={showPassword ? EyeIcon : EyeOffIcon}
-            className="text-darkBlue-500"
+            className="text-blue-500"
           />
         </InputSlot>
       </Input>

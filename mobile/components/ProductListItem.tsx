@@ -43,7 +43,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
         <Pressable className="flex-1">
           <Image
             source={{
-              uri: product.image,
+              uri: product.images[0].image_link,
             }}
             className="mb-6 h-[240px] w-full rounded-md"
             alt={`${product.name} image`}

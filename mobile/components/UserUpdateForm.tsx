@@ -53,9 +53,9 @@ const UserUpdateForm = ({
   //   }, [handleSubmit, onSubmit, onFormSubmit]);
 
   return (
-    <FormControl className="p-4 border rounded-lg border-outline-300 bg-white m-2 max-w-[400px] w-full mx-auto">
+    <FormControl className="p-4 border shadow-sm rounded-lg  bg-white dark:bg-black m-2 max-w-[400px] w-full mx-auto">
       <VStack space="xs">
-        <Text className="text-typography-900">Name</Text>
+        <Text className="text-zinc-700 dark:text-slate-300">Name</Text>
         <Input>
           <InputField
             value={watch("name")}
@@ -68,7 +68,7 @@ const UserUpdateForm = ({
         )}
       </VStack>
       <VStack space="xs">
-        <Text className="text-typography-900">Email</Text>
+        <Text className="text-zinc-700 dark:text-slate-300">Email</Text>
         <Input>
           <InputField
             value={watch("email")}
@@ -81,7 +81,7 @@ const UserUpdateForm = ({
         )}
       </VStack>
       <VStack space="xs">
-        <Text className="text-typography-900">Phone</Text>
+        <Text className="text-zinc-700 dark:text-slate-300">Phone</Text>
         <Input>
           <InputField
             value={watch("phone")}
@@ -94,7 +94,7 @@ const UserUpdateForm = ({
         )}
       </VStack>
       <VStack space="xs">
-        <Text className="text-typography-900">Address</Text>
+        <Text className="text-zinc-700 dark:text-slate-300">Address</Text>
         <Input>
           <InputField
             value={watch("address")}

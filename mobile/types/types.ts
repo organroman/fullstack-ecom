@@ -10,8 +10,13 @@ export type Product = {
   id: number;
   name: string;
   description: string;
-  image: string;
+  images: ProductImage[];
   price: number;
+};
+
+export type ProductImage = {
+  id: number;
+  image_link: string;
 };
 
 export interface ICartItem {
@@ -44,6 +49,8 @@ export interface IUserOrder {
     product: Product;
   }[];
 }
+
+export type Theme = "light" | "dark";
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
