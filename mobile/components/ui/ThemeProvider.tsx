@@ -2,12 +2,7 @@
 
 import React, { createContext, useState, useEffect, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Theme } from "@/types/types";
-
-interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
-}
+import { Theme, ThemeContextType } from "@/types/types";
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(
   undefined

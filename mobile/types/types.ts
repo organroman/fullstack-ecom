@@ -52,6 +52,11 @@ export interface IUserOrder {
 
 export type Theme = "light" | "dark";
 
+export interface ThemeContextType {
+  theme: Theme;
+  toggleTheme: () => void;
+}
+
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>;

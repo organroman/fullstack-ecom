@@ -76,7 +76,7 @@ const OrderIdScreen = () => {
               <Link href={`/product/${p.product.id}`}>
                 <HStack className="gap-4">
                   <Image
-                    source={{ uri: p.product.image }}
+                    source={{ uri: p.product.images[0].image_link }}
                     className="w-[80px] h-80px rounded-md"
                   />
                   <Text>{p.product.name}</Text>

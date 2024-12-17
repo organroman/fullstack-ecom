@@ -55,7 +55,6 @@ app.use("/categories", categoriesRoutes);
 app.use("/upload", uploadRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error("Unhandled error:", err);
   res.status(500).json({ error: err.message || "File upload failed" });
   next()
 });

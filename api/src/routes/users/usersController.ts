@@ -40,7 +40,6 @@ export async function createUser(req: Request, res: Response) {
     delete user.password;
     res.status(201).json(user);
   } catch (e) {
-    console.log(e);
     res.status(500).send(e);
   }
 }
@@ -135,8 +134,6 @@ export async function listUsers(req: Request, res: Response) {
       );
 
     const users = await query.limit(limit).offset(offset);
-    console.log("🚀 ~ users:", users);
-
     const totalUsers = await db.$count(usersTable);
     const totalPages = Math.ceil(totalUsers / limit);
 

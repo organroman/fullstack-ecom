@@ -1,10 +1,20 @@
+import { Stack } from "expo-router";
 
-import {Stack } from "expo-router";
+import { useTheme } from "@/components/ui/ThemeProvider";
 
+import { bgColor } from "@/utils/constants";
 
 export default function SettingsLayout() {
+  const { theme } = useTheme();
+
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: bgColor(theme),
+        },
+      }}
+    >
       <Stack.Screen
         name="settings"
         options={{

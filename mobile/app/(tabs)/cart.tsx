@@ -31,7 +31,6 @@ export default function Cart() {
       ),
     onSuccess: (data) => {
       resetCart();
-      console.log(data);
     },
     onError: (error) => {
       console.log(error);
@@ -44,12 +43,12 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <VStack className="p-4 items-center justify-center h-full gap-4">
+      <VStack className="p-4 items-center justify-center h-full gap-4 bg-white dark:bg-black">
         <Text className="font-bold">Your cart is empty</Text>
         <Text>But it&apos;s always not to late to fill it</Text>
         <Link href="/" asChild>
-          <Button>
-            <ButtonText>Go to the shop</ButtonText>
+          <Button className="bg-zinc-900 border border-zinc-500">
+            <ButtonText className="text-slate-200">Go to the shop</ButtonText>
           </Button>
         </Link>
       </VStack>
@@ -57,7 +56,7 @@ export default function Cart() {
   }
 
   return (
-    <View className="flex-1 h-full">
+    <View className="flex-1 bg-white dark:bg-black">
       <FlatList
         data={items}
         contentContainerClassName="gap-2 mx-auto w-full max-w-[960px] p-2 flex-1"
@@ -65,8 +64,11 @@ export default function Cart() {
         ListFooterComponent={() => (
           <VStack space="sm">
             <Text className="font-bold">Total: ${totalAmount}</Text>
-            <Button onPress={onCheckout}>
-              <ButtonText>Checkout</ButtonText>
+            <Button
+              onPress={onCheckout}
+              className=" bg-zinc-900 border border-zinc-800"
+            >
+              <ButtonText className="text-slate-100">Checkout</ButtonText>
             </Button>
           </VStack>
         )}

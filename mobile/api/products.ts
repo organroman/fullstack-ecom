@@ -19,5 +19,7 @@ export async function fetchProductById(id: number) {
     throw new Error("Error");
   }
 
+  console.log(data);
+
   return data;
 }

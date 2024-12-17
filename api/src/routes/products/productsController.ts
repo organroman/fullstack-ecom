@@ -16,7 +16,8 @@ type MappedProduct = {
 export async function listProducts(req: Request, res: Response) {
   try {
     const searchPhrase = req.query.search || "";
-    const categoryId = req.query.status || "";
+    const categoryId = req.query.categoryId || "";
+
 
     const page = Number(req.query.page as string) || 1;
     const limit = Number(req.query.limit as string) || 10;
@@ -128,11 +129,12 @@ export async function getProductById(req: Request, res: Response) {
     }
 
     const productImages = await db
-      .select()
-      .from(productImagesTable)
-      .where(eq(productImagesTable.product_id, Number(id)));
-
+    .select()
+    .from(productImagesTable)
+    .where(eq(productImagesTable.product_id, Number(id)));
+    
     const productWithImages = { ...product, images: productImages };
+
     res.status(200).json({ product: productWithImages });
   } catch (e) {
     res.status(500).send(e);
@@ -211,7 +213,6 @@ export async function updateProduct(req: Request, res: Response) {
       res.status(404).send({ message: "Product not found" });
     }
   } catch (e) {
-    console.log(e);
     res.status(500).send(e);
   }
 }
@@ -242,7 +243,6 @@ export async function deleteProduct(req: Request, res: Response) {
       res.status(404).send({ message: "Product not found" });
     }
   } catch (e) {
-    console.log(e);
     res.status(500).send(e);
   }
 }

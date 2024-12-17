@@ -18,6 +18,7 @@ import { ICartItem, Product } from "@/types/types";
 import { useFavorite } from "@/store/favoriteStore";
 import { cn } from "@/utils/utils";
 import { Link, useSegments } from "expo-router";
+import React from "react";
 
 interface CartItemProps {
   item: ICartItem;
@@ -39,23 +40,25 @@ const CartItem = ({ item }: CartItemProps) => {
   const segments = useSegments();
 
   return (
-    <HStack className="bg-white p-4 w-full items-center justify-between relative">
+    <HStack className="bg-white dark:bg-zinc-800 border border-zinc-600 rounded-md p-4 py-2 w-full items-center justify-between relative">
       <Link href={`/(products)/${item.product.id}`} asChild>
         <Pressable>
           <HStack space="sm">
             <Image
               source={{
-                uri: item.product.image,
+                uri: item.product?.images[0]?.image_link,
               }}
               className="mr-2 h-[80px] rounded-md"
               alt={`${item.product.name} image`}
               resizeMode="contain"
             />
             <VStack space="sm" className="justify-center">
-              <Text className="font-bold max-w-[240px]">
+              <Text className="font-bold max-w-[240px] text-zinc-700 dark:text-slate-200">
                 {item.product.name}
               </Text>
-              <Text>${item.product.price}</Text>
+              <Text className="text-zinc-700 dark:text-slate-200">
+                ${item.product.price}
+              </Text>
             </VStack>
           </HStack>
         </Pressable>
@@ -67,6 +70,7 @@ const CartItem = ({ item }: CartItemProps) => {
               onPress={() => deleteProduct(item.product)}
               size="md"
               variant="link"
+              // className="bg-zinc-200 dark:bg-zinc-950"
             >
               <ButtonIcon as={XIcon} />
             </Button>
@@ -76,17 +80,19 @@ const CartItem = ({ item }: CartItemProps) => {
                 isDisabled={item.quantity === 1}
                 onPress={() => decreaseQuantity(item)}
                 size="xs"
-                className="p-1 h-6"
+                className="p-1 h-6 bg-zinc-200 dark:bg-zinc-950  "
               >
-                <ButtonIcon as={MinusIcon} />
+                <ButtonIcon as={MinusIcon} className="dark:text-slate-200" />
               </Button>
-              <Text className="ml-auto">{item.quantity}</Text>
+              <Text className="ml-auto dark:text-slate-200">
+                {item.quantity}
+              </Text>
               <Button
                 size="xs"
-                className="p-1 h-6"
+                className="p-1 h-6  bg-zinc-200 dark:bg-zinc-950 "
                 onPress={() => increaseQuantity(item)}
               >
-                <ButtonIcon as={PlusIcon} />
+                <ButtonIcon as={PlusIcon} className="dark:text-slate-200" />
               </Button>
             </HStack>
           </>
@@ -94,7 +100,7 @@ const CartItem = ({ item }: CartItemProps) => {
         <Button variant="link" onPress={() => toggleFavorite(item.product)}>
           <ButtonIcon
             as={HeartIcon}
-            className={cn(isFavorite && "text-red-500")}
+            className={cn("text-slate-200", isFavorite && "text-blue-500")}
           />
         </Button>
         {segments.includes("favorites") && (
@@ -108,7 +114,7 @@ const CartItem = ({ item }: CartItemProps) => {
           >
             <ButtonIcon
               as={ShoppingCartIcon}
-              className={cn(isInBasket && "text-red-500")}
+              className={cn("text-slate-200", isInBasket && "text-blue-500")}
             />
           </Button>
         )}

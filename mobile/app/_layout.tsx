@@ -8,6 +8,10 @@ import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme } from "@/types/types";
+import resolveConfig from "tailwindcss/resolveConfig";
+import config from "@/tailwind.config";
+import { cn } from "@/utils/utils";
+import { bgColor, safeAreaViewBg } from "@/utils/constants";
 
 const queryClient = new QueryClient();
 
@@ -26,11 +30,21 @@ export default function RootLayout() {
   if (theme === null) {
     return null;
   }
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <GluestackUIProvider mode={theme}>
-          <Stack>
+          <Stack
+            screenOptions={{
+              contentStyle: {
+                backgroundColor: safeAreaViewBg(theme),
+              },
+              headerStyle: {
+                backgroundColor: bgColor(theme),
+              },
+            }}
+          >
             <Stack.Screen
               name="(tabs)"
               options={{

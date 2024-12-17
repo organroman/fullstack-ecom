@@ -20,10 +20,12 @@ export default function FavoritesScreen() {
   }
 
   return (
-    <FlatList
-      data={favItems}
-      contentContainerClassName="gap-2 mx-auto w-full max-w-[960px] p-2 flex-1"
-      renderItem={({ item }) => <CartItem item={{ ...item, quantity: 1 }} />}
-    />
+    <View className="flex-1 bg-white dark:bg-black">
+      <FlatList
+        data={favItems}
+        contentContainerClassName="gap-2 mx-auto w-full max-w-[960px] p-2 flex-1"
+        renderItem={({ item }) => <CartItem item={{ ...item, quantity: 1 }} />}
+      />
+    </View>
   );
 }

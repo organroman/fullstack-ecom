@@ -17,11 +17,15 @@ import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 import useCart from "@/store/cartStore";
 import { useAuth } from "@/store/authStore";
 import { useFavorite } from "@/store/favoriteStore";
-import { cn } from "@/utils/utils";
 import { useTheme } from "@/components/ui/ThemeProvider";
-import resolveConfig from "tailwindcss/resolveConfig";
-import config from "@/tailwind.config";
-import { Text } from "@/components/ui/text";
+
+import {
+  bgColor,
+  borderColor,
+  headerColorText,
+  tabBarColor,
+  tabBarColorActive,
+} from "@/utils/constants";
 
 export default function TabsLayout() {
   const cartItemsNum = useCart((state) => state.items.length);
@@ -30,48 +34,33 @@ export default function TabsLayout() {
   const router = useRouter();
   const { theme } = useTheme();
 
-  const tailwind = resolveConfig(config);
-
-  const bgColor =
-    theme === "dark"
-      ? tailwind.theme.colors.zinc[900]
-      : tailwind.theme.colors.zinc[100];
-
-  const borderColor = tailwind.theme.colors.blue[500];
-
   const getIconColor = (focused?: boolean) => {
-    return cn(
-      "text-zinc-700 dark:text-zinc-400 ",
-      focused && "text-blue-500 dark:text-blue-500"
-    );
+    return focused ? tabBarColorActive : tabBarColor(theme);
   };
 
   return (
     <Tabs
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: bgColor,
+          backgroundColor: bgColor(theme),
           borderTopColor: borderColor,
           borderTopWidth: 0.5,
         },
         headerStyle: {
-          backgroundColor: "red",
+          backgroundColor: bgColor(theme),
         },
+
+        tabBarInactiveTintColor: tabBarColor(theme),
+        tabBarActiveTintColor: tabBarColorActive,
       }}
     >
       <Tabs.Screen
         name="(categories)"
         options={{
           title: "Categories",
-
           headerShown: false,
-          tabBarLabel: (props) => (
-            <Text className={cn("text-xs", getIconColor(props.focused))}>
-              {props.children}
-            </Text>
-          ),
           tabBarIcon: ({ focused }) => (
-            <Icon className={getIconColor(focused)} as={LogsIcon} />
+            <Icon color={getIconColor(focused)} as={LogsIcon} />
           ),
         }}
       />
@@ -80,13 +69,8 @@ export default function TabsLayout() {
         options={{
           title: "Products",
           headerShown: false,
-          tabBarLabel: (props) => (
-            <Text className={cn("text-xs", getIconColor(props.focused))}>
-              {props.children}
-            </Text>
-          ),
           tabBarIcon: ({ focused }) => (
-            <Icon className={getIconColor(focused)} as={HomeIcon} />
+            <Icon color={getIconColor(focused)} as={HomeIcon} />
           ),
         }}
       />
@@ -96,22 +80,20 @@ export default function TabsLayout() {
         options={{
           title: "Cart",
           tabBarIcon: ({ focused }) => (
-            <Icon className={getIconColor(focused)} as={ShoppingCartIcon} />
-          ),
-          tabBarLabel: (props) => (
-            <Text className={cn("text-xs", getIconColor(props.focused))}>
-              {props.children}
-            </Text>
+            <Icon color={getIconColor(focused)} as={ShoppingCartIcon} />
           ),
           tabBarBadge: cartItemsNum > 0 ? cartItemsNum : undefined,
           headerLeft: () => (
             <Button
               variant="link"
-              className={getIconColor()}
+              className={headerColorText(theme)}
               onPress={() => router.back()}
             >
-              <ButtonIcon as={ChevronLeftIcon} />
-              <ButtonText>Back</ButtonText>
+              <ButtonIcon
+                as={ChevronLeftIcon}
+                className={headerColorText(theme)}
+              />
+              <ButtonText className={headerColorText(theme)}>Back</ButtonText>
             </Button>
           ),
         }}
@@ -120,23 +102,21 @@ export default function TabsLayout() {
         name="favorites"
         options={{
           title: "Favorites",
-          tabBarLabel: (props) => (
-            <Text className={cn("text-xs", getIconColor(props.focused))}>
-              {props.children}
-            </Text>
-          ),
           tabBarIcon: ({ focused }) => (
-            <Icon className={getIconColor(focused)} as={HeartIcon} />
+            <Icon color={getIconColor(focused)} as={HeartIcon} />
           ),
           tabBarBadge: favoriteItemsNum > 0 ? favoriteItemsNum : undefined,
           headerLeft: () => (
             <Button
               variant="link"
-              className={getIconColor()}
+              className={headerColorText(theme)}
               onPress={() => router.back()}
             >
-              <ButtonIcon as={ChevronLeftIcon} />
-              <ButtonText>Back</ButtonText>
+              <ButtonIcon
+                as={ChevronLeftIcon}
+                className={headerColorText(theme)}
+              />
+              <ButtonText className={headerColorText(theme)}>Back</ButtonText>
             </Button>
           ),
         }}
@@ -146,13 +126,8 @@ export default function TabsLayout() {
         options={{
           title: "Login",
           headerShown: false,
-          tabBarLabel: (props) => (
-            <Text className={cn("text-xs", getIconColor(props.focused))}>
-              {props.children}
-            </Text>
-          ),
           tabBarIcon: ({ focused }) => (
-            <Icon className={getIconColor(focused)} as={UserIcon} />
+            <Icon color={getIconColor(focused)} as={UserIcon} />
           ),
           href: isLoggedIn ? null : "(auth)/login",
         }}
@@ -161,15 +136,9 @@ export default function TabsLayout() {
         name="(settings)"
         options={{
           title: "More",
-          tabBarLabel: (props) => (
-            <Text className={cn("text-xs", getIconColor(props.focused))}>
-              {props.children}
-            </Text>
-          ),
-
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <Icon className={getIconColor(focused)} as={UserCog} />
+            <Icon color={getIconColor(focused)} as={UserCog} />
           ),
           href: isLoggedIn ? "(settings)/settings" : null,
         }}

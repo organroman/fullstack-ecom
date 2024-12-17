@@ -2,7 +2,6 @@ import { create } from "zustand";
 
 import { ICartItem, Product } from "@/types/types";
 
-
 type State = {
   items: ICartItem[];
 };
@@ -30,11 +29,10 @@ const useCart = create<State & Action>((set) => ({
       const currentItemIndex = state.items.findIndex(
         (i) => i.product.id === item.product.id
       );
+      console.log("🚀 ~ currentItemIndex:", currentItemIndex);
 
       const updatedItems = state.items.map((i, index) =>
-        index == currentItemIndex
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
+        index == currentItemIndex ? { ...i, quantity: i.quantity + 1 } : item
       );
       return { items: updatedItems };
     }),
@@ -46,9 +44,7 @@ const useCart = create<State & Action>((set) => ({
       );
 
       const updatedItems = state.items.map((i, index) =>
-        index == currentItemIndex
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
+        index == currentItemIndex ? { ...i, quantity: item.quantity - 1 } : item
       );
       return { items: updatedItems };
     }),
