@@ -1,8 +1,7 @@
 import "@/global.css";
 
-import { Tabs, useRouter } from "expo-router";
+import { Tabs } from "expo-router";
 import {
-  ChevronLeftIcon,
   HeartIcon,
   HomeIcon,
   LogsIcon,
@@ -12,46 +11,43 @@ import {
 } from "lucide-react-native";
 
 import { Icon } from "@/components/ui/icon";
-import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
+
+import BackButton from "@/components/BackButton";
+import { useTheme } from "@/components/ui/ThemeProvider";
 
 import useCart from "@/store/cartStore";
 import { useAuth } from "@/store/authStore";
 import { useFavorite } from "@/store/favoriteStore";
-import { useTheme } from "@/components/ui/ThemeProvider";
 
-import {
-  bgColor,
-  borderColor,
-  headerColorText,
-  tabBarColor,
-  tabBarColorActive,
-} from "@/utils/constants";
+import { BG_ACCENT_COLOR, BORDER_COLOR, TEXT_COLOR } from "@/utils/constants";
 
 export default function TabsLayout() {
   const cartItemsNum = useCart((state) => state.items.length);
   const favoriteItemsNum = useFavorite((state) => state.items.length);
   const isLoggedIn = useAuth((s) => !!s.token);
-  const router = useRouter();
   const { theme } = useTheme();
 
   const getIconColor = (focused?: boolean) => {
-    return focused ? tabBarColorActive : tabBarColor(theme);
+    return focused ? BORDER_COLOR : TEXT_COLOR(theme);
   };
 
   return (
     <Tabs
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: bgColor(theme),
-          borderTopColor: borderColor,
+          backgroundColor: BG_ACCENT_COLOR(theme),
+          borderTopColor: BORDER_COLOR,
           borderTopWidth: 0.5,
         },
         headerStyle: {
-          backgroundColor: bgColor(theme),
+          backgroundColor: BG_ACCENT_COLOR(theme),
+        },
+        headerTitleStyle: {
+          color: TEXT_COLOR(theme),
         },
 
-        tabBarInactiveTintColor: tabBarColor(theme),
-        tabBarActiveTintColor: tabBarColorActive,
+        tabBarInactiveTintColor: TEXT_COLOR(theme),
+        tabBarActiveTintColor: BORDER_COLOR,
       }}
     >
       <Tabs.Screen
@@ -83,19 +79,7 @@ export default function TabsLayout() {
             <Icon color={getIconColor(focused)} as={ShoppingCartIcon} />
           ),
           tabBarBadge: cartItemsNum > 0 ? cartItemsNum : undefined,
-          headerLeft: () => (
-            <Button
-              variant="link"
-              className={headerColorText(theme)}
-              onPress={() => router.back()}
-            >
-              <ButtonIcon
-                as={ChevronLeftIcon}
-                className={headerColorText(theme)}
-              />
-              <ButtonText className={headerColorText(theme)}>Back</ButtonText>
-            </Button>
-          ),
+          headerLeft: () => <BackButton />,
         }}
       />
       <Tabs.Screen
@@ -106,19 +90,7 @@ export default function TabsLayout() {
             <Icon color={getIconColor(focused)} as={HeartIcon} />
           ),
           tabBarBadge: favoriteItemsNum > 0 ? favoriteItemsNum : undefined,
-          headerLeft: () => (
-            <Button
-              variant="link"
-              className={headerColorText(theme)}
-              onPress={() => router.back()}
-            >
-              <ButtonIcon
-                as={ChevronLeftIcon}
-                className={headerColorText(theme)}
-              />
-              <ButtonText className={headerColorText(theme)}>Back</ButtonText>
-            </Button>
-          ),
+          headerLeft: () => <BackButton />,
         }}
       />
       <Tabs.Screen

@@ -1,22 +1,22 @@
 import { useState } from "react";
-import { View, Text, ActivityIndicator, FlatList } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import { Link, Stack } from "expo-router";
 import { SvgUri } from "react-native-svg";
 
 import { useGetCategories } from "@/api/categories/queries";
 
-import { VStack } from "@/components/ui/vstack";
-import { SearchBar } from "@/components/ui/SearchBar";
-import { useDebounce } from "@/utils/utils";
 import { useTheme } from "@/components/ui/ThemeProvider";
+import { cn, useDebounce } from "@/utils/utils";
 import {
-  barTintColor,
-  bgColor,
-  borderColor,
-  headerColorText,
+  BAR_TINT_COLOR,
+  BG_ACCENT_COLOR,
+  BG_COLOR,
+  BORDER_COLOR,
+  SEARCH_BAR_TEXT_COLOR,
+  TEXT_COLOR,
 } from "@/utils/constants";
-import { Button, ButtonIcon } from "@/components/ui/button";
-import { SearchIcon } from "lucide-react-native";
+import Loading from "@/components/Loading";
+import ErrorScreen from "@/components/ErrorScreen";
 
 const CategoriesScreen = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
@@ -37,61 +37,40 @@ const CategoriesScreen = () => {
   // });
 
   if (isLoading) {
-    return (
-      <VStack className="w-full h-screen items-center justify-center">
-        <ActivityIndicator />
-      </VStack>
-    );
+    return <Loading />;
+  }
+
+  if (error) {
+    return <ErrorScreen errorText="Failed to load categories" />;
   }
 
   return (
-    <View className="bg-zinc-100 dark:bg-zinc-900 flex-1">
+    <View className="flex-1">
       <Stack.Screen
         options={{
-          // headerSearchBarOptions: {
-          //   placeholder: "Type for search..",
-          //   tintColor: headerColorText(theme),
-          //   textColor: headerColorText(theme),
-          //   barTintColor: barTintColor(theme),
-          //   headerIconColor: "#ffffff",
-          //   hintTextColor: headerColorText(theme),
+          headerSearchBarOptions: {
+            placeholder: "Type for search..",
+            tintColor: BORDER_COLOR,
+            textColor: SEARCH_BAR_TEXT_COLOR,
+            barTintColor: BAR_TINT_COLOR,
 
-          //   onChangeText: (e) => {
-          //     const { text } = e.nativeEvent;
-          //     setSearchPhrase(text);
-          //   },
-          // },
+            onChangeText: (e) => {
+              const { text } = e.nativeEvent;
+              setSearchPhrase(text);
+            },
+          },
           headerTransparent: true,
-          headerRight: () => (
-            <Button variant="link">
-              <ButtonIcon as={SearchIcon} />
-            </Button>
-          ),
 
           title: "Categories",
           contentStyle: {
-            backgroundColor: bgColor(theme),
-            borderColor: borderColor,
+            backgroundColor: BG_COLOR(theme),
+            borderColor: BORDER_COLOR,
           },
-          headerTintColor: headerColorText(theme),
-          headerStyle: { backgroundColor: bgColor(theme) },
-
-          // headerShown: false,
+          headerTintColor: TEXT_COLOR(theme),
+          headerStyle: { backgroundColor: BG_ACCENT_COLOR(theme) },
         }}
       />
-      <View className="flex-1 bg-white dark:bg-black">
-        {/* <Box className="p-4 border-b-[0.5px] border-blue-500 bg-zinc-100 dark:bg-zinc-900 flex-shrink-0">
-          <SearchBar
-            searchPhrase={searchPhrase}
-            setSearchPhrase={setSearchPhrase}
-          />
-        </Box> */}
-        {/* <Box className=" p-2">
-          {isLoading ? (
-            <VStack className="w-full items-center justify-center">
-              <ActivityIndicator />
-            </VStack>
-          ) : ( */}
+      <View className="flex-1">
         <FlatList
           key={1}
           data={categories}
@@ -102,11 +81,11 @@ const CategoriesScreen = () => {
             <View className="w-full">
               <Link
                 href={{
-                  pathname: `/(tabs)/(products)/index/?categoryId=${item.id}`,
+                  pathname: `/(tabs)/(products)/products/?categoryId=${item.id}`,
                 }}
                 className="w-full"
               >
-                <View className="w-full flex flex-row items-center border-b border-zinc-500 rounded-md p-2 gap-4">
+                <View className="w-full flex flex-row items-center border-b border-neutral-300 dark:border-zinc-500 rounded-md p-2 gap-4">
                   <SvgUri uri={item.icon_url} width="24" height="24" />
                   <Text className="no-underline text-zinc-700 dark:text-slate-100 text-md font-semibold w-full">
                     {item.name}
@@ -116,8 +95,6 @@ const CategoriesScreen = () => {
             </View>
           )}
         />
-        {/* )} */}
-        {/* </Box> */}
       </View>
     </View>
   );

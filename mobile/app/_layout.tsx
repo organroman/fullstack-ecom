@@ -1,17 +1,15 @@
 import "@/global.css";
 
+import { Theme } from "@/types/types";
+
+import { useEffect, useState } from "react";
 import { Stack } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Theme } from "@/types/types";
-import resolveConfig from "tailwindcss/resolveConfig";
-import config from "@/tailwind.config";
-import { cn } from "@/utils/utils";
-import { bgColor, safeAreaViewBg } from "@/utils/constants";
+import { BG_ACCENT_COLOR, BG_COLOR } from "@/utils/constants";
 
 const queryClient = new QueryClient();
 
@@ -38,10 +36,10 @@ export default function RootLayout() {
           <Stack
             screenOptions={{
               contentStyle: {
-                backgroundColor: safeAreaViewBg(theme),
+                backgroundColor: BG_COLOR(theme),
               },
               headerStyle: {
-                backgroundColor: bgColor(theme),
+                backgroundColor: BG_ACCENT_COLOR(theme),
               },
             }}
           >

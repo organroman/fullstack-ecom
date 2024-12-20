@@ -1,6 +1,9 @@
+import React from "react";
+import { useEffect, useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, Pressable, ScrollView, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import { useQuery } from "@tanstack/react-query";
+import { HeartIcon } from "lucide-react-native";
 
 import { Card } from "@/components/ui/card";
 import { Image } from "@/components/ui/image";
@@ -10,16 +13,20 @@ import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon, ButtonText } from "@/components/ui/button";
 
-import useCart from "@/store/cartStore";
-import { HeartIcon } from "lucide-react-native";
-import { useFavorite } from "@/store/favoriteStore";
-import { cn } from "@/utils/utils";
-import { fetchProductById } from "@/api/products";
-import { bgColor, headerColorText } from "@/utils/constants";
+import Loading from "@/components/Loading";
+import ErrorScreen from "@/components/ErrorScreen";
 import { useTheme } from "@/components/ui/ThemeProvider";
-import { Product, ProductImage } from "@/types/types";
-import { useEffect, useState } from "react";
-import React from "react";
+
+import { useFavorite } from "@/store/favoriteStore";
+import useCart from "@/store/cartStore";
+
+import { fetchProductById } from "@/api/products";
+import { cn } from "@/utils/utils";
+import { BG_ACCENT_COLOR, BG_COLOR, TEXT_COLOR } from "@/utils/constants";
+
+import { ProductImage } from "@/types/types";
+
+
 
 const ProductDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -55,11 +62,11 @@ const ProductDetailsScreen = () => {
   };
 
   if (isLoading) {
-    return <ActivityIndicator />;
+    return <Loading />;
   }
 
   if (error) {
-    return <Text>!!!Error in fetch product</Text>;
+    return <ErrorScreen errorText="Failed to load product" />;
   }
 
   return (
@@ -68,19 +75,19 @@ const ProductDetailsScreen = () => {
         options={{
           title: data?.product.name || "Product details",
           contentStyle: {
-            backgroundColor: bgColor(theme),
+            backgroundColor: BG_COLOR(theme),
           },
           headerStyle: {
-            backgroundColor: bgColor(theme),
+            backgroundColor: BG_ACCENT_COLOR(theme),
           },
           headerTitleStyle: {
-            color: headerColorText(theme),
+            color: TEXT_COLOR(theme),
           },
-          headerTintColor: headerColorText(theme),
+          headerTintColor: TEXT_COLOR(theme),
         }}
       />
-      <View className="flex-1 items-center p-3 bg-black">
-        <Card className="p-5 rounded-lg max-w-[960px] w-full flex-1 justify-between relative bg-zinc-400 dark:bg-zinc-800 border border-zinc-600">
+      <View className="flex-1 items-center p-3">
+        <Card className="p-5 rounded-lg max-w-[960px] w-full flex-1 justify-between relative bg-neutral-200 dark:bg-zinc-800 border border-neutral-300 dark:border-zinc-600">
           <VStack>
             <Image
               source={{
@@ -129,7 +136,7 @@ const ProductDetailsScreen = () => {
               ))}
             </ScrollView>
 
-            <Text className="text-xl font-normal mb-1 text-zinc-700 dark:text-zinc-200">
+            <Text className="text-xl font-normal mb-1 text-zinc-700 dark:text-zinc-300">
               {data.product.name}
             </Text>
             <VStack className="mb-4">
@@ -146,13 +153,12 @@ const ProductDetailsScreen = () => {
           </VStack>
           <Box className="flex-col sm:flex-row">
             <Button
-              action={isInCart ? "negative" : "primary"}
               onPress={isInCart ? deleteFromCart : addToCart}
-              className="px-4 py-2 mr-0 mb-3 sm:mr-3 sm:mb-0 sm:flex-1 bg-slate-400 dark:bg-zinc-900 border border-slate-600 dark:border-zinc-800 rounded-md text-zinc-700 dark:text-zinc-300"
+              className="px-4 py-2 mr-0 mb-3 sm:mr-3 sm:mb-0 sm:flex-1 border"
             >
               <ButtonText
                 size="sm"
-                className="dark:text-slate-100 text-slate-700"
+                className="text-zinc-700 dark:text-zinc-200"
               >
                 {isInCart ? "Delete from cart" : "Add to cart"}
               </ButtonText>

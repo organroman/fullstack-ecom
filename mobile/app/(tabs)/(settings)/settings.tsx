@@ -5,13 +5,14 @@ import { Text } from "@/components/ui/text";
 import { useTheme } from "@/components/ui/ThemeProvider";
 import { VStack } from "@/components/ui/vstack";
 import { useAuth } from "@/store/authStore";
-import { Link, Redirect } from "expo-router";
+import { Link, Redirect, useRouter } from "expo-router";
 import { MoonIcon, Rows4Icon, SunIcon, UserIcon } from "lucide-react-native";
 import { SafeAreaView, Image, View } from "react-native";
 
 const SettingsGeneralScreen = () => {
   const isLoggedIn = useAuth((s) => !!s.token);
   const { theme, toggleTheme } = useTheme();
+  const router = useRouter();
 
   if (!isLoggedIn) {
     return <Redirect href="(products)" />;

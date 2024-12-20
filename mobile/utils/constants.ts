@@ -1,6 +1,5 @@
-import { useTheme } from "@/components/ui/ThemeProvider";
 import config from "@/tailwind.config";
-import { Theme, ThemeContextType } from "@/types/types";
+import { Theme } from "@/types/types";
 import resolveConfig from "tailwindcss/resolveConfig";
 
 const tailwind = resolveConfig(config);
@@ -10,30 +9,21 @@ export const STATUS_COLOR = {
   Cancelled: "text-red-500",
 };
 
-export const bgColor = (theme: Theme) =>
+export const SEARCH_BAR_TEXT_COLOR = tailwind.theme.colors.zinc[700];
+
+export const BORDER_COLOR = tailwind.theme.colors.blue[500];
+
+export const BAR_TINT_COLOR = tailwind.theme.colors.zinc[300];
+
+export const BG_COLOR = (theme: Theme) =>
+  theme === "dark" ? tailwind.theme.colors.black : tailwind.theme.colors.white;
+
+export const BG_ACCENT_COLOR = (theme: Theme) =>
   theme === "dark"
-    ? tailwind.theme.colors.zinc[900]
-    : tailwind.theme.colors.zinc[100];
+    ? tailwind.theme.colors.zinc[800]
+    : tailwind.theme.colors.neutral[200];
 
-export const safeAreaViewBg = (theme: Theme) =>
-  theme === "dark" ? "bg-zinc-100" : "bg-zinc-900";
-
-export const barTintColor = (theme: Theme) =>
+export const TEXT_COLOR = (theme: Theme) =>
   theme === "dark"
-    ? tailwind.theme.colors.zinc[500]
-    : tailwind.theme.colors.zinc[100];
-
-export const borderColor = tailwind.theme.colors.blue[500];
-
-export const headerColorText = (theme: Theme) =>
-  theme === "dark"
-    ? tailwind.theme.colors.zinc[200]
+    ? tailwind.theme.colors.zinc[300]
     : tailwind.theme.colors.zinc[700];
-
-export const tabBarColor = (theme: Theme) =>
-  theme === "dark"
-    ? tailwind.theme.colors.zinc[400]
-    : tailwind.theme.colors.zinc[700];
-
-export const tabBarColorActive = tailwind.theme.colors.blue[500];
-
