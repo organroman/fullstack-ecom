@@ -23,7 +23,7 @@ import { useTheme } from "@/components/ui/ThemeProvider";
 
 import Loading from "@/components/Loading";
 
-import { useGetCategories } from "@/api/categories/queries";
+import { useGetCategories } from "@/api/categories/useGetCategories";
 
 import { cn } from "@/utils/utils";
 import { TEXT_COLOR } from "@/utils/constants";
@@ -61,16 +61,8 @@ const FilterScreen = () => {
   };
 
   const handleApplyFilter = () => {
-    const params = new URLSearchParams();
-
-    if (selectedItem) {
-      params.append("categoryId", selectedItem.id.toString());
-    } else params.delete("categoryId");
-
-    const query = params.toString();
-
     router.replace({
-      pathname: `(tabs)/(products)/products`,
+      pathname: `(tabs)/(products)?`,
       params: { categoryId: selectedItem?.id.toString() || undefined },
     });
   };

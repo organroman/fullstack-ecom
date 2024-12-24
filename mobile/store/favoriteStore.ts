@@ -2,10 +2,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-import { IFavoriteItem, Product } from "@/types/types";
+import { FavoriteItem, Product } from "@/types/types";
 
 type State = {
-  items: IFavoriteItem[];
+  items: FavoriteItem[];
 };
 
 type Action = {

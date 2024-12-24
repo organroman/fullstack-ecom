@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { Link, Redirect } from "expo-router";
-import { useMutation } from "@tanstack/react-query";
 
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,11 +9,11 @@ import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 
-import { login } from "@/api/auth";
 import { useAuth } from "@/store/authStore";
-import { LoginFormData } from "@/types/types";
+import { LoginFormData, UpdatedUser } from "@/types/types";
 import { loginSchema } from "@/utils/schema";
 import PasswordInput from "@/components/PasswordInput";
+import { useLogin } from "@/api/auth/useLogin";
 
 export default function LoginScreen() {
   const {
@@ -30,20 +29,14 @@ export default function LoginScreen() {
   const setToken = useAuth((s) => s.setToken);
   const isLoggedIn = useAuth((s) => !!s.token);
 
-  const loginMutation = useMutation({
-    mutationFn: async ({ email, password }: LoginFormData) => {
-      const data = await login(email, password);
-      return data;
-    },
+  const onSuccess = (data: UpdatedUser) => {
+    if (data.user && data.token) {
+      setUser(data.user);
+      setToken(data.token);
+    }
+  };
 
-    onSuccess: (data) => {
-      if (data.user && data.token) {
-        setUser(data.user);
-        setToken(data.token);
-      }
-    },
-    onError: (error) => console.log(error.message),
-  });
+  const { loginMutation } = useLogin(onSuccess);
 
   const onSubmit = (formData: LoginFormData) => {
     loginMutation.mutate(formData);

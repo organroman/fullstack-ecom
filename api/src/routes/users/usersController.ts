@@ -23,7 +23,7 @@ export async function updateUser(req: Request, res: Response) {
       res.status(404).send({ message: "User not found" });
     } else res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ message: "Something went wrong", error: error });
   }
 }
 
@@ -40,7 +40,7 @@ export async function createUser(req: Request, res: Response) {
     delete user.password;
     res.status(201).json(user);
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: "Something went wrong", error: e });
   }
 }
 
@@ -83,7 +83,7 @@ export async function changePassword(req: Request, res: Response) {
     delete updatedUser.password;
     res.status(200).json({ updatedUser, token });
   } catch (error) {
-    res.status(500).send("Something went wrong");
+    res.status(500).send({ message: "Something went wrong", error: error });
   }
 }
 
@@ -159,7 +159,7 @@ export async function listUsers(req: Request, res: Response) {
       limit,
     });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ message: "Something went wrong", error: error });
   }
 }
 
@@ -181,6 +181,6 @@ export async function getUserById(req: Request, res: Response) {
 
     res.status(200).json(userWithoutPassword);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ message: "Something went wrong", error: error });
   }
 }

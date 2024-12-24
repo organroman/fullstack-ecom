@@ -1,19 +1,20 @@
 import { Pressable } from "react-native";
 import { Link } from "expo-router";
 import dayjs from "dayjs";
+import { ChevronRightIcon } from "lucide-react-native";
 
-import { IUserOrder } from "@/types/types";
+import { Order } from "@/types/types";
 import { Card } from "./ui/card";
 import { HStack } from "./ui/hstack";
 import { Text } from "./ui/text";
 import { VStack } from "./ui/vstack";
 import { Image } from "./ui/image";
 import { Box } from "./ui/box";
-import { cn } from "@/utils/utils";
-import { STATUS_COLOR } from "@/utils/constants";
+import { Heading } from "./ui/heading";
+import { Icon } from "./ui/icon";
 
 interface OrderListItemProps {
-  order: IUserOrder;
+  order: Order;
 }
 
 const OrderListItem = ({ order }: OrderListItemProps) => {
@@ -23,38 +24,73 @@ const OrderListItem = ({ order }: OrderListItemProps) => {
   );
 
   return (
-    <Card className="w-full gap-2 border border-blue-200">
-      <Link href={`/orders/${order.id}`} asChild>
+    <Card className="w-full flex-1 border border-neutral-400 dark:border-zinc-800 py-3 px-4">
+      <Link href={`/(tabs)/(settings)/(orders)/${order.id}`} asChild>
         <Pressable>
-          <VStack className="gap-2">
-            <HStack className="justify-between">
-              <Text>№ {order.id}</Text>
-              <Text className="text-neutral-400">
-                {dayjs(order.createdAt).format("DD.MM.YYYY")}
-              </Text>
-            </HStack>
-            <Text className={cn("font-bold", STATUS_COLOR[order.status])}>
-              {order.status}
-            </Text>
-            <HStack className="gap-4">
-              {order.items.map((item) => (
-                <Box
-                  key={item.id}
-                  className="w-[84px] h-[84px] flex items-center justify-center border border-gray-300 rounded-md"
+          <HStack space="xl" className="flex-1">
+            <Box className="w-[116px] h-[116px] flex items-center justify-center border border-gray-300 rounded-md">
+              <Image
+                className="h-full w-full rounded-md  object-fill "
+                source={{ uri: order.items[0].product.images[0].image_link }}
+                alt={order.items[0].product.name}
+              />
+            </Box>
+            <VStack className="flex-1" space="xs">
+              <HStack className="items-center justify-between mb-2">
+                <Heading size="md" className="text-zinc-700 dark:text-zinc-300">
+                  № {order.id}
+                </Heading>
+                <Icon
+                  as={ChevronRightIcon}
+                  size="lg"
+                  className="text-zinc-700 dark:text-zinc-300 ml-auto"
+                />
+              </HStack>
+              <HStack className="justify-between w-full">
+                <Text size="sm" className="text-neutral-500">
+                  Status
+                </Text>
+                <Text
+                  size="sm"
+                  className="text-zinc-700 dark:text-zinc-300 font-bold"
                 >
-                  <Image
-                    className="h-full w-full rounded-md  object-fill "
-                    source={{ uri: item.product.image }}
-                    alt={item.product.name}
-                  />
-                </Box>
-              ))}
-            </HStack>
-            <HStack className="justify-between">
-              <Text>Order amount</Text>
-              <Text className="font-bold">${orderAmount}</Text>
-            </HStack>
-          </VStack>
+                  {order.status}
+                </Text>
+              </HStack>
+              <HStack className="justify-between w-full">
+                <Text size="sm" className="text-neutral-500">
+                  Date
+                </Text>
+                <Text
+                  size="sm"
+                  className="text-zinc-700 dark:text-zinc-300 font-bold"
+                >
+                  {dayjs(order.createdAt).format("DD.MM.YYYY")}
+                </Text>
+              </HStack>
+              <HStack className="justify-between w-full">
+                <Text size="sm" className="text-neutral-500">
+                  Products
+                </Text>
+                <Text
+                  size="sm"
+                  className="text-zinc-700 dark:text-zinc-300 font-bold"
+                >
+                  {order.items.length +
+                    " " +
+                    (order.items.length > 1 ? "pcs" : "pc")}
+                </Text>
+              </HStack>
+              <HStack className="justify-between w-full">
+                <Text size="sm" className="text-neutral-500">
+                  Total amount
+                </Text>
+                <Text className="text-zinc-700 dark:text-zinc-300 font-bold">
+                  $ {orderAmount}
+                </Text>
+              </HStack>
+            </VStack>
+          </HStack>
         </Pressable>
       </Link>
     </Card>

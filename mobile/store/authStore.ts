@@ -2,15 +2,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-import { IUser } from "@/types/types";
+import { User } from "@/types/types";
 
 type State = {
-  user: IUser | null;
+  user: User | null;
   token: string | null;
 };
 
 type Action = {
-  setUser: (user: any) => void;
+  setUser: (user: User) => void;
   setToken: (token: string) => void;
   removeUser: () => void;
   removeToken: () => void;

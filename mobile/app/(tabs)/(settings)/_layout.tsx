@@ -2,7 +2,7 @@ import { Stack } from "expo-router";
 
 import { useTheme } from "@/components/ui/ThemeProvider";
 
-import { BG_COLOR } from "@/utils/constants";
+import { BG_ACCENT_COLOR, BG_COLOR, TEXT_COLOR } from "@/utils/constants";
 
 export default function SettingsLayout() {
   const { theme } = useTheme();
@@ -13,36 +13,30 @@ export default function SettingsLayout() {
         contentStyle: {
           backgroundColor: BG_COLOR(theme),
         },
+        headerStyle: {
+          backgroundColor: BG_ACCENT_COLOR(theme),
+        },
+        headerTitleStyle: {
+          color: TEXT_COLOR(theme),
+        },
       }}
     >
       <Stack.Screen
-        name="settings"
+        name="index"
         options={{
           title: "Settings",
-          headerShown: false,
         }}
       />
       <Stack.Screen
-        name="orders/my-orders"
+        name="(orders)"
         options={{
           title: "My orders",
-        }}
-      />
-      <Stack.Screen
-        name="orders/[id]"
-        options={{
-          title: "Order",
           headerShown: false,
         }}
       />
+
       <Stack.Screen
-        name="profile/profile"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="profile/change-password"
+        name="(profile)"
         options={{
           headerShown: false,
         }}

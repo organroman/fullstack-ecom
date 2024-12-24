@@ -1,5 +1,3 @@
-
-import { useMutation } from "@tanstack/react-query";
 import { Link, Redirect } from "expo-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,12 +9,13 @@ import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 
-import { login, register as signUp } from "@/api/auth";
 import { useAuth } from "@/store/authStore";
-import { SignUpFormData } from "@/types/types";
+import { SignUpFormData, UpdatedUser } from "@/types/types";
 import { signUpSchema } from "@/utils/schema";
 
 import PasswordInput from "@/components/PasswordInput";
+import { useRegister } from "@/api/auth/useRegister";
+import { useLogin } from "@/api/auth/useLogin";
 
 export default function RegisterScreen() {
   const {
@@ -33,22 +32,27 @@ export default function RegisterScreen() {
 
   const isLoggedIn = useAuth((s) => !!s.token);
 
-  const registerMutation = useMutation({
-    mutationFn: async ({ name, email, password }: SignUpFormData) => {
-      const data = await signUp(name, email, password);
-      return data;
-    },
-    onSuccess: async (data, variables) => {
-      if (data) {
-        const loginData = await login(variables.email, variables.password);
-        if (loginData.user && loginData.token) {
-          setUser(loginData.user);
-          setToken(loginData.token);
-        }
-      }
-    },
-    onError: () => console.log("Error"),
-  });
+  const onRegisterSuccess = async (
+    registerData: UpdatedUser,
+    variables: SignUpFormData
+  ) => {
+    if (registerData) {
+      loginMutation.mutate({
+        email: variables.email,
+        password: variables.password,
+      });
+    }
+  };
+
+  const onLoginSuccess = (loginData: UpdatedUser) => {
+    if (loginData) {
+      setUser(loginData.user);
+      setToken(loginData.token);
+    }
+  };
+
+  const { registerMutation } = useRegister(onRegisterSuccess);
+  const { loginMutation } = useLogin(onLoginSuccess);
 
   const onSubmit = (formData: SignUpFormData) => {
     registerMutation.mutate(formData);

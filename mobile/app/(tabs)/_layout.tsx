@@ -12,7 +12,6 @@ import {
 
 import { Icon } from "@/components/ui/icon";
 
-import BackButton from "@/components/BackButton";
 import { useTheme } from "@/components/ui/ThemeProvider";
 
 import useCart from "@/store/cartStore";
@@ -75,22 +74,21 @@ export default function TabsLayout() {
         name="cart"
         options={{
           title: "Cart",
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Icon color={getIconColor(focused)} as={ShoppingCartIcon} />
           ),
           tabBarBadge: cartItemsNum > 0 ? cartItemsNum : undefined,
-          headerLeft: () => <BackButton />,
         }}
       />
       <Tabs.Screen
         name="favorites"
         options={{
-          title: "Favorites",
+          title: "Wish List",
           tabBarIcon: ({ focused }) => (
             <Icon color={getIconColor(focused)} as={HeartIcon} />
           ),
           tabBarBadge: favoriteItemsNum > 0 ? favoriteItemsNum : undefined,
-          headerLeft: () => <BackButton />,
         }}
       />
       <Tabs.Screen
@@ -112,7 +110,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused }) => (
             <Icon color={getIconColor(focused)} as={UserCog} />
           ),
-          href: isLoggedIn ? "(settings)/settings" : null,
+          href: isLoggedIn ? "(settings)" : null,
         }}
       />
     </Tabs>

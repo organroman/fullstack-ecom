@@ -6,21 +6,23 @@ import { VStack } from "./ui/vstack";
 import { Input, InputField } from "./ui/input";
 
 import { updateUserSchema } from "@/utils/schema";
-import { IUser, UpdateUserSchema } from "@/types/types";
+import { User, UpdateUserSchema } from "@/types/types";
 import { Text } from "./ui/text";
 import { useEffect } from "react";
 import { UseMutationResult } from "@tanstack/react-query";
 
 interface UserUpdateFormProps {
-  currentInfo: IUser;
+  currentInfo: User;
   onFormSubmit: (submit: () => void) => void;
   updateUserMutation: UseMutationResult<any, Error, UpdateUserSchema, unknown>;
+  handleOnSuccess: (data: User) => void;
 }
 
 const UserUpdateForm = ({
   currentInfo,
   onFormSubmit,
   updateUserMutation,
+  handleOnSuccess,
 }: UserUpdateFormProps) => {
   const {
     handleSubmit,
@@ -38,24 +40,19 @@ const UserUpdateForm = ({
   });
 
   const onSubmit = (data: UpdateUserSchema) => {
-    updateUserMutation.mutate(data);
+    updateUserMutation.mutate(data, {
+      onSuccess: (data) => handleOnSuccess(data),
+    });
   };
 
   useEffect(() => {
     onFormSubmit(handleSubmit(onSubmit));
   }, [handleSubmit, onSubmit, onFormSubmit]);
-  //   useEffect(() => {
-  //     onFormSubmit(() => {
-  //       if (formSubmitRef.current) {
-  //         handleSubmit(onSubmit)();
-  //       }
-  //     });
-  //   }, [handleSubmit, onSubmit, onFormSubmit]);
 
   return (
-    <FormControl className="p-4 border shadow-sm rounded-lg  bg-white dark:bg-black m-2 max-w-[400px] w-full mx-auto">
+    <FormControl className="py-4 max-w-[400px] w-full mx-auto flex flex-col gap-2">
       <VStack space="xs">
-        <Text className="text-zinc-700 dark:text-slate-300">Name</Text>
+        <Text className="text-zinc-700 dark:text-zinc-300 text-xs">Name</Text>
         <Input>
           <InputField
             value={watch("name")}
@@ -68,7 +65,7 @@ const UserUpdateForm = ({
         )}
       </VStack>
       <VStack space="xs">
-        <Text className="text-zinc-700 dark:text-slate-300">Email</Text>
+        <Text className="text-zinc-700 dark:text-zinc-300 text-xs">Email</Text>
         <Input>
           <InputField
             value={watch("email")}
@@ -81,7 +78,7 @@ const UserUpdateForm = ({
         )}
       </VStack>
       <VStack space="xs">
-        <Text className="text-zinc-700 dark:text-slate-300">Phone</Text>
+        <Text className="text-zinc-700 dark:text-zinc-300 text-xs">Phone</Text>
         <Input>
           <InputField
             value={watch("phone")}
@@ -94,7 +91,7 @@ const UserUpdateForm = ({
         )}
       </VStack>
       <VStack space="xs">
-        <Text className="text-zinc-700 dark:text-slate-300">Address</Text>
+        <Text className="text-zinc-700 dark:text-zinc-300 text-xs">Address</Text>
         <Input>
           <InputField
             value={watch("address")}

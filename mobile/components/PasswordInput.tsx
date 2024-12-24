@@ -1,9 +1,9 @@
-import { View, Text } from "react-native";
+import { Text } from "react-native";
 import React, { useState } from "react";
+import { EyeIcon, EyeOffIcon } from "lucide-react-native";
+
 import { VStack } from "./ui/vstack";
 import { Input, InputField, InputIcon, InputSlot } from "./ui/input";
-import { UseFormWatch } from "react-hook-form";
-import { EyeIcon, EyeOffIcon } from "lucide-react-native";
 
 interface PasswordInputProps {
   label?: string;
@@ -28,7 +28,7 @@ const PasswordInput = ({
 
   return (
     <VStack className="gap-1">
-      <Text className="text-zinc-700 dark:text-slate-300 text-sm">{label}</Text>
+      <Text className="text-zinc-700 dark:text-zinc-300 text-sm">{label}</Text>
       <Input>
         <InputField
           value={value}

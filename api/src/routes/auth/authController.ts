@@ -52,6 +52,6 @@ export async function login(req: Request, res: Response) {
     delete user.password;
     res.status(200).json({ token, user });
   } catch (error) {
-    res.status(500).send("Something went wrong");
+    res.status(500).send({ message: "Something went wrong", error: error });
   }
 }

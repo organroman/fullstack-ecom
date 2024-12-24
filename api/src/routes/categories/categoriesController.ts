@@ -18,7 +18,7 @@ export async function getCategories(req: Request, res: Response) {
       categories,
     });
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: "Something went wrong", error: e });
   }
 }
 
@@ -30,7 +30,7 @@ export async function createCategory(req: Request, res: Response) {
       .returning();
     res.status(201).json(category);
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: "Something went wrong", error: e });
   }
 }
 
@@ -49,7 +49,7 @@ export async function updateCategory(req: Request, res: Response) {
       res.status(200).json(category);
     } else res.status(404).send({ message: "Category not found" });
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: "Something went wrong", error: e });
   }
 }
 
@@ -68,6 +68,6 @@ export async function deleteCategory(req: Request, res: Response) {
       res.status(404).send({ message: "Product not found" });
     }
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: "Something went wrong", error: e });
   }
 }

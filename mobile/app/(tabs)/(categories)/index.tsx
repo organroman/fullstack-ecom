@@ -3,10 +3,13 @@ import { View, Text, FlatList } from "react-native";
 import { Link, Stack } from "expo-router";
 import { SvgUri } from "react-native-svg";
 
-import { useGetCategories } from "@/api/categories/queries";
+import { useGetCategories } from "@/api/categories/useGetCategories";
 
 import { useTheme } from "@/components/ui/ThemeProvider";
-import { cn, useDebounce } from "@/utils/utils";
+import Loading from "@/components/Loading";
+import ErrorScreen from "@/components/ErrorScreen";
+
+import { useDebounce } from "@/utils/utils";
 import {
   BAR_TINT_COLOR,
   BG_ACCENT_COLOR,
@@ -15,8 +18,6 @@ import {
   SEARCH_BAR_TEXT_COLOR,
   TEXT_COLOR,
 } from "@/utils/constants";
-import Loading from "@/components/Loading";
-import ErrorScreen from "@/components/ErrorScreen";
 
 const CategoriesScreen = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
@@ -81,7 +82,7 @@ const CategoriesScreen = () => {
             <View className="w-full">
               <Link
                 href={{
-                  pathname: `/(tabs)/(products)/products/?categoryId=${item.id}`,
+                  pathname: `/(tabs)/(products)?categoryId=${item.id}`,
                 }}
                 className="w-full"
               >

@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/card";
 import { Image } from "@/components/ui/image";
 import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
+import { useTheme } from "./ui/ThemeProvider";
+
 import { HStack } from "./ui/hstack";
 import { Button, ButtonIcon, ButtonText } from "./ui/button";
 import { VStack } from "./ui/vstack";
@@ -16,7 +18,6 @@ import useCart from "@/store/cartStore";
 import { useFavorite } from "@/store/favoriteStore";
 import { cn } from "@/utils/utils";
 import { BG_ACCENT_COLOR } from "@/utils/constants";
-import { useTheme } from "./ui/ThemeProvider";
 
 interface ProductListItemProps {
   product: Product;

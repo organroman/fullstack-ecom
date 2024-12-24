@@ -1,19 +1,20 @@
 import React from "react";
-import { ActivityIndicator, View, FlatList, SafeAreaView } from "react-native";
+import { ActivityIndicator, FlatList, SafeAreaView } from "react-native";
 import { useState } from "react";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import { LogsIcon } from "lucide-react-native";
 
-import { useInfiniteProducts } from "@/api/products/queries";
+import { useInfiniteProducts } from "@/api/products/useInfiniteProducts";
 
 import { useBreakpointValue } from "@/components/ui/utils/use-break-point-value";
-import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon } from "@/components/ui/button";
 
 import ProductListItem from "@/components/ProductListItem";
 import Loading from "@/components/Loading";
 import ErrorScreen from "@/components/ErrorScreen";
+import { useTheme } from "@/components/ui/ThemeProvider";
+import Empty from "@/components/Empty";
 
 import { useDebounce } from "@/utils/utils";
 import {
@@ -22,13 +23,12 @@ import {
   SEARCH_BAR_TEXT_COLOR,
   TEXT_COLOR,
 } from "@/utils/constants";
-import { useTheme } from "@/components/ui/ThemeProvider";
 
 export default function ProductsScreen() {
   const router = useRouter();
   const { theme } = useTheme();
-  const [searchPhrase, setSearchPhrase] = useState("");
-  const { categoryId } = useLocalSearchParams();
+  const [searchPhrase, setSearchPhrase] = useState<string>("");
+  const { categoryId } = useGlobalSearchParams<{ categoryId: string }>();
 
   const debouncedSearchPhrase = useDebounce(searchPhrase, 500);
 
@@ -41,7 +41,7 @@ export default function ProductsScreen() {
     isFetchingNextPage,
   } = useInfiniteProducts({
     searchPhrase: debouncedSearchPhrase,
-    categoryId: categoryId ? (categoryId as string) : undefined,
+    categoryId: categoryId ? categoryId : undefined,
   });
 
   const allProducts = data?.pages.flatMap((page) => page.products) || [];
@@ -66,6 +66,10 @@ export default function ProductsScreen() {
     return <ErrorScreen errorText="Failed to load products" />;
   }
 
+  if (allProducts.length === 0) {
+    return <Empty title="Products not found" desc="Try another keywords" />;
+  }
+
   return (
     <>
       <Stack.Screen
@@ -83,6 +87,7 @@ export default function ProductsScreen() {
               <ButtonIcon as={LogsIcon} />
             </Button>
           ),
+          headerLeft: () => undefined,
           headerTitleStyle: {
             color: TEXT_COLOR(theme),
           },
@@ -101,29 +106,21 @@ export default function ProductsScreen() {
       />
       <SafeAreaView className="flex-1 w-full">
         <Box className="p-2 h-full flex-1">
-          {allProducts.length === 0 ? (
-            <View className="h-full w-full items-center justify-center">
-              <Text>Products not found</Text>
-            </View>
-          ) : (
-            <FlatList
-              key={numColumns}
-              data={allProducts}
-              numColumns={numColumns}
-              onEndReached={handleLoadMore}
-              onEndReachedThreshold={0.5}
-              contentContainerClassName="gap-2 max-w-[960px] w-full mx-auto"
-              contentInsetAdjustmentBehavior="automatic"
-              columnWrapperClassName="gap-2"
-              renderItem={({ item }) => <ProductListItem product={item} />}
-              showsVerticalScrollIndicator={false}
-              ListFooterComponent={() =>
-                isFetchingNextPage ? (
-                  <ActivityIndicator className="mt-4" />
-                ) : null
-              }
-            />
-          )}
+          <FlatList
+            key={numColumns}
+            data={allProducts}
+            numColumns={numColumns}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.5}
+            contentContainerClassName="gap-2 max-w-[960px] w-full mx-auto"
+            contentInsetAdjustmentBehavior="automatic"
+            columnWrapperClassName="gap-2"
+            renderItem={({ item }) => <ProductListItem product={item} />}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={() =>
+              isFetchingNextPage ? <ActivityIndicator className="mt-4" /> : null
+            }
+          />
         </Box>
       </SafeAreaView>
     </>

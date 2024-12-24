@@ -18,7 +18,6 @@ export async function listProducts(req: Request, res: Response) {
     const searchPhrase = req.query.search || "";
     const categoryId = req.query.categoryId || "";
 
-
     const page = Number(req.query.page as string) || 1;
     const limit = Number(req.query.limit as string) || 10;
     const offset = (page - 1) * limit;
@@ -110,7 +109,7 @@ export async function listProducts(req: Request, res: Response) {
       limit,
     });
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: "Something went wrong", error: e });
   }
 }
 
@@ -129,10 +128,10 @@ export async function getProductById(req: Request, res: Response) {
     }
 
     const productImages = await db
-    .select()
-    .from(productImagesTable)
-    .where(eq(productImagesTable.product_id, Number(id)));
-    
+      .select()
+      .from(productImagesTable)
+      .where(eq(productImagesTable.product_id, Number(id)));
+
     const productWithImages = { ...product, images: productImages };
 
     res.status(200).json({ product: productWithImages });
@@ -165,7 +164,7 @@ export async function createProduct(req: Request, res: Response) {
 
     res.status(201).json({ ...newProduct, images: newProductImages });
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: "Something went wrong", error: e });
   }
 }
 
@@ -213,7 +212,7 @@ export async function updateProduct(req: Request, res: Response) {
       res.status(404).send({ message: "Product not found" });
     }
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: "Something went wrong", error: e });
   }
 }
 
@@ -243,6 +242,6 @@ export async function deleteProduct(req: Request, res: Response) {
       res.status(404).send({ message: "Product not found" });
     }
   } catch (e) {
-    res.status(500).send(e);
+    res.status(500).send({ message: "Something went wrong", error: e });
   }
 }

@@ -15,19 +15,22 @@ export default function ProductsLayout() {
         contentStyle: {
           backgroundColor: BG_COLOR(theme),
         },
+        headerLeft: () => undefined,
       }}
     >
       <Stack.Screen
-        name="products"
+        name="index"
         options={{
           title: "Products",
+          headerLeft: () => undefined,
+          headerBackVisible: false,
         }}
       />
       <Stack.Screen
         name="[id]"
         options={{
           title: "Product",
-          headerLeft: () => <BackButton />,
+          headerLeft: () => <BackButton text="Products" />,
         }}
       />
       <Stack.Screen

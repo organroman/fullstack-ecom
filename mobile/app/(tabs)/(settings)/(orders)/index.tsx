@@ -1,13 +1,14 @@
-import { Text, ActivityIndicator, FlatList } from "react-native";
-import { useQuery } from "@tanstack/react-query";
+import { FlatList } from "react-native";
 import { Redirect } from "expo-router";
 
 import { useBreakpointValue } from "@/components/ui/utils/use-break-point-value";
 import { Box } from "@/components/ui/box";
 
 import OrderListItem from "@/components/OrderListItem";
+import Loading from "@/components/Loading";
+import ErrorScreen from "@/components/ErrorScreen";
 
-import { getUserOrders } from "@/api/orders";
+import { useGetOrders } from "@/api/orders/useGetOrders";
 import { useAuth } from "@/store/authStore";
 
 const MyOrdersScreen = () => {
@@ -15,8 +16,10 @@ const MyOrdersScreen = () => {
   const token = useAuth((s) => !!s.token);
 
   if (!user || !token) {
-    return <Redirect href="home" />;
+    return <Redirect href="/" />;
   }
+
+  const { data, isLoading, error } = useGetOrders();
 
   const numColumns = useBreakpointValue({
     default: 1,
@@ -24,29 +27,20 @@ const MyOrdersScreen = () => {
     xl: 3,
   });
 
-  const {
-    data: orders,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["user-orders"],
-    queryFn: async () => await getUserOrders(user?.id),
-  });
-
   if (isLoading) {
-    return <ActivityIndicator />;
+    return <Loading />;
   }
 
-  if (error) {
-    return <Text>Error fetching orders</Text>;
+  if (error || !data) {
+    return <ErrorScreen errorText="Failed to load orders" />;
   }
 
   return (
-    <Box className="px-2 py-2 w-full">
+    <Box className="p-2 w-full">
       <FlatList
         key={numColumns}
-        data={orders}
-        contentContainerClassName="gap-4 max-w-[960px] w-full mx-auto mt-2 "
+        data={data.orders}
+        contentContainerClassName="gap-3 max-w-[960px] w-full mx-auto mt-2 "
         renderItem={({ item }) => <OrderListItem order={item} />}
       />
     </Box>

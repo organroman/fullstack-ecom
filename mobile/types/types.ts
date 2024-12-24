@@ -12,43 +12,74 @@ export type Product = {
   description: string;
   images: ProductImage[];
   price: number;
+  category_id: number;
+};
+
+export type Products = {
+  products: Product[];
+  page: number;
+  limit: number;
+  totalPages: number;
+  total: number;
 };
 
 export type ProductImage = {
   id: number;
   image_link: string;
+  product_id: number;
 };
 
-export interface ICartItem {
+export type Category = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  icon_url: string;
+  status: "ACTIVE" | "ARCHIVED";
+  display_order: number;
+};
+
+export type Categories = {
+  categories: Category[];
+  page: number;
+  limit: number;
+  totalPages: number;
+  total: number;
+};
+
+export type CartItem = {
   product: Product;
   quantity: number;
-}
+  price: number;
+};
 
-export interface IFavoriteItem {
+export type FavoriteItem = {
   product: Product;
-}
+};
 
-export interface IUser {
+export type User = {
   id: number;
   email: string;
   role: string;
   name: string;
   address: string;
   phone: string;
-}
+};
 
-export interface IUserOrder {
+export type UpdatedUser = {
+  user: User;
+  token: string;
+};
+
+export type Order = {
   id: number;
   createdAt: string;
   status: "New" | "Delivered" | "Cancelled";
-  userId: number;
-  items: {
-    id: number;
-    quantity: number;
-    price: number;
-    product: Product;
-  }[];
-}
+  delivery_address: string;
+  contact_phone: string;
+  user: User;
+  items: CartItem[];
+};
 
 export type Theme = "light" | "dark";
 

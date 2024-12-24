@@ -3,6 +3,8 @@ import {
   pgTable,
   doublePrecision,
   pgEnum,
+  text,
+  varchar,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import z from "zod";
@@ -22,6 +24,8 @@ export const orderStatusEnum = pgEnum("orderStatus", [
 export const ordersTable = pgTable("orders", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   status: orderStatusEnum().notNull().default("NEW"),
+  delivery_address: text().notNull(),
+  contact_phone: varchar({ length: 255 }).notNull(),
 
   user_id: integer()
     .references(() => usersTable.id)
@@ -45,6 +49,8 @@ export const orderItemsTable = pgTable("order_items", {
 export const insertOrderSchema = createInsertSchema(ordersTable).omit({
   id: true,
   user_id: true,
+  delivery_address: true,
+  contact_phone: true,
   status: true,
   created_at: true,
   updated_at: true,
@@ -58,6 +64,7 @@ export const insertOrderItemsSchema = createInsertSchema(orderItemsTable).omit({
 export const insertOrderWithItemsSchema = z.object({
   order: insertOrderSchema,
   items: z.array(insertOrderItemsSchema),
+
 });
 
 export const updateOrderSchema = createInsertSchema(ordersTable).pick({

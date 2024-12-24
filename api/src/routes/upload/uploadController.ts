@@ -10,6 +10,6 @@ export async function uploadFiles(req: Request, res: Response) {
       fileUrl: req.file.path,
     });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ message: "Something went wrong", error: error });
   }
 }
