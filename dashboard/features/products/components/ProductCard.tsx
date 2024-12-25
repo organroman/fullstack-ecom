@@ -27,7 +27,7 @@ const ProductCard = ({ product, isShowDescription }: ProductCardProps) => {
         <CarouselContent>
           {product.images.map((image) => (
             <CarouselItem key={image.id}>
-              <div className="bg-white rounded-md w-[280px]">
+              <div className=" rounded-md w-[280px]">
                 <Image
                   src={image.image_link}
                   width={240}
