@@ -1,19 +1,21 @@
-import { UseProductProps } from "@/types/types";
+import { Product, UseProductProps } from "@/types/types";
 
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { deleteProduct } from "..";
+import api from "@/api";
 
 export function useDeleteProduct({
   closeDialog,
   queryClient,
   view,
+  token,
 }: UseProductProps) {
   const deleteProductMutation = useMutation({
     mutationFn: async (id: number) => {
-      const data = await deleteProduct(id);
-      return data;
+      return await api.delete<Product>(`products/${id}`, {
+        Authorization: token ?? "",
+      });
     },
 
     onSuccess: () => {

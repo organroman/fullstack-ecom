@@ -41,7 +41,7 @@ const Modal = ({
   destructive,
 }: ModalProps) => {
   return (
-    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+    <DialogContent className="sm:max-w-md max-h-[90vh] max-w-md overflow-y-auto">
       <DialogHeader className="flex flex-col justify-center text-center">
         <DialogTitle
           className={cn(
@@ -59,7 +59,7 @@ const Modal = ({
         </DialogDescription>
       </DialogHeader>
       {children}
-      <DialogFooter className="sm:justify-start w-full mt-4">
+      <DialogFooter className="sm:justify-start mt-4">
         <DialogClose asChild>
           <Button
             type="button"
@@ -80,7 +80,7 @@ const Modal = ({
         >
           {isPending ? (
             <div className="flex flex-row items-center">
-              <Loader className="size-6 animate-spin text-slate-100 mr-2" />
+              <Loader className="size-6 animate-spin text-zinc-300 mr-2" />
               <span>{buttonActionTitleContinuous}</span>
             </div>
           ) : (

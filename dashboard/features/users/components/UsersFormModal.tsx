@@ -1,5 +1,5 @@
 "use client";
-import { IUser, Roles, UserFormModalData } from "@/types/types";
+import { User, Roles, UserFormModalData } from "@/types/types";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,11 +12,15 @@ import Modal from "@/components/Modal";
 import { SelectContent, SelectItem } from "@/components/ui/select";
 
 import { USER_ROLES } from "@/lib/constants";
-import { capitalizeFirstLetter, getUserSchema } from "@/lib/utils";
+import {
+  capitalizeFirstLetter,
+  getUserSchema,
+} from "@/lib/utils";
+
 
 interface UserFormModalProps {
-  userMutation: UseMutationResult<void, Error, UserFormModalData>;
-  user?: IUser;
+  userMutation: UseMutationResult<User, Error, UserFormModalData>;
+  user?: User;
 }
 
 const UsersFormModal = ({ user, userMutation }: UserFormModalProps) => {
@@ -32,7 +36,8 @@ const UsersFormModal = ({ user, userMutation }: UserFormModalProps) => {
     },
   });
 
-  const onSubmit = (formData: IUser) => {
+  const onSubmit = (formData: User) => {
+
     userMutation.mutate(
       { ...formData, id: String(user?.id) || "" },
       {

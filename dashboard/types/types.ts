@@ -2,7 +2,7 @@ import { loginSchema, signUpSchema } from "@/lib/schema";
 import { QueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 
-export type ProductType = {
+export type Product = {
   id: number;
   name: string;
   description: string;
@@ -10,6 +10,14 @@ export type ProductType = {
   category_id: string;
   price: number;
   created_at: string;
+};
+
+export type Products = {
+  products: Product[];
+  page: number;
+  total: number;
+  limit: number;
+  totalPages: number;
 };
 
 export enum Status {
@@ -36,22 +44,13 @@ export type Categories = {
   categories: Category[];
 };
 
-export interface ICartItem {
-  product: ProductType;
-  quantity: number;
-}
-
-export interface IFavoriteItem {
-  product: ProductType;
-}
-
 export enum Roles {
   ADMIN = "ADMIN",
   CUSTOMER = "CUSTOMER",
   SALES_MANAGER = "SALES MANAGER",
 }
 
-export interface IUser {
+export type User = {
   id?: string;
   role: Roles;
   name: string;
@@ -60,7 +59,15 @@ export interface IUser {
   address: string;
   createdAt?: string;
   password?: string;
-}
+};
+
+export type Users = {
+  users: User[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+};
 
 export enum EOrderStatuses {
   "NEW",
@@ -73,14 +80,14 @@ export interface IOrderItem {
   id: number;
   quantity: number;
   price: number;
-  product: ProductType;
+  product: Product;
 }
 
 export type IOrder = {
   id: number;
   createdAt: Date;
   status: EOrderStatuses;
-  user: IUser;
+  user: User;
   items: IOrderItem[];
 };
 
@@ -131,6 +138,7 @@ export type UserFormModalData = {
 export interface UseQueryProps {
   closeDialog: () => void;
   queryClient: QueryClient;
+  token: string | null;
 }
 
 export interface UseProductProps extends UseQueryProps {

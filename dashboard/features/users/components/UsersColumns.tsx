@@ -1,17 +1,11 @@
 "use client";
 
 import { capitalizeFirstLetter, cn } from "@/lib/utils";
-import { IUser, Roles } from "@/types/types";
+import { User, Roles } from "@/types/types";
 import { ColumnDef } from "@tanstack/react-table";
 import UserActionsMenu from "./UserActionsMenu";
 import { Badge } from "@/components/ui/badge";
 
-export type User = {
-  users: IUser[];
-  total: number;
-  page: number;
-  limit: number;
-};
 
 const rolesColor = {
   ADMIN: "bg-yellow-600 hover:bg-yellow-600",
@@ -19,7 +13,7 @@ const rolesColor = {
   CUSTOMER: "bg-zinc-700",
 };
 
-export const usersColumns: ColumnDef<IUser>[] = [
+export const usersColumns: ColumnDef<User>[] = [
   {
     accessorKey: "id",
     header: "Id",

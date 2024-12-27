@@ -6,6 +6,15 @@ body {
   font-family: var(--font-geist-sans)
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

@@ -25,7 +25,9 @@ export const createProductSchema = z.object({
     })
     .transform((val) => Number(val)),
   images: z.array(
-    z.object({ image_link: z.string().min(1, "Image is required") })
+    z.object({
+      image_link: z.string().min(1, "Image is required"),
+    })
   ),
 });
 

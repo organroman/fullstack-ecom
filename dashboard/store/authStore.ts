@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-import { IUser } from "@/types/types";
+import { User } from "@/types/types";
 
 
 type State = {
-  user: IUser | null;
+  user: User | null;
   token: string | null;
   isHydrated: boolean;
 };
 
 type Action = {
-  setUser: (user: IUser | null) => void;
+  setUser: (user: User | null) => void;
   setToken: (token: string | null) => void;
 };
 

@@ -1,4 +1,4 @@
-import { ProductType } from "@/types/types";
+import { Product } from "@/types/types";
 
 import { useCallback, useEffect, useRef } from "react";
 import { Loader } from "lucide-react";
@@ -6,10 +6,16 @@ import { Loader } from "lucide-react";
 import LoadingPage from "@/app/loading";
 import ProductCard from "./ProductCard";
 import { useInfiniteProducts } from "@/api/products/queries/useInfiniteProducts";
+import { useToken } from "@/components/providers/token-provider";
+import { useSearchParams } from "next/navigation";
 
 const ProductsGridView = () => {
+  const token = useToken();
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("search") || "";
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-  useInfiniteProducts();
+    useInfiniteProducts({ search, token });
 
   const allProducts = data?.pages.flatMap((page) => page.products) || [];
 
@@ -46,7 +52,7 @@ const ProductsGridView = () => {
   return (
     <div className=" overflow-y-auto">
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 items-center gap-4 overflow-y-auto ">
-        {allProducts?.map((product: ProductType) => (
+        {allProducts?.map((product: Product) => (
           <ProductCard
             key={product.id}
             product={product}

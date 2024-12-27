@@ -15,11 +15,13 @@ import ProductsTableView from "@/features/products/components/ProductsTableView"
 import { getDataFromLS } from "@/lib/utils";
 import { useDialog } from "@/hooks/use-modal";
 import { useCreateProduct } from "@/api/products/queries/useCreateProduct";
+import { useToken } from "@/components/providers/token-provider";
 
 const ProductsClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
+  const token = useToken();
 
   const view = (searchParams.get("view") || "table") as View;
 
@@ -29,6 +31,7 @@ const ProductsClient = () => {
     view,
     closeDialog,
     queryClient,
+    token,
   });
 
   const updateQueryParams = (
@@ -89,7 +92,6 @@ const ProductsClient = () => {
         }
         dialogOpen={dialogOpen}
         dialogHandleOpen={setDialogOpen}
-      
       />
 
       {view === "grid" ? (

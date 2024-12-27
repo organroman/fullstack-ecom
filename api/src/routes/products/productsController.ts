@@ -134,7 +134,7 @@ export async function getProductById(req: Request, res: Response) {
 
     const productWithImages = { ...product, images: productImages };
 
-    res.status(200).json({ product: productWithImages });
+    res.status(200).json(productWithImages);
   } catch (e) {
     res.status(500).send(e);
   }
@@ -193,18 +193,30 @@ export async function updateProduct(req: Request, res: Response) {
       .where(eq(productsTable.id, id))
       .returning();
 
-    const updatedImages = [];
-    for (const image of images) {
-      const updatedImage = await db
-        .update(productImagesTable)
-        .set({
-          image_link: image.image_link,
-          updated_at: new Date(),
-        })
-        .where(eq(productImagesTable.id, image.id))
-        .returning();
-      updatedImages.push(...updatedImage);
+    const existingImages = await db
+      .select()
+      .from(productImagesTable)
+      .where(eq(productImagesTable.product_id, id));
+
+    const productImages = images.map((image: ImageType & { id?: number }) => ({
+      ...image,
+      product_id: product.id,
+    }));
+
+    const imagesToInsert = productImages.filter(
+      (image: ImageType & { id: number }) =>
+        !image.id ||
+        !existingImages.some((existing) => existing.id === image.id)
+    );
+
+    if (imagesToInsert.length > 0) {
+      await db.insert(productImagesTable).values(imagesToInsert);
     }
+
+    const updatedImages = await db
+      .select()
+      .from(productImagesTable)
+      .where(eq(productImagesTable.product_id, id));
 
     if (updatedProduct) {
       res.json({ ...updatedProduct, images: updatedImages });
@@ -240,6 +252,24 @@ export async function deleteProduct(req: Request, res: Response) {
       res.status(204).send();
     } else {
       res.status(404).send({ message: "Product not found" });
+    }
+  } catch (e) {
+    res.status(500).send({ message: "Something went wrong", error: e });
+  }
+}
+
+export async function deleteImage(req: Request, res: Response) {
+  try {
+    const id = Number(req.params.id);
+
+    const deletedImage = await db
+      .delete(productImagesTable)
+      .where(eq(productImagesTable.id, id));
+
+    if (deletedImage) {
+      res.status(204).send();
+    } else {
+      res.status(404).send({ message: "Image not found" });
     }
   } catch (e) {
     res.status(500).send({ message: "Something went wrong", error: e });

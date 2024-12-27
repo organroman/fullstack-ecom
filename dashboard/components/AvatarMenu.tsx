@@ -1,6 +1,6 @@
 "use client";
 
-import { IUser } from "@/types/types";
+import { User } from "@/types/types";
 
 import { useState } from "react";
 import { useTheme } from "next-themes";
@@ -27,7 +27,7 @@ import Modal from "./Modal";
 
 import { removeCookie } from "@/lib/utils";
 
-const AvatarMenu = ({ data }: { data: IUser | undefined }) => {
+const AvatarMenu = ({ data }: { data: User | undefined }) => {
   const { setTheme } = useTheme();
   const router = useRouter();
 

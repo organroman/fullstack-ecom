@@ -1,9 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchProductById } from "..";
+import api from "@/api";
+import { Product } from "@/types/types";
 
-export function useProductById(id: number) {
-  return useQuery({
-    queryKey: ["product", id],
-    queryFn: async () => await fetchProductById(id),
+interface UseProductById {
+  productId: number;
+  token: string | null;
+}
+
+export function useProductById({ productId, token }: UseProductById) {
+  return useQuery<any, Error, Product>({
+    queryKey: ["product", productId],
+    queryFn: async () => {
+      return await api.get<Product>(`products/${productId}`, {
+        Authorization: token ?? "",
+      });
+    },
   });
 }

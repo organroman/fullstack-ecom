@@ -25,6 +25,7 @@ interface HeaderProps {
   dialogHandleOpen: Dispatch<SetStateAction<boolean>>;
   entityView?: string;
   handleEntityView?: () => void;
+  backBtn?: boolean;
 }
 
 const Header = ({
@@ -39,6 +40,7 @@ const Header = ({
   dialogHandleOpen,
   entityView,
   handleEntityView,
+  backBtn = false,
 }: HeaderProps) => {
   const router = useRouter();
 
@@ -48,10 +50,12 @@ const Header = ({
   return (
     <div className="flex flex-row items-center justify-between pt-4">
       <div className="flex items-center gap-4">
-        <Button onClick={goBack} className="text-md [&_svg]:size-5">
-          <ChevronLeftIcon />
-          Back
-        </Button>
+        {backBtn && (
+          <Button onClick={goBack} className="text-md [&_svg]:size-5">
+            <ChevronLeftIcon />
+            Back
+          </Button>
+        )}
 
         <h2 className="text-3xl">{title}</h2>
       </div>

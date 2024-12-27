@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductType } from "@/types/types";
+import { Product } from "@/types/types";
 
 import Image from "next/image";
 
@@ -16,23 +16,23 @@ import {
 } from "@/components/ui/carousel";
 
 interface ProductCardProps {
-  product: ProductType;
+  product: Product;
   isShowDescription: boolean;
 }
 
 const ProductCard = ({ product, isShowDescription }: ProductCardProps) => {
   return (
-    <Card className="p-5 rounded-lg flex-1 relative hover:border-blue-400 hover:shadow-lg transition flex flex-col justify-center">
-      <Carousel className="w-full max-w-xs relative" >
+    <Card className="p-5 h-[380px] rounded-lg flex-1 relative hover:border-blue-400 hover:shadow-lg transition flex flex-col justify-center">
+      <Carousel className="w-full max-w-xs relative">
         <CarouselContent>
           {product.images.map((image) => (
             <CarouselItem key={image.id}>
-              <div className=" rounded-md w-[280px]">
+              <div className="rounded-md h-[280px] aspect-square w-full flex justify-center ">
                 <Image
                   src={image.image_link}
                   width={240}
                   height={280}
-                  className="mb-6 h-[280px] rounded-md w-auto object-fit"
+                  className="mb-6 h-[280px] aspect-square rounded-md object-contain bg-transparent"
                   alt={`${product.name} image`}
                 />
               </div>
@@ -40,7 +40,7 @@ const ProductCard = ({ product, isShowDescription }: ProductCardProps) => {
           ))}
         </CarouselContent>
         <CarouselPrevious className="absolute left-1 top-1/2 -translate-y-1/2" />
-        <CarouselNext className="absolute right-8 top-1/2 -translate-y-1/2" />
+        <CarouselNext className="absolute right-1 top-1/2 -translate-y-1/2" />
       </Carousel>
 
       <div className="absolute top-2 right-2">

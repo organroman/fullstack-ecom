@@ -21,7 +21,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     <div className="h-screen overflow-hidden">
       <div className="flex w-full h-full">
         <div className="hidden lg:block lg:w-[264px] h-full">
-          <SideBar role={userData.role} userId={userData.userId} />
+          <SideBar
+            role={userData.role}
+            userId={userData.userId}
+            token={usersToken}
+          />
         </div>
         <div className=" w-full">
           <div className="flex flex-col mx-auto max-w-screen-2xl h-full">

@@ -1,4 +1,4 @@
-import { ProductType, View } from "@/types/types";
+import { Product, View } from "@/types/types";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
@@ -12,10 +12,12 @@ import { useDialog } from "@/hooks/use-modal";
 
 import { useDeleteProduct } from "@/api/products/queries/useDeleteProduct";
 import { useEditProduct } from "@/api/products/queries/useEditProduct";
+import { useToken } from "@/components/providers/token-provider";
 
-const ProductActionsMenu = ({ product }: { product: ProductType }) => {
+const ProductActionsMenu = ({ product }: { product: Product }) => {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
+  const token = useToken();
 
   const {
     dialogOpen: isEditDialogOpen,
@@ -36,12 +38,14 @@ const ProductActionsMenu = ({ product }: { product: ProductType }) => {
     closeDialog: closeEditDialog,
     queryClient,
     view,
+    token,
   });
 
   const { deleteProductMutation } = useDeleteProduct({
     closeDialog: closeDeleteDialog,
     queryClient,
     view,
+    token,
   });
 
   return (

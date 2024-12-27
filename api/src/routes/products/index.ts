@@ -6,6 +6,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  deleteImage,
 } from "./productsController.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
 import { createProductWithImagesSchema } from "../../db/schema/products.js";
@@ -34,5 +35,6 @@ router.put(
 );
 
 router.delete("/:id", verifyToken, verifySeller, deleteProduct);
+router.delete("/images/:id", verifyToken, verifySeller, deleteImage);
 
 export default router;

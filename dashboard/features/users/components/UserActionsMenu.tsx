@@ -1,4 +1,4 @@
-import { IUser } from "@/types/types";
+import { User } from "@/types/types";
 
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -7,13 +7,20 @@ import { Dialog } from "@/components/ui/dialog";
 
 import UsersFormModal from "./UsersFormModal";
 import { useDialog } from "@/hooks/use-modal";
-import { useEditUser } from "@/api/users/queries/useEditUser";
+import { useEditUser } from "@/api/users/useEditUser";
+import { useToken } from "@/components/providers/token-provider";
+import ErrorPage from "@/app/error";
 
-const UserActionsMenu = ({ user }: { user: IUser }) => {
-
+const UserActionsMenu = ({ user }: { user: User }) => {
   const { dialogOpen, setDialogOpen, closeDialog } = useDialog();
   const queryClient = useQueryClient();
-  const { editUserMutation } = useEditUser({ closeDialog, queryClient });
+  const token = useToken();
+
+  if (!token) {
+    return <ErrorPage error="Unauthorized" />;
+  }
+
+  const { editUserMutation } = useEditUser({ closeDialog, queryClient, token });
 
   return (
     <>
@@ -25,7 +32,10 @@ const UserActionsMenu = ({ user }: { user: IUser }) => {
       />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <UsersFormModal user={user} userMutation={editUserMutation} />
+        <UsersFormModal
+          user={user}
+          userMutation={editUserMutation}
+        />
       </Dialog>
     </>
   );

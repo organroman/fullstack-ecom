@@ -5,7 +5,6 @@ import { cn, hasPermission } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import {
   GoCheckCircle,
@@ -21,7 +20,7 @@ import { PERMISSIONS } from "@/lib/permissions";
 
 import AvatarMenu from "./AvatarMenu";
 import { Separator } from "./ui/separator";
-import { useUserById } from "@/api/users/queries";
+import { useGetUserById } from "@/api/users/useGetUserById";
 
 const routes = [
   {
@@ -65,12 +64,13 @@ const routes = [
 type SideBarProps = {
   role: string;
   userId: string;
+  token: string | null;
 };
 
-const SideBar = ({ role, userId }: SideBarProps) => {
+const SideBar = ({ role, userId, token }: SideBarProps) => {
   const pathName = usePathname();
 
-  const { data, isLoading } = useUserById(Number(userId));
+  const { data, isLoading } = useGetUserById({ userId: Number(userId), token });
 
   //TODO: Moibile Sidebar
 

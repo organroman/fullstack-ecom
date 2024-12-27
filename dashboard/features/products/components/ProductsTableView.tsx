@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { DataTable } from "@/components/DataTable";
 import { productColumns } from "./ProductsColumns";
 import { usePaginatedProducts } from "@/api/products/queries/usePaginatedProducts";
+import { useToken } from "@/components/providers/token-provider";
+import ErrorPage from "@/app/error";
 
 interface ProductsTableViewProps {
   view: string;
@@ -27,10 +29,16 @@ const ProductsTableView = ({
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit") || 10);
   const search = searchParams.get("search") || "";
+  const token = useToken();
 
-  const { data, isLoading, error } = usePaginatedProducts(page, limit, search);
+  const { data, isLoading, error } = usePaginatedProducts({
+    page,
+    limit,
+    search,
+    token,
+  });
 
-  const { products = [], totalPages = 0, totalItems = 0 } = data || {};
+  const { products = [], totalPages = 0, total = 0 } = data || {};
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -52,12 +60,16 @@ const ProductsTableView = ({
     updateQueryParams(view, search, page, newLimit);
   };
 
+  if (error) {
+    return <ErrorPage error={error.message} />;
+  }
+
   return (
     <div className="h-full border overflow-y-auto rounded-md">
       <DataTable
         data={products}
         columns={productColumns}
-        totalItems={totalItems}
+        totalItems={total}
         totalPages={totalPages}
         onPageChange={handlePageChange}
         onLimitChange={handleLimitChange}

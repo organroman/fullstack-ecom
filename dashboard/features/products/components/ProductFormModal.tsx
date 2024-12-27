@@ -1,38 +1,32 @@
 "use client";
 
-import { Category, ProductFormModalData, ProductType } from "@/types/types";
+import { Category, ProductFormModalData, Product } from "@/types/types";
 
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UseMutationResult } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
 
 import { Form } from "@/components/ui/form";
 
-import { createProductSchema } from "@/lib/schema";
 import Modal from "@/components/Modal";
 import UseFormInput from "@/components/form/UseFormInput";
 import UseFormSelect from "@/components/form/UseFormSelect";
-import { useGetCategories } from "@/api/categories/queries/useGetCategories";
 import { useSearchParams } from "next/navigation";
 import { SelectContent, SelectItem } from "@/components/ui/select";
-import { Loader, MinusIcon, PlusIcon } from "lucide-react";
-import UseFormUploader from "@/components/form/UseFormFileUploader";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
+import UseFormFilesArrayUploader from "@/components/form/UseFormFilesArrayUploader";
+import { createProductSchema } from "@/lib/schema";
+import { useGetCategories } from "@/api/categories/queries/useGetCategories";
 
 interface ProductFormModalProps {
   productMutation: UseMutationResult<
-    void,
+    Product,
     Error,
     ProductFormModalData,
     unknown
   >;
-  product?: ProductType;
+  product?: Product;
 }
 
 const ProductFormModal = ({
@@ -44,14 +38,10 @@ const ProductFormModal = ({
     defaultValues: {
       name: product ? product.name : "",
       description: product ? product.description : "",
-      images: product ? product.images : [{ image_link: "" }],
+      images: product ? product.images : [],
       price: product ? String(product.price) : "",
       category_id: product ? String(product?.category_id) : "",
     },
-  });
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: "images",
   });
 
   const searchParams = useSearchParams();
@@ -59,21 +49,6 @@ const ProductFormModal = ({
 
   const { data, isLoading } = useGetCategories(search);
   const { categories = [] } = data || {};
-
-  const handleAppendUploader = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    append({
-      image_link: "",
-    });
-  };
-
-  const handleRemoveUploader = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    index: number
-  ) => {
-    e.preventDefault();
-    remove(index);
-  };
 
   const onSubmit = (formData: ProductFormModalData) => {
     productMutation.mutate(
@@ -86,7 +61,9 @@ const ProductFormModal = ({
         images: form.control._formValues.images,
       },
       {
-        onSuccess: () => form.control._reset(),
+        onSuccess: () => {
+          form.control._reset();
+        },
       }
     );
   };
@@ -108,7 +85,7 @@ const ProductFormModal = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-2"
+          className="space-y-2 max-w-md"
           id="create-product"
         >
           <UseFormInput
@@ -152,62 +129,12 @@ const ProductFormModal = ({
             label="Price"
             placeholder="Enter product price "
           />
-
-          {fields.map((field, index) => (
-            <div key={field.id} className="flex flex-row items-end space-x-2">
-              <UseFormUploader
-                key={field.id}
-                control={form.control}
-                label="Images"
-                {...form.register(`images.${index}.image_link` as const)}
-                uploadedUrl={
-                  fields[index].image_link ||
-                  form.control._formValues.images[index].image_link
-                }
-                arrayActions={
-                  <div className="flex flex-row items-center space-x-2">
-                    {fields.length - 1 === index && (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              onClick={(e) => handleAppendUploader(e)}
-                              className="w-9 h-9 bg-emerald-500 hover:bg-emerald-700"
-                              size="icon"
-                            >
-                              <PlusIcon className="w-9 h-9" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Add one more image uploader field</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    )}
-                    {index > 0 && (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              size="icon"
-                              variant="destructive"
-                              className="w-9 h-9"
-                              onClick={(e) => handleRemoveUploader(e, index)}
-                            >
-                              <MinusIcon className="p-0" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Remove image uploader field</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    )}
-                  </div>
-                }
-              />
-            </div>
-          ))}
+          <UseFormFilesArrayUploader
+            name="images"
+            control={form.control}
+            label="Images"
+            product={product}
+          />
         </form>
       </Form>
     </Modal>

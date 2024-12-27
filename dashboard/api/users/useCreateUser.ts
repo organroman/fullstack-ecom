@@ -1,14 +1,20 @@
-import { UseQueryProps, UserFormModalData } from "@/types/types";
+import { UseQueryProps, User, UserFormModalData } from "@/types/types";
 
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { createUser } from "..";
 
-export function useCreateUser({ closeDialog, queryClient }: UseQueryProps) {
-  const mutation = useMutation<void, Error, UserFormModalData>({
+import api from "@/api";
+
+export function useCreateUser({
+  closeDialog,
+  queryClient,
+  token,
+}: UseQueryProps) {
+  const mutation = useMutation({
     mutationFn: async (user: UserFormModalData) => {
-      const data = await createUser(user);
-      return data;
+      return await api.post<User>("users", user, {
+        Authorization: token ?? "",
+      });
     },
 
     onSuccess: () => {

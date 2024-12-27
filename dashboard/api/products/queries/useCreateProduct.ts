@@ -1,16 +1,16 @@
-import { ProductFormModalData, UseProductProps } from "@/types/types";
+import { Product, ProductFormModalData, UseProductProps } from "@/types/types";
 
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-
-import { createProduct } from "..";
+import api from "@/api";
 
 export function useCreateProduct({
   view,
   closeDialog,
   queryClient,
+  token,
 }: UseProductProps) {
-  const mutation = useMutation<void, Error, ProductFormModalData>({
+  const mutation = useMutation<Product, Error, ProductFormModalData>({
     mutationFn: async ({
       name,
       description,
@@ -18,16 +18,19 @@ export function useCreateProduct({
       category_id,
       images,
     }: ProductFormModalData) => {
-      const data = await createProduct({
+      const payload = {
         product: {
-          name: name,
-          description: description,
+          name,
+          description,
           price: Number(price),
           category_id: Number(category_id),
         },
         images,
+      };
+
+      return await api.post<Product>("products", payload, {
+        Authorization: token ?? "",
       });
-      return data;
     },
 
     onSuccess: () => {

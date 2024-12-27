@@ -12,11 +12,13 @@ import { Select } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import UserRolesSelector from "@/components/UserRolesSelector";
 
-import { useUserById } from "@/api/users/queries";
 import Header from "@/components/Header";
 import { useDialog } from "@/hooks/use-modal";
 import UsersFormModal from "@/features/users/components/UsersFormModal";
-import { useCreateUser } from "@/api/users/queries/useCreateUser";
+import { useCreateUser } from "@/api/users/useCreateUser";
+import ErrorPage from "@/app/error";
+import { useGetUserById } from "@/api/users/useGetUserById";
+import { useToken } from "@/components/providers/token-provider";
 
 interface UserIdClientProps {
   userId: string;
@@ -26,17 +28,27 @@ interface UserIdClientProps {
 
 const UserIdClient = ({ userId, isAllowedToEdit, role }: UserIdClientProps) => {
   const queryClient = useQueryClient();
-  const { data: user, isLoading, error } = useUserById(Number(userId));
+  const token = useToken();
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useGetUserById({ userId: Number(userId), token });
+
   const { dialogOpen, setDialogOpen, closeDialog } = useDialog();
 
-  const { createUserMutation } = useCreateUser({ closeDialog, queryClient });
+  const { createUserMutation } = useCreateUser({
+    closeDialog,
+    queryClient,
+    token,
+  });
 
   if (isLoading) {
     return <LoadingPage />;
   }
 
   if (error) {
-    return <p>Error of fetch user</p>;
+    return <ErrorPage error={error.message} />;
   }
 
   return (
