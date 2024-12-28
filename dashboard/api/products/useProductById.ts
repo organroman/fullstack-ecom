@@ -8,7 +8,7 @@ interface UseProductById {
 }
 
 export function useProductById({ productId, token }: UseProductById) {
-  return useQuery<any, Error, Product>({
+  return useQuery<Product, Error, Product>({
     queryKey: ["product", productId],
     queryFn: async () => {
       return await api.get<Product>(`products/${productId}`, {

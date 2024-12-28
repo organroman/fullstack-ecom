@@ -5,14 +5,14 @@ import { useSearchParams } from "next/navigation";
 
 import { Dialog } from "@/components/ui/dialog";
 import DropdownActionsMenu from "@/components/DropdownActionsMenu";
+import { useToken } from "@/components/providers/token-provider";
 
 import ProductForm from "./ProductFormModal";
 import Modal from "@/components/Modal";
 import { useDialog } from "@/hooks/use-modal";
 
-import { useDeleteProduct } from "@/api/products/queries/useDeleteProduct";
-import { useEditProduct } from "@/api/products/queries/useEditProduct";
-import { useToken } from "@/components/providers/token-provider";
+import { useDeleteProduct } from "@/api/products/useDeleteProduct";
+import { useEditProduct } from "@/api/products/useEditProduct";
 
 const ProductActionsMenu = ({ product }: { product: Product }) => {
   const queryClient = useQueryClient();

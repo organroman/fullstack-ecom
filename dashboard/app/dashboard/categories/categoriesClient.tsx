@@ -5,27 +5,32 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { DataTable } from "@/components/DataTable";
 import Header from "@/components/Header";
+import { useToken } from "@/components/providers/token-provider";
+import ErrorPage from "@/app/error";
 
 import { categoriesColumns } from "@/features/categories/components/CategoriesColumns";
 import CategoryFormModal from "@/features/categories/components/CategoryFormModal";
 
-import { useGetCategories } from "@/api/categories/queries/useGetCategories";
+import { useGetCategories } from "@/api/categories/useGetCategories";
+import { useCreateCategory } from "@/api/categories/useCreateCategory";
+
 import { useDialog } from "@/hooks/use-modal";
 import { useUpdateQueryParams } from "@/hooks/use-update-query-params";
-import { useCreateCategory } from "@/api/categories/queries/useCreateCategory";
 
 const CategoriesClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
+  const token = useToken();
 
   const search = searchParams.get("search") || "";
 
   const { dialogOpen, setDialogOpen, closeDialog } = useDialog();
-  const { data, isLoading, error } = useGetCategories(search);
+  const { data, isLoading, error } = useGetCategories({ search, token });
   const { createCategoryMutation } = useCreateCategory({
     closeDialog,
     queryClient,
+    token,
   });
 
   const { categories = [] } = data || {};
@@ -40,6 +45,10 @@ const CategoriesClient = () => {
     searchParams,
     router,
   });
+
+  if (error) {
+    return <ErrorPage error={error.message} />;
+  }
 
   return (
     <div className="flex flex-col gap-4 h-full">

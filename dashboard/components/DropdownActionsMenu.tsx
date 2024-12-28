@@ -22,8 +22,8 @@ import {
 
 interface DropdownActionsMenuProps {
   label?: string;
-  viewItemLink: string;
-  viewItemTitle: string;
+  viewItemLink?: string;
+  viewItemTitle?: string;
   editItemDialogOpen: (value: SetStateAction<boolean>) => void;
   editItemTitle: string;
   deleteItemDialogOpen?: (value: SetStateAction<boolean>) => void;
@@ -50,11 +50,13 @@ const DropdownActionsMenu = ({
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>{label}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href={viewItemLink}>
-            <ExternalLinkIcon /> {viewItemTitle}
-          </Link>
-        </DropdownMenuItem>
+        {viewItemLink && (
+          <DropdownMenuItem asChild>
+            <Link href={viewItemLink}>
+              <ExternalLinkIcon /> {viewItemTitle}
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem onClick={() => editItemDialogOpen(true)}>
           <PencilIcon /> {editItemTitle}
         </DropdownMenuItem>

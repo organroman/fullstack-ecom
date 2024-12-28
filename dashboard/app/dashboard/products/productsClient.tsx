@@ -7,15 +7,17 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
 import Header from "@/components/Header";
+import { useToken } from "@/components/providers/token-provider";
 
 import ProductFormModal from "@/features/products/components/ProductFormModal";
 import ProductsGridView from "@/features/products/components/ProductsGridView";
 import ProductsTableView from "@/features/products/components/ProductsTableView";
 
-import { getDataFromLS } from "@/lib/utils";
 import { useDialog } from "@/hooks/use-modal";
-import { useCreateProduct } from "@/api/products/queries/useCreateProduct";
-import { useToken } from "@/components/providers/token-provider";
+
+import { useCreateProduct } from "@/api/products/useCreateProduct";
+
+import { getDataFromLS } from "@/lib/utils";
 
 const ProductsClient = () => {
   const router = useRouter();

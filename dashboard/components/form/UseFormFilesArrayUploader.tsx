@@ -14,7 +14,7 @@ import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 import { uploadImage } from "@/api/upload";
 import { Product, View } from "@/types/types";
-import { useDeleteProductImage } from "@/api/products/queries/useDeleteProductImage";
+import { useDeleteProductImage } from "@/api/products/useDeleteProductImage";
 import { useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToken } from "../providers/token-provider";

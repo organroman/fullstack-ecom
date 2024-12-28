@@ -19,7 +19,7 @@ import { capitalizeFirstLetter } from "@/lib/utils";
 interface CategoryFormModalProps {
   category?: Category;
   categoryMutation: UseMutationResult<
-    void,
+    Category,
     Error,
     CategoryFormModalData,
     unknown
@@ -52,7 +52,7 @@ const CategoryFormModal = ({
       descriptionFirst={
         category
           ? "Update the fields and click 'Save'"
-          : "fill in the fields and click 'Save'"
+          : "Fill in the fields and click 'Save'"
       }
       buttonActionTitle="Save"
       buttonActionTitleContinuous="Saving"
@@ -111,7 +111,7 @@ const CategoryFormModal = ({
             name="icon_url"
             control={form.control}
             label="Icon"
-            uploadedUrl={form.control._formValues.icon_url}
+            // uploadedUrl={form.control._formValues.icon_url}
           />
         </form>
       </Form>

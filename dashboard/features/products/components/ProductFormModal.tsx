@@ -17,7 +17,7 @@ import { SelectContent, SelectItem } from "@/components/ui/select";
 
 import UseFormFilesArrayUploader from "@/components/form/UseFormFilesArrayUploader";
 import { createProductSchema } from "@/lib/schema";
-import { useGetCategories } from "@/api/categories/queries/useGetCategories";
+import { useGetCategories } from "@/api/categories/useGetCategories";
 
 interface ProductFormModalProps {
   productMutation: UseMutationResult<

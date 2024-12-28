@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { DataTable } from "@/components/DataTable";
 import { productColumns } from "./ProductsColumns";
-import { usePaginatedProducts } from "@/api/products/queries/usePaginatedProducts";
+import { usePaginatedProducts } from "@/api/products/usePaginatedProducts";
 import { useToken } from "@/components/providers/token-provider";
 import ErrorPage from "@/app/error";
 

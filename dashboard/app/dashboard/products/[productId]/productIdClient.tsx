@@ -3,23 +3,18 @@
 import { ProductImage, View } from "@/types/types";
 import { useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
+import ErrorPage from "@/app/error";
 import Header from "@/components/Header";
 
-import ProductFormModal from "@/features/products/components/ProductFormModal";
-
-import { useDialog } from "@/hooks/use-modal";
-import LoadingPage from "@/app/loading";
-
-import { useCreateProduct } from "@/api/products/queries/useCreateProduct";
-import { useProductById } from "@/api/products/queries/useProductById";
 import {
   Card,
   CardContent,
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 import {
   Carousel,
   CarouselApi,
@@ -28,12 +23,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { useEffect, useState } from "react";
-import ProductActionsMenu from "@/features/products/components/ProductActionsMenu";
 import { useToken } from "@/components/providers/token-provider";
-import ErrorPage from "@/app/error";
+
+import ProductFormModal from "@/features/products/components/ProductFormModal";
+import ProductActionsMenu from "@/features/products/components/ProductActionsMenu";
+
+import { useDialog } from "@/hooks/use-modal";
+import LoadingPage from "@/app/loading";
+
+import { useCreateProduct } from "@/api/products/useCreateProduct";
+import { useProductById } from "@/api/products/useProductById";
+
+import { cn } from "@/lib/utils";
 
 const ProductDetailsPage = ({ id }: { id: string }) => {
   const searchParams = useSearchParams();

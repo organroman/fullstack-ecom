@@ -1,25 +1,28 @@
-import { CategoryFormModalData } from "@/types/types";
+import { Category, CategoryFormModalData } from "@/types/types";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { createCategory } from "..";
+import api from "@/api";
 
-interface UseProductProps {
+interface UseProductParams {
   closeDialog: () => void;
   queryClient: QueryClient;
+  token: string | null;
 }
 
 export function useCreateCategory({
   closeDialog,
   queryClient,
-}: UseProductProps) {
+  token,
+}: UseProductParams) {
   const createCategoryMutation = useMutation<
-    void,
+    Category,
     Error,
     CategoryFormModalData
   >({
     mutationFn: async (payload: CategoryFormModalData) => {
-      const data = await createCategory(payload);
-      return data;
+      return await api.post<Category>("categories", payload, {
+        Authorization: token ?? "",
+      });
     },
 
     onSuccess: () => {

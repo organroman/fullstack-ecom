@@ -1,20 +1,18 @@
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { deleteCategory } from "..";
-
-interface UseCategoryProps {
-  closeDialog: () => void;
-  queryClient: QueryClient;
-}
+import { Category, UseQueryProps } from "@/types/types";
+import api from "@/api";
 
 export function useDeleteCategory({
   closeDialog,
   queryClient,
-}: UseCategoryProps) {
+  token,
+}: UseQueryProps) {
   const deleteCategoryMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const data = await deleteCategory(id);
-      return data;
+    mutationFn: async (slug: string) => {
+      return await api.delete<Category>(`categories/${slug}`, {
+        Authorization: token ?? "",
+      });
     },
 
     onSuccess: () => {

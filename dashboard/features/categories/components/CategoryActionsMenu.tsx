@@ -2,18 +2,19 @@ import { Category } from "@/types/types";
 
 import { useQueryClient } from "@tanstack/react-query";
 
-
 import { Dialog } from "@/components/ui/dialog";
 import DropdownActionsMenu from "@/components/DropdownActionsMenu";
 
 import Modal from "@/components/Modal";
 import { useDialog } from "@/hooks/use-modal";
 import CategoryFormModal from "./CategoryFormModal";
-import { useUpdateCategory } from "@/api/categories/queries/useUpdateCategory";
-import { useDeleteCategory } from "@/api/categories/queries/useDeleteCategory";
+import { useUpdateCategory } from "@/api/categories/useUpdateCategory";
+import { useDeleteCategory } from "@/api/categories/useDeleteCategory";
+import { useToken } from "@/components/providers/token-provider";
 
 const CategoryActionMenu = ({ category }: { category: Category }) => {
   const queryClient = useQueryClient();
+  const token = useToken();
   const {
     dialogOpen: isEditDialogOpen,
     openDialog: openEditDialog,
@@ -31,19 +32,18 @@ const CategoryActionMenu = ({ category }: { category: Category }) => {
   const { editCategoryMutation } = useUpdateCategory({
     closeDialog: closeEditDialog,
     queryClient,
-    id: category.id,
+    token,
   });
 
   const { deleteCategoryMutation } = useDeleteCategory({
     closeDialog: closeDeleteDialog,
     queryClient,
+    token,
   });
 
   return (
     <>
       <DropdownActionsMenu
-        viewItemLink={`/dashboard/categories/${category.slug}`}
-        viewItemTitle="View Category"
         editItemDialogOpen={() => openEditDialog()}
         editItemTitle="Edit Category"
         deleteItemDialogOpen={() => openDeleteDialog()}
