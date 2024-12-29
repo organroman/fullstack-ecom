@@ -10,14 +10,17 @@ import { ordersColumns } from "@/features/orders/components/OrdersColumns";
 import OrderFormModal from "@/features/orders/components/OrderFormModal";
 import OrdersFilter from "@/features/orders/components/OrdersFilter";
 
-import { usePaginatedOrders } from "@/api/orders/queries";
+import { usePaginatedOrders } from "@/api/orders/useGetPaginatedOrders";
 
 import { useDialog } from "@/hooks/use-modal";
 import { useUpdateQueryParams } from "@/hooks/use-update-query-params";
+import ErrorPage from "@/app/error";
+import { useToken } from "@/components/providers/token-provider";
 
 const OrdersClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const token = useToken();
 
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit") || 10);
@@ -26,14 +29,15 @@ const OrdersClient = () => {
 
   const [selectedStatus, setSelectedStatus] = useState<string>(status || "All");
   const { dialogOpen, setDialogOpen } = useDialog();
-  const { data, isLoading, error } = usePaginatedOrders(
+  const { data, isLoading, error } = usePaginatedOrders({
     page,
     limit,
     search,
-    status
-  );
+    status,
+    token,
+  });
 
-  const { orders = [], totalPages = 0, totalItems = 0 } = data || {};
+  const { orders = [], totalPages = 0, total = 0 } = data || {};
 
   const {
     searchPhrase,
@@ -54,6 +58,10 @@ const OrdersClient = () => {
     setSelectedStatus(status);
     handleStatusChange(status);
   };
+
+  if (error) {
+    return <ErrorPage error={error.message} />;
+  }
 
   return (
     <div className="flex flex-col gap-4 h-full">
@@ -78,7 +86,7 @@ const OrdersClient = () => {
         <DataTable
           data={orders}
           columns={ordersColumns}
-          totalItems={totalItems}
+          totalItems={total}
           totalPages={totalPages}
           onLimitChange={handleLimitChange}
           onPageChange={handlePageChange}

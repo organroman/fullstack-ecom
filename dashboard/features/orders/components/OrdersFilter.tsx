@@ -16,6 +16,7 @@ const OrdersFilter = ({
   selectedStatus,
   onFilterChange,
 }: OrdersFilterProps) => {
+  const orderStatusesWithAll = ["All", ...ORDER_STATUSES];
   return (
     <Select value={selectedStatus} onValueChange={onFilterChange}>
       <SelectTrigger className="w-[180px]">
@@ -24,7 +25,7 @@ const OrdersFilter = ({
           : capitalizeFirstLetter(selectedStatus)}
       </SelectTrigger>
       <SelectContent>
-        {ORDER_STATUSES.map((status) => (
+        {orderStatusesWithAll.map((status) => (
           <SelectItem value={status} key={status}>
             {capitalizeFirstLetter(status)}
           </SelectItem>

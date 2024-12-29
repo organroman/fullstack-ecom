@@ -69,34 +69,39 @@ export type Users = {
   totalPages: number;
 };
 
-export enum EOrderStatuses {
-  "NEW",
-  "PROCESSING",
-  "CANCELLED",
-  "SHIPPED",
-  "SENT",
+export enum EOrderStatus {
+  NEW = "NEW",
+  PROCESSING = "PROCESSING",
+  CANCELLED = "CANCELLED",
+  SHIPPED = "SHIPPED",
+  SENT = "SENT",
 }
-export interface IOrderItem {
+export type OrderItem = {
   id: number;
+  order_id: number;
   quantity: number;
   price: number;
   product: Product;
 }
 
-export type IOrder = {
+export type Order = {
   id: number;
-  createdAt: Date;
-  status: EOrderStatuses;
+  created_at: Date;
+  status: EOrderStatus;
+  delivery_address: string;
+  contact_phone: string;
   user: User;
-  items: IOrderItem[];
+  items: OrderItem[];
 };
 
-export interface IUsersOrder {
-  id: number;
-  createdAt: Date;
-  status: EOrderStatuses;
-  items: IOrderItem[];
-}
+export type Orders = {
+  orders: Order[];
+  limit: number;
+  total: number;
+  page: number;
+  totalPages: number;
+};
+
 
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 

@@ -81,8 +81,8 @@ export interface Order {
   id: number;
   created_at: Date | null;
   status: OrderStatusType;
-  deliveryAddress: string;
-  phone: string;
+  delivery_address: string;
+  contact_phone: string;
   user: User | null;
   items: Item[];
 }
@@ -113,6 +113,8 @@ export async function listOrders(req: Request, res: Response) {
             id: ordersTable.id,
             createdAt: ordersTable.created_at,
             status: ordersTable.status,
+            contact_phone: ordersTable.contact_phone,
+            delivery_address: ordersTable.delivery_address,
             userId: ordersTable.user_id,
           })
           .from(ordersTable)
@@ -176,8 +178,8 @@ export async function listOrders(req: Request, res: Response) {
           id: orderId,
           created_at: row.order.created_at,
           status: row.order.status,
-          deliveryAddress: row.order.delivery_address,
-          phone: row.order.contact_phone,
+          delivery_address: row.order.delivery_address,
+          contact_phone: row.order.contact_phone,
 
           user: row.user
             ? {

@@ -1,4 +1,4 @@
-import { EOrderStatuses, Roles, Status } from "@/types/types";
+import { EOrderStatus, Roles, Status } from "@/types/types";
 
 export const USER_ROLES = [
   "All",
@@ -6,8 +6,7 @@ export const USER_ROLES = [
 ];
 
 export const ORDER_STATUSES = [
-  "All",
-  ...Object.keys(EOrderStatuses).filter((status) => isNaN(Number(status))),
+  ...Object.keys(EOrderStatus).filter((status) => isNaN(Number(status))),
 ];
 
 export const CATEGORY_STATUSES = [

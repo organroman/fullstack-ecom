@@ -6,7 +6,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import UserActionsMenu from "./UserActionsMenu";
 import { Badge } from "@/components/ui/badge";
 
-
 const rolesColor = {
   ADMIN: "bg-yellow-600 hover:bg-yellow-600",
   "SALES MANAGER": "bg-blue-400 hover:bg-blue-400 ",
@@ -35,6 +34,7 @@ export const usersColumns: ColumnDef<User>[] = [
   },
   { accessorKey: "address", header: "Address" },
   { accessorKey: "phone", header: "Phone" },
+
   {
     accessorKey: "actions",
     header: () => <div className="text-right">Actions</div>,
