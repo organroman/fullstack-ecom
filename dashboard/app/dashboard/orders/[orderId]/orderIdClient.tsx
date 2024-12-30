@@ -1,40 +1,11 @@
 "use client";
 import { EOrderStatus, OrderItem } from "@/types/types";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import dayjs from "dayjs";
-
-import LoadingPage from "@/app/loading";
-
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import Header from "@/components/Header";
-import OrderFormModal from "@/features/orders/components/OrderFormModal";
-
-import { useDialog } from "@/hooks/use-modal";
-import { useUpdateOrderStatus } from "@/api/orders/useChangeOrderStatus";
-import { useGetOrderById } from "@/api/orders/useGetOrderById";
-import { useToken } from "@/components/providers/token-provider";
-import ErrorPage from "@/app/error";
-import { ORDER_STATUSES } from "@/lib/constants";
-import { capitalizeFirstLetter } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  EclipseIcon,
   EllipsisIcon,
   MinusIcon,
   PencilIcon,
@@ -42,9 +13,23 @@ import {
   SaveIcon,
   XIcon,
 } from "lucide-react";
+
+import LoadingPage from "@/app/loading";
+import ErrorPage from "@/app/error";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+import Header from "@/components/Header";
+import OrderFormModal from "@/features/orders/components/OrderFormModal";
+import { useToken } from "@/components/providers/token-provider";
+
 import OrderDetail from "@/features/orders/components/OrderDetail";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import StatusChangeSelector from "@/features/orders/components/StatusChangeSelector";
+
+import { useDialog } from "@/hooks/use-modal";
+import { useUpdateOrderStatus } from "@/api/orders/useChangeOrderStatus";
+import { useGetOrderById } from "@/api/orders/useGetOrderById";
 
 const OrderIdClient = () => {
   const { orderId } = useParams();
@@ -91,8 +76,8 @@ const OrderIdClient = () => {
     setIsEditingAddress(false);
   };
 
-  if (error) {
-    return <ErrorPage error={error.message} />;
+  if (error || !order) {
+    return <ErrorPage error={error?.message || "Failed to get order"} />;
   }
 
   return (
@@ -120,22 +105,11 @@ const OrderIdClient = () => {
               title="Status:"
               value={
                 <div className="col-span-4">
-                  <Select
-                    defaultValue={order?.status}
-                    onValueChange={handleStatusChange}
+                  <StatusChangeSelector
+                    order={order}
                     disabled={updateStatus.isPending}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select a status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ORDER_STATUSES.map((status) => (
-                        <SelectItem key={status} value={status}>
-                          {capitalizeFirstLetter(status)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    onStatusChange={handleStatusChange}
+                  />
                 </div>
               }
             />

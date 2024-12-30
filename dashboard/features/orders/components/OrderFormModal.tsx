@@ -1,9 +1,9 @@
 import Modal from "@/components/Modal";
-import { IOrder } from "@/types/types";
+import { Order } from "@/types/types";
 import React from "react";
 
 interface OrderFormModalProps {
-  order?: IOrder;
+  order?: Order;
 }
 
 const OrderFormModal = ({ order }: OrderFormModalProps) => {

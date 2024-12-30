@@ -51,7 +51,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="w-full h-full md:w-[487px] shadow-md dark:bg-slate-800">
+    <Card className="w-full h-full md:w-[487px] shadow-md dark:bg-zinc-800">
       <CardHeader className="flex items-center justify-center text-center p-7">
         <CardTitle>Welcome back!</CardTitle>
       </CardHeader>

@@ -1,6 +1,6 @@
 "use client";
 
-import { SetStateAction } from "react";
+import { ReactNode, SetStateAction } from "react";
 import Link from "next/link";
 
 import {
@@ -24,10 +24,11 @@ interface DropdownActionsMenuProps {
   label?: string;
   viewItemLink?: string;
   viewItemTitle?: string;
-  editItemDialogOpen: (value: SetStateAction<boolean>) => void;
-  editItemTitle: string;
+  editItemDialogOpen?: (value: SetStateAction<boolean>) => void;
+  editItemTitle?: string;
   deleteItemDialogOpen?: (value: SetStateAction<boolean>) => void;
   deleteItemTitle?: string;
+  extraItems?: ReactNode;
 }
 
 const DropdownActionsMenu = ({
@@ -38,6 +39,7 @@ const DropdownActionsMenu = ({
   editItemTitle,
   deleteItemDialogOpen,
   deleteItemTitle,
+  extraItems,
 }: DropdownActionsMenuProps) => {
   return (
     <DropdownMenu>
@@ -57,9 +59,12 @@ const DropdownActionsMenu = ({
             </Link>
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem onClick={() => editItemDialogOpen(true)}>
-          <PencilIcon /> {editItemTitle}
-        </DropdownMenuItem>
+        {editItemTitle && editItemDialogOpen && (
+          <DropdownMenuItem onClick={() => editItemDialogOpen(true)}>
+            <PencilIcon /> {editItemTitle}
+          </DropdownMenuItem>
+        )}
+        {extraItems && extraItems}
         {deleteItemTitle && deleteItemDialogOpen && (
           <>
             <DropdownMenuSeparator />
