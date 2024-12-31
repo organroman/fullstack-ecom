@@ -57,12 +57,15 @@ const CategoriesClient = () => {
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
         onSearch={handleSearch}
-        dialogContent={
-          <CategoryFormModal categoryMutation={createCategoryMutation} />
-        }
-        dialogButtonLabel="Create category"
-        dialogHandleOpen={setDialogOpen}
-        dialogOpen={dialogOpen}
+        createItemVariant={{
+          variant: "modal",
+          dialogContent: (
+            <CategoryFormModal categoryMutation={createCategoryMutation} />
+          ),
+          dialogButtonLabel: "Create category",
+          dialogHandleOpen: setDialogOpen,
+          dialogOpen: dialogOpen,
+        }}
       />
 
       <div className="h-full border overflow-y-auto rounded-md">

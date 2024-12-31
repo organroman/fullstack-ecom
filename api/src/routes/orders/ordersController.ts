@@ -16,8 +16,6 @@ export async function createOrder(req: Request, res: Response) {
     const { order, items } = req.cleanBody;
     const { delivery_address, contact_phone } = order;
 
-    console.log(items, items, contact_phone);
-
     if (!userId || !delivery_address || !contact_phone) {
       res.status(400).json({ message: "Invalid order data" });
       return;
@@ -302,13 +300,13 @@ export async function getOrderById(req: Request, res: Response) {
     });
 
     const mapProduct = (productData: (typeof orderWithItems)[0]) => {
-      const productId = productData.product?.id; // Extract the product ID safely
+      const productId = productData.product?.id;
       return {
         id: productId,
         name: productData.product?.name,
         price: productData.product?.price,
         description: productData.product?.description,
-        images: productId ? imagesByProductId[productId] || [] : [], // Use the product ID only if it exists
+        images: productId ? imagesByProductId[productId] || [] : [],
       };
     };
 
@@ -340,23 +338,61 @@ export async function getOrderById(req: Request, res: Response) {
       items,
       user: mapUser(orderWithItems[0]),
     };
-    console.log(mergedOrder);
 
     res.json(mergedOrder);
   } catch (e) {
     res.status(500).send({ message: "Something went wrong", error: e });
   }
 }
-
+interface OrderItem {
+  id: number;
+  order_id: number;
+  quantity: number;
+  price: number;
+  product_id: number;
+}
 export async function updateOrder(req: Request, res: Response) {
   try {
     const id = parseInt(req.params.id);
+    const { order, items } = req.body;
+
+    order.updated_at = new Date();
 
     const [updatedOrder] = await db
       .update(ordersTable)
-      .set(req.body)
+      .set(order)
       .where(eq(ordersTable.id, id))
       .returning();
+
+    const existingItems = await db
+      .select()
+      .from(orderItemsTable)
+      .where(eq(orderItemsTable.order_id, id));
+
+    const itemsToInsert = items.filter(
+      (item: OrderItem) =>
+        !item.id ||
+        !existingItems.some((existing: OrderItem) => existing.id === item.id)
+    );
+
+    const itemsToInsertMap = itemsToInsert.map((i: any) => ({
+      ...i,
+      order_id: id,
+    }));
+
+    const itemsToDelete = existingItems.filter((existing: OrderItem) =>
+      !items.some((item: OrderItem) => existing.id == item.id)
+    );
+
+    if (itemsToInsert.length > 0) {
+      await db.insert(orderItemsTable).values(itemsToInsertMap);
+    }
+
+    if (itemsToDelete.length > 0) {
+      itemsToDelete.forEach(async (item: OrderItem) => {
+        await db.delete(orderItemsTable).where(eq(orderItemsTable.id, item.id));
+      });
+    }
 
     if (!updatedOrder) {
       res.status(404).send({ message: "Order not found " });

@@ -51,7 +51,6 @@ const UseFormUploader = <T extends FieldValues>({
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => {
-        console.log(value);
         return (
           <FormItem>
             {label && <FormLabel>{label}</FormLabel>}

@@ -5,7 +5,6 @@ interface OrderDetailProps {
   value: string | ReactNode;
 }
 const OrderDetail = ({ title, value }: OrderDetailProps) => {
-  console.log(title);
   return (
     <div className="grid grid-cols-5 gap-2 items-center w-full">
       <p className="text-lg text-zinc-700 dark:text-zinc-300 col-span-1">

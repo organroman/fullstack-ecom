@@ -86,12 +86,15 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
     <div className="flex flex-col gap-4 h-full">
       <Header
         title="Product details"
-        dialogButtonLabel="Create product"
-        dialogOpen={dialogOpen}
-        dialogHandleOpen={setDialogOpen}
-        dialogContent={
-          <ProductFormModal productMutation={createProductMutation} />
-        }
+        createItemVariant={{
+          variant: "modal",
+          dialogButtonLabel: "Create product",
+          dialogOpen: dialogOpen,
+          dialogHandleOpen: setDialogOpen,
+          dialogContent: (
+            <ProductFormModal productMutation={createProductMutation} />
+          ),
+        }}
         backBtn
       />
       <Card className="p-5 rounded-lg flex-1 relative hover:border-blue-400 hover:shadow-lg transition flex flex-row">

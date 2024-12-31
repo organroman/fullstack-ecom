@@ -76,10 +76,13 @@ const UsersClient = () => {
         onSearch={handleSearch}
         setSearchPhrase={setSearchPhrase}
         title="Users"
-        dialogOpen={dialogOpen}
-        dialogButtonLabel="Create user"
-        dialogHandleOpen={setDialogOpen}
-        dialogContent={<UsersFormModal userMutation={createUserMutation} />}
+        createItemVariant={{
+          variant: "modal",
+          dialogOpen: dialogOpen,
+          dialogButtonLabel: "Create user",
+          dialogHandleOpen: setDialogOpen,
+          dialogContent: <UsersFormModal userMutation={createUserMutation} />,
+        }}
         filterComponent={
           <UserRolesSelector
             role={role}

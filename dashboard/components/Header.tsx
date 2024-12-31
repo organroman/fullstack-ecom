@@ -13,31 +13,41 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 
+interface ModalVariant {
+  variant: "modal";
+  dialogContent: ReactNode;
+  dialogButtonLabel: string;
+  dialogOpen: boolean;
+  dialogHandleOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+interface PageVariant {
+  variant: "page";
+  link: string;
+  btnLabel: string;
+}
+
+type CreateItemVariant = ModalVariant | PageVariant;
+
 interface HeaderProps {
   title: string;
   searchPhrase?: string | "";
   setSearchPhrase?: Dispatch<SetStateAction<string>>;
   onSearch?: (newSearch: string) => void;
   filterComponent?: ReactNode;
-  dialogContent: ReactNode;
-  dialogButtonLabel: string;
-  dialogOpen: boolean;
-  dialogHandleOpen: Dispatch<SetStateAction<boolean>>;
+  createItemVariant: CreateItemVariant;
+  page?: {};
   entityView?: string;
   handleEntityView?: () => void;
   backBtn?: boolean;
 }
-
 const Header = ({
   title,
   searchPhrase,
   setSearchPhrase,
   onSearch,
   filterComponent,
-  dialogContent,
-  dialogButtonLabel,
-  dialogOpen,
-  dialogHandleOpen,
+  createItemVariant,
   entityView,
   handleEntityView,
   backBtn = false,
@@ -68,12 +78,22 @@ const Header = ({
           />
         )}
         {filterComponent}
-        <Dialog open={dialogOpen} onOpenChange={dialogHandleOpen}>
-          <DialogTrigger asChild>
-            <Button>{dialogButtonLabel}</Button>
-          </DialogTrigger>
-          {dialogContent}
-        </Dialog>
+        {createItemVariant.variant === "modal" && (
+          <Dialog
+            open={createItemVariant.dialogOpen}
+            onOpenChange={createItemVariant.dialogHandleOpen}
+          >
+            <DialogTrigger asChild>
+              <Button>{createItemVariant.dialogButtonLabel}</Button>
+            </DialogTrigger>
+            {createItemVariant.dialogContent}
+          </Dialog>
+        )}
+        {createItemVariant.variant === "page" && (
+          <Button onClick={() => router.push(createItemVariant.link)}>
+            {createItemVariant.btnLabel}
+          </Button>
+        )}
         {entityView && (
           <TooltipProvider>
             <Tooltip>

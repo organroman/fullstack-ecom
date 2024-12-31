@@ -88,12 +88,15 @@ const ProductsClient = () => {
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
         onSearch={handleSearch}
-        dialogButtonLabel="Create product"
-        dialogContent={
-          <ProductFormModal productMutation={createProductMutation} />
-        }
-        dialogOpen={dialogOpen}
-        dialogHandleOpen={setDialogOpen}
+        createItemVariant={{
+          variant: "modal",
+          dialogButtonLabel: "Create product",
+          dialogContent: (
+            <ProductFormModal productMutation={createProductMutation} />
+          ),
+          dialogOpen: dialogOpen,
+          dialogHandleOpen: setDialogOpen,
+        }}
       />
 
       {view === "grid" ? (

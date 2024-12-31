@@ -10,10 +10,9 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import Modal from "@/components/Modal";
 import { useToken } from "@/components/providers/token-provider";
 import DropdownActionsMenu from "@/components/DropdownActionsMenu";
-import OrderFormModal from "./OrderFormModal";
 import StatusChangeSelector from "./StatusChangeSelector";
 
-import { useUpdateOrderStatus } from "@/api/orders/useChangeOrderStatus";
+import { useUpdateOrder } from "@/api/orders/useUpdateOrder";
 
 interface OrderActionsMenuProps {
   order: Order;
@@ -22,13 +21,13 @@ interface OrderActionsMenuProps {
 const OrderActionsMenu = ({ order }: OrderActionsMenuProps) => {
   const queryClient = useQueryClient();
   const token = useToken();
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
   const [isChangeStatusDialogOpen, setIsChangeDialogOpen] = useState(false);
   const [orderStatus, setOrderStatus] = useState<EOrderStatus>(order.status);
-  const { updateStatus } = useUpdateOrderStatus({
-    orderId: order.id,
+  const { updateOrderMutation } = useUpdateOrder({
     token,
     queryClient,
+    order,
   });
 
   const handleClose = () => setIsChangeDialogOpen(false);
@@ -38,11 +37,14 @@ const OrderActionsMenu = ({ order }: OrderActionsMenuProps) => {
   };
 
   const handleSaveStatus = () => {
-    updateStatus.mutate(orderStatus, {
-      onSuccess: () => {
-        handleClose();
-      },
-    });
+    updateOrderMutation.mutate(
+      { status: orderStatus },
+      {
+        onSuccess: () => {
+          handleClose();
+        },
+      }
+    );
   };
   return (
     <>
@@ -55,10 +57,6 @@ const OrderActionsMenu = ({ order }: OrderActionsMenuProps) => {
           </DropdownMenuItem>
         }
       />
-
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <OrderFormModal order={order} />
-      </Dialog>
       <Dialog
         open={isChangeStatusDialogOpen}
         onOpenChange={setIsChangeDialogOpen}
@@ -68,13 +66,13 @@ const OrderActionsMenu = ({ order }: OrderActionsMenuProps) => {
           descriptionFirst="Select new order and click 'Save'"
           buttonActionTitle="Save"
           buttonActionTitleContinuous="Saving"
-          isPending={updateStatus.isPending}
+          isPending={updateOrderMutation.isPending}
           action={handleSaveStatus}
         >
           <div className="w-full">
             <StatusChangeSelector
               order={order}
-              disabled={updateStatus.isPending}
+              disabled={updateOrderMutation.isPending}
               className="w-full"
               onStatusChange={handleStatusChange}
             />

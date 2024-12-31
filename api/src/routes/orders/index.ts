@@ -11,8 +11,6 @@ import {
   getOrderById,
   listOrders,
   updateOrder,
-  // gerOrdersByUserId,
-  // gerOrderByIdAndUserId,
 } from "./ordersController.js";
 
 const router = Router();
@@ -26,8 +24,6 @@ router.post(
 
 router.get("/", verifyToken, listOrders);
 router.get("/:id", verifyToken, getOrderById);
-// router.get("/user/:userId", verifyToken, gerOrdersByUserId);
-// router.get("/:orderId/user/:userId", verifyToken, gerOrderByIdAndUserId);
 router.put("/:id", verifyToken, validateData(updateOrderSchema), updateOrder);
 
 export default router;

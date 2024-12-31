@@ -7,12 +7,10 @@ import { DataTable } from "@/components/DataTable";
 import Header from "@/components/Header";
 
 import { ordersColumns } from "@/features/orders/components/OrdersColumns";
-import OrderFormModal from "@/features/orders/components/OrderFormModal";
 import OrdersFilter from "@/features/orders/components/OrdersFilter";
 
 import { usePaginatedOrders } from "@/api/orders/useGetPaginatedOrders";
 
-import { useDialog } from "@/hooks/use-modal";
 import { useUpdateQueryParams } from "@/hooks/use-update-query-params";
 import ErrorPage from "@/app/error";
 import { useToken } from "@/components/providers/token-provider";
@@ -28,7 +26,6 @@ const OrdersClient = () => {
   const status = searchParams.get("status") || "";
 
   const [selectedStatus, setSelectedStatus] = useState<string>(status || "All");
-  const { dialogOpen, setDialogOpen } = useDialog();
   const { data, isLoading, error } = usePaginatedOrders({
     page,
     limit,
@@ -76,10 +73,11 @@ const OrdersClient = () => {
             onFilterChange={handleFilterChange}
           />
         }
-        dialogContent={<OrderFormModal />}
-        dialogButtonLabel="Create Order"
-        dialogOpen={dialogOpen}
-        dialogHandleOpen={setDialogOpen}
+        createItemVariant={{
+          variant: "page",
+          btnLabel: "Create order",
+          link: "orders/new",
+        }}
       />
 
       <div className="h-full border overflow-y-auto rounded-md">

@@ -77,7 +77,7 @@ export enum EOrderStatus {
   SENT = "SENT",
 }
 export type OrderItem = {
-  id: number;
+  id?: number;
   order_id: number;
   quantity: number;
   price: number;

@@ -10,6 +10,7 @@ import {
 import { ORDER_STATUSES } from "@/lib/constants";
 import { capitalizeFirstLetter } from "@/lib/utils";
 
+
 interface StatusChangeSelectorProps {
   order: Order;
   className?: string;
@@ -22,7 +23,8 @@ const StatusChangeSelector = ({
   onStatusChange,
   className = "w-[180px]",
   disabled,
-}: StatusChangeSelectorProps) => {
+}: 
+StatusChangeSelectorProps) => {
   return (
     <Select
       defaultValue={order?.status}

@@ -55,10 +55,13 @@ const UserIdClient = ({ userId, isAllowedToEdit, role }: UserIdClientProps) => {
     <>
       <Header
         title="User details"
-        dialogButtonLabel="Create user"
-        dialogOpen={dialogOpen}
-        dialogHandleOpen={setDialogOpen}
-        dialogContent={<UsersFormModal userMutation={createUserMutation} />}
+        createItemVariant={{
+          variant: "modal",
+          dialogButtonLabel: "Create user",
+          dialogOpen: dialogOpen,
+          dialogHandleOpen: setDialogOpen,
+          dialogContent: <UsersFormModal userMutation={createUserMutation} />,
+        }}
       />
       <Card className="mx-auto max-w-[768px] sm:max-w[460px] border shadow-md dark:shadow-slate-500">
         <CardHeader className="flex flex-row items-center justify-between">
