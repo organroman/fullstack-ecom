@@ -1,24 +1,22 @@
 import { Order, OrderItem, Product } from "@/types/types";
 
-import { EllipsisIcon, MinusIcon, PlusIcon } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-
-import { Button } from "@/components/ui/button";
 
 import { Dialog } from "@/components/ui/dialog";
 import Modal from "@/components/Modal";
 import { useToken } from "@/components/providers/token-provider";
 
 import ProductSelector from "./ProductSelector";
-import ItemsListHeaderCell from "./ItemsListHeaderCell";
 
 import { useInfiniteProducts } from "@/api/products/useInfiniteProducts";
 import { useUpdateOrder } from "@/api/orders/useUpdateOrder";
 
 import { useDialog } from "@/hooks/use-modal";
 import { useDebounce } from "@/lib/utils-client";
+import OrderItemsListHeader from "./OrderItemsListHeader";
+import OrderListItem from "./OrderListItem";
+import OrderListItemsFooter from "./OrderListItemsFooter";
 
 interface OrderItemsListProps {
   order: Order;
@@ -118,73 +116,43 @@ const OrderItemsList = ({ order }: OrderItemsListProps) => {
     }
   };
 
+  const handleQuantity = (id: number, action: "plus" | "minus") => {
+    const itemForUpdate = order.items.find((i) => i.product.id === id);
+
+    if (!itemForUpdate) return;
+
+    const updatedItems = order.items.map((i) =>
+      i.product.id === id
+        ? {
+            ...i,
+            quantity: action === "plus" ? i.quantity + 1 : i.quantity - 1,
+          }
+        : i
+    );
+
+    updateOrderMutation.mutate({
+      updatedItems,
+    });
+  };
+
   return (
     <div className="w-full col-span-2">
-      <div className="grid grid-cols-8 mb-4 font-semibold">
-        <ItemsListHeaderCell children="Image" />
-        <ItemsListHeaderCell
-          children="Name"
-          styles="text-lg text-zinc-700 dark:text-zinc-300 col-span-3"
-        />
-        <ItemsListHeaderCell children="Quantity" />
-        <ItemsListHeaderCell children="Price" />
-        <ItemsListHeaderCell children="Price" />
-
-        <EllipsisIcon className="size-6 col-span-1 justify-self-end  text-zinc-700 dark:text-zinc-300" />
-      </div>
+      <OrderItemsListHeader />
       {order.items.map((item: OrderItem) => (
-        <div
-          className="grid grid-cols-8 font-semibold items-center overflow-y-auto"
+        <OrderListItem
           key={item.id}
-        >
-          <Image
-            src={item.product.images[0].image_link}
-            width={40}
-            height={40}
-            alt={item.product.name}
-            className="w-20 aspect-square col-span-1 mb-2"
-          />
-          <p className="text-md text-neutral-400 col-span-3">
-            {item.product.name}
-          </p>
-          <p className="text-md text-neutral-400 col-span-1">{item.quantity}</p>
-          <p className="text-md text-neutral-400 col-span-1">
-            ${item.price.toLocaleString()}
-          </p>
-          <p className="text-md text-neutral-400 col-span-1">
-            ${(item.quantity * item.price).toLocaleString()}
-          </p>
-          {order.items.length > 1 && (
-            <Button
-              variant="destructive"
-              size="icon"
-              className="col-span-1 justify-self-end"
-              onClick={() => handleRemoveProduct(item)}
-            >
-              <MinusIcon />
-            </Button>
-          )}
-        </div>
+          item={item}
+          handleRemoveProduct={handleRemoveProduct}
+          isRemoveBtnShown={order.items.length > 1}
+          handleQuantity={handleQuantity}
+        />
       ))}
-      <div className="grid grid-cols-8 font-bold mt-6 items-center">
-        <p className="text-xl text-zinc-700 dark:text-zinc-300 col-span-4">
-          Totals
-        </p>
-        <p className="text-lg text-zinc-700 dark:text-zinc-300 col-span-1">
-          {totalItemsQuantity}
-        </p>
-        <p className="text-lg text-zinc-700 dark:text-zinc-300 col-span-1">-</p>
-        <p className="text-lg text-zinc-700 dark:text-zinc-300 col-span-1 font-bold">
-          ${totalAmountOfOrder?.toLocaleString()}
-        </p>
-        <Button
-          size="icon"
-          className="col-span-1 justify-self-end"
-          onClick={() => addProductSetDialogOpen(true)}
-        >
-          <PlusIcon />
-        </Button>
-      </div>
+      <OrderListItemsFooter
+        totalAmountOfOrder={totalAmountOfOrder}
+        totalItemsQuantity={totalItemsQuantity}
+        addProductSetDialogOpen={() => addProductSetDialogOpen(true)}
+      />
+
       <Dialog
         open={addProductDialogOpen}
         onOpenChange={addProductSetDialogOpen}

@@ -16,10 +16,10 @@ interface ProductSelectorProps {
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
   isLoading: boolean;
-  isPending: boolean;
+  isPending?: boolean;
   error: Error | null;
   allProducts: Product[];
-  handleSave: () => void;
+  handleSave?: () => void;
 }
 
 const ProductSelector = ({
@@ -39,7 +39,7 @@ const ProductSelector = ({
       descriptionFirst="Add product to the order and save"
       buttonActionTitle="Save"
       buttonActionTitleContinuous="Saving"
-      isPending={isPending}
+      isPending={isPending || false}
       action={handleSave}
     >
       <Select

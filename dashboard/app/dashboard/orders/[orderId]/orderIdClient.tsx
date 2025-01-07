@@ -81,7 +81,7 @@ const OrderIdClient = () => {
               value={
                 <div className="col-span-4">
                   <StatusChangeSelector
-                    order={order}
+                    defaultValue={order.status}
                     disabled={updateOrderMutation.isPending}
                     onStatusChange={handleStatusChange}
                   />

@@ -122,7 +122,7 @@ const FilterScreen = () => {
             </AccordionHeader>
             <AccordionContent>
               <ScrollView className="w-full flex flex-col gap-2">
-                {data.categories.map((category: Category) => (
+                {data?.categories.map((category: Category) => (
                   <Pressable
                     key={category.id}
                     className="flex flex-row items-center justify-between py-1"

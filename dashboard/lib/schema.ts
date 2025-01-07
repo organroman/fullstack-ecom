@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Roles, Status } from "@/types/types";
+import { EOrderStatus, Roles, Status } from "@/types/types";
 
 export const signUpSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -28,6 +28,16 @@ export const createProductSchema = z.object({
     z.object({
       image_link: z.string().min(1, "Image is required"),
     })
+  ),
+});
+
+export const orderSchema = z.object({
+  user_id: z.string().min(1, "Customer is required"),
+  delivery_address: z.string().min(1, "Delivery address is required"),
+  contact_phone: z.string(),
+  status: z.nativeEnum(EOrderStatus),
+  items: z.array(
+    z.object({ product: createProductSchema, quantity: z.number() })
   ),
 });
 

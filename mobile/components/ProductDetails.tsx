@@ -29,8 +29,8 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
   const cartItems = useCart((state) => state.items);
   const favoriteItems = useFavorite((state) => state.items);
 
-  const isInCart = cartItems.some((item) => item.product.id === product.id);
-  const isInFavorite = favoriteItems.some(
+  const isInCart = cartItems?.some((item) => item.product?.id === product?.id);
+  const isInFavorite = favoriteItems?.some(
     (item) => item.product.id === product.id
   );
 

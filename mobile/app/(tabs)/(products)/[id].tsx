@@ -43,7 +43,7 @@ const ProductDetailsScreen = () => {
         }}
       />
       <View className="flex-1 items-center p-3">
-        <ProductDetails product={data.product} />
+        <ProductDetails product={data} />
       </View>
     </>
   );

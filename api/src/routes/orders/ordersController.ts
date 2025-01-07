@@ -12,11 +12,10 @@ import { OrderStatusType, RoleType } from "../../types/express";
 
 export async function createOrder(req: Request, res: Response) {
   try {
-    const userId = req.userId;
-    const { order, items } = req.cleanBody;
-    const { delivery_address, contact_phone } = order;
+    const { order, items } = req.body;
+    const { delivery_address, contact_phone, user_id } = order;
 
-    if (!userId || !delivery_address || !contact_phone) {
+    if (!user_id || !delivery_address || !contact_phone) {
       res.status(400).json({ message: "Invalid order data" });
       return;
     }
@@ -25,7 +24,7 @@ export async function createOrder(req: Request, res: Response) {
       .insert(ordersTable)
       //@ts-ignore
       .values({
-        user_id: userId,
+        user_id,
         delivery_address,
         contact_phone,
       })
@@ -380,10 +379,27 @@ export async function updateOrder(req: Request, res: Response) {
       order_id: id,
     }));
 
-    const itemsToDelete = existingItems.filter((existing: OrderItem) =>
-      !items.some((item: OrderItem) => existing.id == item.id)
+    const itemsToUpdate = items.filter((item: OrderItem) => {
+      const existingItem = existingItems.find(
+        (existing: OrderItem) => existing.id === item.id
+      );
+      return existingItem && existingItem.quantity !== item.quantity;
+    });
+
+    const itemsToDelete = existingItems.filter(
+      (existing: OrderItem) =>
+        !items.some((item: OrderItem) => existing.id == item.id)
     );
 
+    if (itemsToUpdate.length > 0) {
+      itemsToUpdate.forEach(async (i: OrderItem) => {
+        const { id, ...rest } = i;
+        return await db
+          .update(orderItemsTable)
+          .set(rest)
+          .where(eq(orderItemsTable.id, id));
+      });
+    }
     if (itemsToInsert.length > 0) {
       await db.insert(orderItemsTable).values(itemsToInsertMap);
     }

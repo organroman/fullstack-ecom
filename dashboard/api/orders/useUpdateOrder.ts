@@ -28,14 +28,14 @@ export function useUpdateOrder({
       const orderItems = updatedItems
         ? updatedItems.map((item) => ({
             id: item.id,
-            order_id: item.id,
+            order_id: order.id,
             quantity: item.quantity,
             price: item.price,
             product_id: item.product.id,
           }))
         : order?.items?.map((item) => ({
             id: item.id,
-            order_id: item.id,
+            order_id: order.id,
             quantity: item.quantity,
             price: item.price,
             product_id: item.product.id,

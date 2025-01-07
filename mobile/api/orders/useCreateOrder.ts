@@ -22,6 +22,7 @@ export function useCreateOrder({
       items,
     }: UseCreateOrderProps) => {
       const token = useAuth.getState().token;
+      const user = useAuth.getState().user;
 
       if (!token) {
         throw new Error(`Unauthorized`);
@@ -36,6 +37,7 @@ export function useCreateOrder({
         order: {
           delivery_address: deliveryAddress,
           contact_phone: phone,
+          user_id: user?.id,
         },
         items: mappedItems,
       };

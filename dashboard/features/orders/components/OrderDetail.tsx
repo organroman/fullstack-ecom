@@ -10,7 +10,11 @@ const OrderDetail = ({ title, value }: OrderDetailProps) => {
       <p className="text-lg text-zinc-700 dark:text-zinc-300 col-span-1">
         {title}
       </p>
-      <p className="text-md text-neutral-400 col-span-4">{value}</p>
+      {typeof value === "string" ? (
+        <p className="text-md text-neutral-400 col-span-4">{value}</p>
+      ) : (
+        value
+      )}
     </div>
   );
 };

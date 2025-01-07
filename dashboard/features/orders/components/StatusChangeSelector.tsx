@@ -1,4 +1,4 @@
-import { EOrderStatus, Order } from "@/types/types";
+import { EOrderStatus } from "@/types/types";
 
 import {
   Select,
@@ -10,24 +10,22 @@ import {
 import { ORDER_STATUSES } from "@/lib/constants";
 import { capitalizeFirstLetter } from "@/lib/utils";
 
-
 interface StatusChangeSelectorProps {
-  order: Order;
+  defaultValue: EOrderStatus;
   className?: string;
   disabled: boolean;
   onStatusChange: (status: EOrderStatus) => void;
 }
 
 const StatusChangeSelector = ({
-  order,
+  defaultValue,
   onStatusChange,
   className = "w-[180px]",
   disabled,
-}: 
-StatusChangeSelectorProps) => {
+}: StatusChangeSelectorProps) => {
   return (
     <Select
-      defaultValue={order?.status}
+      defaultValue={defaultValue}
       onValueChange={onStatusChange}
       disabled={disabled}
     >

@@ -78,11 +78,11 @@ export enum EOrderStatus {
 }
 export type OrderItem = {
   id?: number;
-  order_id: number;
+  order_id?: number;
   quantity: number;
   price: number;
   product: Product;
-}
+};
 
 export type Order = {
   id: number;
@@ -102,7 +102,6 @@ export type Orders = {
   totalPages: number;
 };
 
-
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 
 export type CategoryFormModalData = {
@@ -113,6 +112,19 @@ export type CategoryFormModalData = {
   icon_url: string;
   status: Status;
   display_order: string;
+};
+
+type OrderItemCreate = {
+  product: Product;
+  quantity: number;
+};
+
+export type CreateOrderFormData = {
+  user_id: string;
+  delivery_address: string;
+  contact_phone: string;
+  status: EOrderStatus;
+  items: OrderItemCreate[];
 };
 
 export type ProductImage = {

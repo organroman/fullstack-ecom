@@ -27,7 +27,7 @@ interface PageVariant {
   btnLabel: string;
 }
 
-type CreateItemVariant = ModalVariant | PageVariant;
+type CreateItemVariant = ModalVariant | PageVariant | undefined;
 
 interface HeaderProps {
   title: string;
@@ -35,7 +35,7 @@ interface HeaderProps {
   setSearchPhrase?: Dispatch<SetStateAction<string>>;
   onSearch?: (newSearch: string) => void;
   filterComponent?: ReactNode;
-  createItemVariant: CreateItemVariant;
+  createItemVariant?: CreateItemVariant;
   page?: {};
   entityView?: string;
   handleEntityView?: () => void;
@@ -78,7 +78,7 @@ const Header = ({
           />
         )}
         {filterComponent}
-        {createItemVariant.variant === "modal" && (
+        {createItemVariant?.variant === "modal" && (
           <Dialog
             open={createItemVariant.dialogOpen}
             onOpenChange={createItemVariant.dialogHandleOpen}
@@ -89,7 +89,7 @@ const Header = ({
             {createItemVariant.dialogContent}
           </Dialog>
         )}
-        {createItemVariant.variant === "page" && (
+        {createItemVariant?.variant === "page" && (
           <Button onClick={() => router.push(createItemVariant.link)}>
             {createItemVariant.btnLabel}
           </Button>
