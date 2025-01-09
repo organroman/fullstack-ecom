@@ -5,7 +5,7 @@ interface RecentSalesCardProps {
   avatarUrl: string;
   name: string;
   email: string;
-  amount: string;
+  amount: number;
 }
 
 const RecentSalesCard = ({
@@ -27,7 +27,7 @@ const RecentSalesCard = ({
           <CardDescription>{email}</CardDescription>
         </div>
       </div>
-      <CardTitle className="font-normal">+${amount}</CardTitle>
+      <CardTitle className="font-normal">+$ {amount.toLocaleString()}</CardTitle>
     </div>
   );
 };

@@ -15,16 +15,24 @@ import {
 } from "@/components/ui/popover";
 import dayjs from "dayjs";
 
+interface DateRangePickerProps {
+  className?: React.HTMLAttributes<HTMLDivElement>;
+  date: DateRange | undefined;
+  setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
+}
+
 export function DateRangePicker({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
-  const currentDate = new Date();
-  const endOfMonth = dayjs(currentDate).endOf("month").toDate();
+  date,
+  setDate,
+}: DateRangePickerProps) {
+  // const currentDate = new Date();
+  // const startOfMonth = dayjs(currentDate).startOf("month").toDate();
 
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: currentDate,
-    to: endOfMonth,
-  });
+  // const [date, setDate] = React.useState<DateRange | undefined>({
+  //   from: startOfMonth,
+  //   to: currentDate,
+  // });
 
   return (
     <div className={cn("grid gap-2", className)}>

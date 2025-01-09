@@ -14,6 +14,7 @@ import authRoutes from "./routes/auth/index.js";
 import usersRoutes from "./routes/users/index.js";
 import categoriesRoutes from "./routes/categories/index.js";
 import uploadRoutes from "./routes/upload/index.js";
+import dashboardRoutes from "./routes/dashboard/index.js";
 
 import serverless from "serverless-http";
 
@@ -53,10 +54,11 @@ app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
 app.use("/categories", categoriesRoutes);
 app.use("/upload", uploadRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ error: err.message || "File upload failed" });
-  next()
+  next();
 });
 
 if (process.env.NODE_ENV === "dev") {

@@ -1,5 +1,6 @@
 import { loginSchema, signUpSchema } from "@/lib/schema";
 import { QueryClient } from "@tanstack/react-query";
+import { DateRange } from "react-day-picker";
 import { z } from "zod";
 
 export type Product = {
@@ -164,4 +165,18 @@ export interface UseProductProps extends UseQueryProps {
 
 export interface UseProductWithIdProps extends UseProductProps {
   id: number;
+}
+
+export interface DashboardIndicator {
+  currentPeriod: number;
+  previousMonth: number;
+}
+
+export interface DashboardIndicatorProps {
+  token: string | null;
+  start: string;
+  end: string;
+}
+export interface DashboardTabsProps {
+  date: DateRange | undefined;
 }
