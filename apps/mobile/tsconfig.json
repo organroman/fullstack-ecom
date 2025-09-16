@@ -4,12 +4,8 @@
     "strict": true,
     "paths": {
       "@shared/*": ["../shared/*"],
-      "@/*": [
-        "./*"
-      ],
-      "tailwind.config": [
-        "./tailwind.config.js"
-      ]
+      "@/*": ["./*"],
+      "tailwind.config": ["./tailwind.config.js"]
     }
   }
 }

@@ -34,7 +34,7 @@ const UseFormFilesArrayUploader = <T extends FieldValues>({
   folderName = "general",
   product,
 }: UseFormFilesArrayUploaderProps<T>) => {
-  const { fields, append, remove } = useFieldArray<T>({
+  const { fields, append, remove, } = useFieldArray<T>({
     control,
     name,
   });

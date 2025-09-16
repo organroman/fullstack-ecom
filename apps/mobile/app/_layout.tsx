@@ -12,22 +12,23 @@ import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { BG_ACCENT_COLOR, BG_COLOR } from "@/utils/constants";
 
 const queryClient = new QueryClient();
+const DEFAULT_THEME: Theme = "light"; // <- pick your default
 
 export default function RootLayout() {
-  const [theme, setTheme] = useState<Theme | null>(null);
+  const [theme, setTheme] = useState<Theme>(DEFAULT_THEME); // <- not null
 
   useEffect(() => {
     (async () => {
-      const savedTheme = (await AsyncStorage.getItem("theme")) as Theme;
-      if (savedTheme) {
-        setTheme(savedTheme || "dark");
+      try {
+        const saved = await AsyncStorage.getItem("theme");
+        if (saved === "light" || saved === "dark") {
+          setTheme(saved as Theme);
+        }
+      } catch (e) {
+        console.log("theme load error", e);
       }
     })();
   }, []);
-
-  if (theme === null) {
-    return null;
-  }
 
   return (
     <QueryClientProvider client={queryClient}>

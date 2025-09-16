@@ -6,7 +6,7 @@ import {
   updateUserSchema,
 } from "../../db/schema/users.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
-import { verifySeller, verifyToken } from "../../middlewares/authMiddleware";
+import { verifySeller, verifyToken } from "../../middlewares/authMiddleware.js";
 import {
   changePassword,
   listUsers,

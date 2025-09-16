@@ -1,4 +1,4 @@
-import { ALLOWED_ROLES } from "./../../utils/constants";
+import { ALLOWED_ROLES } from "../../utils/constants";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 
