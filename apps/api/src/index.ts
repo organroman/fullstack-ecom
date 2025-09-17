@@ -16,9 +16,9 @@ import categoriesRoutes from "./routes/categories/index.js";
 import uploadRoutes from "./routes/upload/index.js";
 import dashboardRoutes from "./routes/dashboard/index.js";
 
-import serverless from "serverless-http";
+// import serverless from "serverless-http";
 
-const port = 8000;
+// const port = 8000;
 
 const app = express();
 
@@ -33,7 +33,7 @@ app.set("query parser", function (str: string) {
   return qs.parse(str);
 });
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.json({
     message: "E-commerce API",
     version: "1.0.0",
@@ -56,15 +56,16 @@ app.use("/categories", categoriesRoutes);
 app.use("/upload", uploadRoutes);
 app.use("/dashboard", dashboardRoutes);
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, _req: Request, res: Response, next: NextFunction) => {
+  console.error("💥 Error:", err);
   res.status(500).json({ error: err.message || "File upload failed" });
   next();
 });
+const PORT = Number(process.env.PORT ?? 8000);
 
-if (process.env.NODE_ENV === "dev") {
-  app.listen(port, () => {
-    console.log(`Listening on port`, port);
-  });
-}
+app.listen(PORT, () => {
+  console.log("✅ API listening on", PORT);
+  console.log("ENV → has DATABASE_URL:", Boolean(process.env.DATABASE_URL));
+});
 
-export const handler = serverless(app);
+// export const handler = serverless(app);

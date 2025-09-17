@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "node --import=tsx --watch --env-file=.env src/index.ts",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc",
     "start": "node --enable-source-maps dist/index.js",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
