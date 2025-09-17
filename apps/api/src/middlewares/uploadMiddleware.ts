@@ -1,6 +1,4 @@
 import multer from "multer";
-// import { CloudinaryStorage } from "multer-storage-cloudinary";
-// import cloudinary from "../../cloudinaryConfig";
 
 export type UploadMeta = {
   folder: string;
