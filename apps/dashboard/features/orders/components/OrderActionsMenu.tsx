@@ -1,3 +1,4 @@
+"use client";
 import { EOrderStatus, Order } from "@/types/types";
 
 import { useState } from "react";

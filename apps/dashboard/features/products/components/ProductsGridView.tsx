@@ -1,3 +1,4 @@
+"use client";
 import { Product } from "@/types/types";
 
 import { useCallback, useEffect, useRef } from "react";

@@ -1,3 +1,4 @@
+"use client";
 import { User } from "@/types/types";
 
 import { useQueryClient } from "@tanstack/react-query";
@@ -32,10 +33,7 @@ const UserActionsMenu = ({ user }: { user: User }) => {
       />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <UsersFormModal
-          user={user}
-          userMutation={editUserMutation}
-        />
+        <UsersFormModal user={user} userMutation={editUserMutation} />
       </Dialog>
     </>
   );

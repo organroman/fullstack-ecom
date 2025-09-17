@@ -1,3 +1,4 @@
+"use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CreditCardIcon, DollarSignIcon, UsersIcon } from "lucide-react";
 import OverviewIndicatorCard from "./OverviewIndicatorCard";

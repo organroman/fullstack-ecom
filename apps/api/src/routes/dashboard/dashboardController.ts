@@ -49,7 +49,6 @@ export async function getTotalRevenueByPeriod(req: Request, res: Response) {
       previousMonth: totalRevenuePrevMonthPeriod[0]?.totalRevenue || 0,
     });
   } catch (e) {
-    console.log(e);
     res.status(500).send({ message: "Something went wrong", error: e });
   }
 }

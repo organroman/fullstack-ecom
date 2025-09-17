@@ -36,10 +36,6 @@ const RecentSales = ({ date }: DashboardTabsProps) => {
 
   const { recentSales = [], totalOrders } = data || {};
 
-  console.log("data", data);
-  console.log("isLoading", isLoading);
-  console.log("error", error);
-
   if (isLoading) {
     return (
       <Card className="col-span-3">
@@ -83,36 +79,6 @@ const RecentSales = ({ date }: DashboardTabsProps) => {
             amount={sale.orderAmount}
           />
         ))}
-        {/* <RecentSalesCard
-          name="Olivia Martin"
-          avatarUrl="/img/avatar-girl-1.png"
-          email="olivia.martin@mail.com"
-          amount="1,999.00"
-        />
-        <RecentSalesCard
-          name="Jackson Lee"
-          avatarUrl="/img/avatar-man-1.png"
-          email="ackson.lee@email.com"
-          amount="39.00"
-        />
-        <RecentSalesCard
-          name="Isabella Nguyen"
-          avatarUrl="/img/avatar-girl-2.png"
-          email="will@email.com"
-          amount="99.00"
-        />
-        <RecentSalesCard
-          name="William Kim"
-          avatarUrl="/img/avatar-man-2.png"
-          email="will@email.com"
-          amount="99.00"
-        />
-        <RecentSalesCard
-          name="Sofia Davis"
-          avatarUrl="/img/avatar-girl-3.png"
-          email="sofia.davis@email.com"
-          amount="499.00"
-        /> */}
       </CardContent>
     </Card>
   );

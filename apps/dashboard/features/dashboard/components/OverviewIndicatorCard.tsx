@@ -1,3 +1,4 @@
+"use client";
 import {
   Card,
   CardContent,
@@ -28,10 +29,7 @@ const OverviewIndicatorCard = ({
   error,
   indicatorType,
 }: OverviewIndicatorCardProps) => {
-  console.log("🚀 ~ prevAmount:", prevAmount);
-  console.log("🚀 ~ amount:", amount);
   const difference = (amount * 100) / prevAmount - 100;
-  console.log("🚀 ~ difference:", difference);
 
   if (isLoading) {
     return (

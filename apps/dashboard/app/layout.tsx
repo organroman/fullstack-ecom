@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   const token = cookies().get("auth-token")?.value || null;
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

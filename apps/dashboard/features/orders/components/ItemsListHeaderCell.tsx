@@ -1,3 +1,4 @@
+"use client";
 interface ItemsListHeaderCellProps {
   children: React.ReactNode;
   styles?: string;

@@ -1,3 +1,5 @@
+"use client";
+
 import { EllipsisIcon } from "lucide-react";
 
 import ItemsListHeaderCell from "./ItemsListHeaderCell";

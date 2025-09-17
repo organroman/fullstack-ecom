@@ -1,3 +1,5 @@
+"use client";
+
 import { Order, OrderItem, Product } from "@/types/types";
 
 import { useState } from "react";
