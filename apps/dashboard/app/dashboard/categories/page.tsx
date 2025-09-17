@@ -1,3 +1,5 @@
+export const dynamic = "force-static";
+
 import CategoriesClient from "./categoriesClient";
 
 const CategoriesPage = () => {
