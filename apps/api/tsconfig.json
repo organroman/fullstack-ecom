@@ -16,7 +16,7 @@
     "baseUrl": ".", // Allow absolute imports relative to project root
     "paths": {
       // "*": ["node_modules/*"]
-      "@/*": ["*"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["src"]

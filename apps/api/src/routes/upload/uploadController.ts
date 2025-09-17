@@ -1,4 +1,4 @@
-import cloudinary from "@/src/cloudinaryConfig";
+import cloudinary from "@/cloudinaryConfig";
 import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
 // import cloudinary from "../../../cloudinaryConfig";
 import { Request, Response } from "express";
