@@ -120,7 +120,7 @@ const LoginForm = () => {
       <CardContent className="flex items-center justify-center">
         <p>
           Don&apos;t have an account?
-          <Link href="/sign-up">
+          <Link href="/register">
             <span className="text-blue-700">&nbsp;Sign Up</span>
           </Link>
         </p>

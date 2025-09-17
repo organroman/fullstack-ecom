@@ -1,3 +1,5 @@
+export const dynamic = "force-static";
+
 import OrdersClient from "./ordersClient";
 
 const OrdersPage = () => {
