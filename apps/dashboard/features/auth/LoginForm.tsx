@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 
 import { LoginFormData } from "@/types/types";
 import { loginSchema } from "@/lib/schema";
-import { handleLogin } from "../../api/auth/actions";
+import { handleLogin } from "../../api/auth/useAuth";
 import { Button } from "@/components/ui/button";
 
 const LoginForm = () => {

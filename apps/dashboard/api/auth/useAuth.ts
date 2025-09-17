@@ -1,14 +1,12 @@
-"use server"
-
 import { login, register } from "@/api/auth";
-import { cookies } from "next/headers";
+import Cookies from "js-cookie";
 
 export async function handleLogin(email: string, password: string) {
   try {
     const res = await login(email, password);
 
     if (res.token) {
-      cookies().set("auth-token", res.token);
+      Cookies.set("auth-token", res.token);
     }
   } catch (error) {
     throw error;
@@ -22,15 +20,12 @@ export async function handleSignUp(
   address: string
 ) {
   try {
-
     const res = await register(email, password, name, address);
 
-
     if (res) {
-
       const loginRes = await login(email, password);
       if (loginRes.token) {
-        cookies().set("auth-token", res.token);
+        Cookies.set("auth-token", res.token);
       }
     }
   } catch (error) {
