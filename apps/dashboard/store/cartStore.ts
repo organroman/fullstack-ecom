@@ -1,17 +1,16 @@
 import { create } from "zustand";
 
-import { ICartItem, Product } from "@/types/types";
-
+import { CartItem, Product } from "@/types/types";
 
 type State = {
-  items: ICartItem[];
+  items: CartItem[];
 };
 
 type Action = {
   addProduct: (product: Product) => void;
   resetCart: () => void;
-  increaseProductQuantity: (item: ICartItem) => void;
-  decreaseProductQuantity: (item: ICartItem) => void;
+  increaseProductQuantity: (item: CartItem) => void;
+  decreaseProductQuantity: (item: CartItem) => void;
   deleteProduct: (product: Product) => void;
 };
 
@@ -25,7 +24,7 @@ const useCart = create<State & Action>((set) => ({
 
   resetCart: () => set({ items: [] }),
 
-  increaseProductQuantity: (item: ICartItem) =>
+  increaseProductQuantity: (item: CartItem) =>
     set((state) => {
       const currentItemIndex = state.items.findIndex(
         (i) => i.product.id === item.product.id
@@ -39,7 +38,7 @@ const useCart = create<State & Action>((set) => ({
       return { items: updatedItems };
     }),
 
-  decreaseProductQuantity: (item: ICartItem) =>
+  decreaseProductQuantity: (item: CartItem) =>
     set((state) => {
       const currentItemIndex = state.items.findIndex(
         (i) => i.product.id === item.product.id

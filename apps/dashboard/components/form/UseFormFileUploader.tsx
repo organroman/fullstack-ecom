@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldValues, Path, Control } from "react-hook-form";
+import {FieldValues, Path, Control } from "react-hook-form";
 
 import {
   FormControl,

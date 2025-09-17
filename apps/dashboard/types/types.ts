@@ -180,3 +180,12 @@ export interface DashboardIndicatorProps {
 export interface DashboardTabsProps {
   date: DateRange | undefined;
 }
+
+export type CartItem = {
+  product: Product;
+  quantity: number;
+  // price: number;
+};
+export type FavoriteItem = {
+  product: Product;
+};

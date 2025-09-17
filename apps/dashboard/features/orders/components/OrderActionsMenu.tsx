@@ -71,7 +71,7 @@ const OrderActionsMenu = ({ order }: OrderActionsMenuProps) => {
         >
           <div className="w-full">
             <StatusChangeSelector
-              order={order}
+              defaultValue={order.status}
               disabled={updateOrderMutation.isPending}
               className="w-full"
               onStatusChange={handleStatusChange}

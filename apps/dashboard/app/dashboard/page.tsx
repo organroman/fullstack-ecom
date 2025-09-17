@@ -15,7 +15,7 @@ const Home = () => {
     from: startOfMonth,
     to: currentDate,
   });
-  
+
   return (
     <div className="flex flex-col gap-4 flex-1 pt-4">
       <div className="flex flex-row items-center justify-between">
