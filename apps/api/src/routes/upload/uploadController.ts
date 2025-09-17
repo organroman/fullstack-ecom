@@ -1,5 +1,6 @@
+import cloudinary from "@/src/cloudinaryConfig";
 import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
-import cloudinary from "../../../cloudinaryConfig";
+// import cloudinary from "../../../cloudinaryConfig";
 import { Request, Response } from "express";
 
 export async function uploadFiles(req: Request, res: Response) {
@@ -48,7 +49,7 @@ export async function uploadFiles(req: Request, res: Response) {
       }
     );
 
-    return res.status(200).json({ fileUrl: result?.url });
+    res.status(200).json({ fileUrl: result?.url });
   } catch (error) {
     res.status(500).send({ message: "Something went wrong", error: error });
   }
