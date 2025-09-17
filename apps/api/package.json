@@ -26,7 +26,6 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "multer": "^1.4.5-lts.1",
-    "multer-storage-cloudinary": "^4.0.0",
     "pg": "^8.13.1",
     "serverless-http": "^3.2.0",
     "zod": "^3.23.8"
