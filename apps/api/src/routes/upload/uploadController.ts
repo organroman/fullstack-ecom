@@ -1,6 +1,6 @@
-import cloudinary from "@/cloudinaryConfig";
+
 import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
-// import cloudinary from "../../../cloudinaryConfig";
+import cloudinary from "../../cloudinaryConfig";
 import { Request, Response } from "express";
 
 export async function uploadFiles(req: Request, res: Response) {
