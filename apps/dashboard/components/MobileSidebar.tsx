@@ -10,9 +10,11 @@ import SideBar from "./SideBar";
 
 interface HeaderProps {
   role: string;
+  userId: string;
+  token: string | null;
 }
 
-const MobileSidebar = ({ role }: HeaderProps) => {
+const MobileSidebar = ({ role, userId, token }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
@@ -28,7 +30,7 @@ const MobileSidebar = ({ role }: HeaderProps) => {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
-        <SideBar role={role} />
+        <SideBar role={role} userId={userId} token={token} />
       </SheetContent>
     </Sheet>
   );

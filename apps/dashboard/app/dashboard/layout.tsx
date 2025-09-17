@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import SideBar from "@/components/SideBar";
 import { getRoleAndUserFromToken } from "@/lib/utils";
+import MobileSidebar from "@/components/MobileSidebar";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -26,6 +27,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             userId={userData.userId}
             token={usersToken}
           />
+          <div className="flex lg:hidden ">
+            <MobileSidebar
+              role={userData.role}
+              userId={userData.userId}
+              token={usersToken}
+            />
+          </div>
         </div>
         <div className=" w-full">
           <div className="flex flex-col mx-auto max-w-screen-2xl h-full">
