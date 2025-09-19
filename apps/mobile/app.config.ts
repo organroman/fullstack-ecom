@@ -8,7 +8,7 @@ const defineConfig = (): ExpoConfig => ({
   scheme: "ecomdemo",
   owner: "organroman",
   orientation: "portrait",
-  userInterfaceStyle: "automatic", // ✅ fixes warning
+  userInterfaceStyle: "automatic",
   icon: "./assets/icon.png",
   splash: {
     image: "./assets/splash.png",
@@ -17,20 +17,26 @@ const defineConfig = (): ExpoConfig => ({
   },
   ios: {
     supportsTablet: true,
-    userInterfaceStyle: "automatic", // optional, can mirror global
+    userInterfaceStyle: "automatic",
+    bundleIdentifier: "com.organroman.ecomdemo",
+    buildNumber: "1",
   },
   android: {
-    package: "com.yourname.ecomdemo",
+    package: "com.organroman.ecomdemo",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
+    versionCode: 1,
   },
   web: {
     bundler: "metro",
     favicon: "./assets/favicon.png",
   },
+
   plugins: ["expo-router"],
+  platforms: ["ios", "android", "web"],
+
   extra: {
     apiUrl: process.env.EXPO_PUBLIC_API_URL,
     eas: { projectId: "f86f9d4f-0621-4270-9689-1362967451b9" },

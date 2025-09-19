@@ -6,7 +6,8 @@
     "android": "DARK_MODE=media expo start --android",
     "ios": "DARK_MODE=media expo start --ios",
     "web": "DARK_MODE=media expo start --web",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "build:web": "expo export --platform web --non-interactive"
   },
   "dependencies": {
     "@expo/html-elements": "0.4.2",
