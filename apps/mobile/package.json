@@ -1,6 +1,5 @@
 {
-  "name": "mobile",
-  "version": "1.0.0",
+  "name": "ecom-demo",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
@@ -51,7 +50,10 @@
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.45",
     "jscodeshift": "0.15.2",
-    "typescript": "^5.3.3"
+    "typescript": "~5.3.3"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": "20.x"
+  }
 }

@@ -1,0 +1,17 @@
+{
+  "cli": { "version": ">= 13.0.0", "appVersionSource": "remote" },
+  "build": {
+    "preview": {
+      "android": { "buildType": "apk" },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://fullstack-ecom-j1kc.onrender.com"
+      }
+    },
+    "production": {
+      "android": { "gradleCommand": ":app:bundleRelease" },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://fullstack-ecom-j1kc.onrender.com"
+      }
+    }
+  }
+}
