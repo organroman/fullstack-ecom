@@ -23,8 +23,10 @@ import { loginSchema } from "@/lib/schema";
 
 import { Button } from "@/components/ui/button";
 import { handleLogin } from "@/api-service/auth/useAuth";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -41,6 +43,7 @@ const LoginForm = () => {
 
     onSuccess: () => {
       toast.success("Logged in");
+      router.replace("/dashboard");
     },
     onError: (error) => {
       toast.error(error.message);
