@@ -20,8 +20,9 @@ import { Input } from "@/components/ui/input";
 
 import { LoginFormData } from "@/types/types";
 import { loginSchema } from "@/lib/schema";
-import { handleLogin } from "../../api/auth/useAuth";
+
 import { Button } from "@/components/ui/button";
+import { handleLogin } from "@/api-service/auth/useAuth";
 
 const LoginForm = () => {
   const form = useForm<LoginFormData>({
