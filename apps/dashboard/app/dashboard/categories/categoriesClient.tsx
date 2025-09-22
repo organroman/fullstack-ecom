@@ -5,7 +5,6 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { DataTable } from "@/components/DataTable";
 import Header from "@/components/Header";
-import { useToken } from "@/components/providers/token-provider";
 import ErrorPage from "@/app/error";
 
 import { categoriesColumns } from "@/features/categories/components/CategoriesColumns";
@@ -21,16 +20,14 @@ const CategoriesClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
-  const token = useToken();
 
   const search = searchParams.get("search") || "";
 
   const { dialogOpen, setDialogOpen, closeDialog } = useDialog();
-  const { data, isLoading, error } = useGetCategories({ search, token });
+  const { data, isLoading, error } = useGetCategories({ search });
   const { createCategoryMutation } = useCreateCategory({
     closeDialog,
     queryClient,
-    token,
   });
 
   const { categories = [] } = data || {};

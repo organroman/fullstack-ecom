@@ -8,10 +8,8 @@ import LoadingPage from "@/app/loading";
 import ErrorPage from "@/app/error";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 import Header from "@/components/Header";
-import { useToken } from "@/components/providers/token-provider";
 
 import OrderDetail from "@/features/orders/components/OrderDetail";
 import StatusChangeSelector from "@/features/orders/components/StatusChangeSelector";
@@ -22,7 +20,6 @@ import { useGetOrderById } from "@/api-service/orders/useGetOrderById";
 import OrderItemsList from "@/features/orders/components/OrderItemsList";
 
 const OrderIdClient = () => {
-  const token = useToken();
   const { orderId } = useParams();
   const queryClient = useQueryClient();
 
@@ -30,10 +27,9 @@ const OrderIdClient = () => {
     data: order,
     isLoading,
     error,
-  } = useGetOrderById({ id: Number(orderId), token });
+  } = useGetOrderById({ id: Number(orderId) });
 
   const { updateOrderMutation } = useUpdateOrder({
-    token,
     queryClient,
     order: order || {},
   });

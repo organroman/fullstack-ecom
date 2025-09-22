@@ -4,10 +4,9 @@ import { Categories } from "@/types/types";
 
 interface UseGetCategoriesParams {
   search: string;
-  token: string | null;
 }
 
-export function useGetCategories({ search, token }: UseGetCategoriesParams) {
+export function useGetCategories({ search }: UseGetCategoriesParams) {
   return useQuery({
     queryKey: ["categories", search],
     queryFn: async () => {
@@ -19,9 +18,7 @@ export function useGetCategories({ search, token }: UseGetCategoriesParams) {
 
       const query = queryParams.toString();
 
-      return await api.get<Categories>(`categories?${query}`, {
-        Authorization: token ?? "",
-      });
+      return await api.get<Categories>(`categories?${query}`);
     },
   });
 }

@@ -6,13 +6,11 @@ import api from "@/api-service";
 interface UseProductParams {
   closeDialog: () => void;
   queryClient: QueryClient;
-  token: string | null;
 }
 
 export function useCreateCategory({
   closeDialog,
   queryClient,
-  token,
 }: UseProductParams) {
   const createCategoryMutation = useMutation<
     Category,
@@ -20,9 +18,7 @@ export function useCreateCategory({
     CategoryFormModalData
   >({
     mutationFn: async (payload: CategoryFormModalData) => {
-      return await api.post<Category>("categories", payload, {
-        Authorization: token ?? "",
-      });
+      return await api.post<Category>("categories", payload);
     },
 
     onSuccess: () => {

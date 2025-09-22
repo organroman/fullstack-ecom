@@ -9,7 +9,6 @@ import { Dialog } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import Modal from "@/components/Modal";
-import { useToken } from "@/components/providers/token-provider";
 import DropdownActionsMenu from "@/components/DropdownActionsMenu";
 import StatusChangeSelector from "./StatusChangeSelector";
 
@@ -21,12 +20,10 @@ interface OrderActionsMenuProps {
 
 const OrderActionsMenu = ({ order }: OrderActionsMenuProps) => {
   const queryClient = useQueryClient();
-  const token = useToken();
 
   const [isChangeStatusDialogOpen, setIsChangeDialogOpen] = useState(false);
   const [orderStatus, setOrderStatus] = useState<EOrderStatus>(order.status);
   const { updateOrderMutation } = useUpdateOrder({
-    token,
     queryClient,
     order,
   });

@@ -10,11 +10,10 @@ import { useDialog } from "@/hooks/use-modal";
 import CategoryFormModal from "./CategoryFormModal";
 import { useUpdateCategory } from "@/api-service/categories/useUpdateCategory";
 import { useDeleteCategory } from "@/api-service/categories/useDeleteCategory";
-import { useToken } from "@/components/providers/token-provider";
 
 const CategoryActionMenu = ({ category }: { category: Category }) => {
   const queryClient = useQueryClient();
-  const token = useToken();
+
   const {
     dialogOpen: isEditDialogOpen,
     openDialog: openEditDialog,
@@ -32,13 +31,11 @@ const CategoryActionMenu = ({ category }: { category: Category }) => {
   const { editCategoryMutation } = useUpdateCategory({
     closeDialog: closeEditDialog,
     queryClient,
-    token,
   });
 
   const { deleteCategoryMutation } = useDeleteCategory({
     closeDialog: closeDeleteDialog,
     queryClient,
-    token,
   });
 
   return (

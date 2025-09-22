@@ -24,7 +24,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Separator } from "@/components/ui/separator";
-import { useToken } from "@/components/providers/token-provider";
 
 import ProductFormModal from "@/features/products/components/ProductFormModal";
 import ProductActionsMenu from "@/features/products/components/ProductActionsMenu";
@@ -40,14 +39,12 @@ import { cn } from "@/lib/utils";
 const ProductDetailsPage = ({ id }: { id: string }) => {
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
-  const token = useToken();
   const {
     data: product,
     isLoading,
     error,
   } = useProductById({
     productId: Number(id),
-    token,
   });
 
   const { dialogOpen, setDialogOpen, closeDialog } = useDialog();
@@ -60,7 +57,6 @@ const ProductDetailsPage = ({ id }: { id: string }) => {
     view,
     closeDialog,
     queryClient,
-    token,
   });
 
   useEffect(() => {

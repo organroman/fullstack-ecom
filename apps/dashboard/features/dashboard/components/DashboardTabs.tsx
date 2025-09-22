@@ -5,7 +5,6 @@ import OverviewIndicatorCard from "./OverviewIndicatorCard";
 import { Chart } from "./Chart";
 import RecentSales from "./RecentSales";
 
-import { useToken } from "@/components/providers/token-provider";
 import dayjs from "dayjs";
 
 import { DashboardTabsProps } from "@/types/types";
@@ -14,7 +13,6 @@ import { useGetUsersByPeriod } from "@/api-service/dashboard/useGetUsersByPeriod
 import { useGetTotalSalesByPeriod } from "@/api-service/dashboard/useGetTotalSalesByPeriod";
 
 const DashboardTabs = ({ date }: DashboardTabsProps) => {
-  const token = useToken();
   const start = dayjs(date?.from).format("YYYY-MM-DD");
   const end = dayjs(date?.to).format("YYYY-MM-DD");
 
@@ -23,7 +21,6 @@ const DashboardTabs = ({ date }: DashboardTabsProps) => {
     isLoading: revenueIsLoading,
     error: revenueError,
   } = useGetRevenueByPeriod({
-    token,
     start,
     end,
   });
@@ -33,7 +30,6 @@ const DashboardTabs = ({ date }: DashboardTabsProps) => {
     isLoading: usersIsLoading,
     error: usersError,
   } = useGetUsersByPeriod({
-    token,
     start,
     end,
   });
@@ -43,7 +39,6 @@ const DashboardTabs = ({ date }: DashboardTabsProps) => {
     isLoading: salesTotalIsLoading,
     error: salesTotalError,
   } = useGetTotalSalesByPeriod({
-    token,
     start,
     end,
   });

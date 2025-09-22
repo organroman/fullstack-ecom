@@ -4,16 +4,13 @@ import api from "..";
 
 interface useGetUserByIdProps {
   userId: number;
-  token: string | null;
 }
 
-export function useGetUserById({ userId, token }: useGetUserByIdProps) {
+export function useGetUserById({ userId }: useGetUserByIdProps) {
   return useQuery<any, Error, User>({
     queryKey: ["user", userId],
     queryFn: async () => {
-      return await api.get<User>(`users/${userId}`, {
-        Authorization: token ?? "",
-      });
+      return await api.get<User>(`users/${userId}`);
     },
   });
 }

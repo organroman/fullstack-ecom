@@ -12,14 +12,11 @@ interface CreateUserProps extends UseQueryProps {
 export function useCreateUser({
   closeDialog,
   queryClient,
-  token,
   handleOnSuccess,
 }: CreateUserProps) {
   const mutation = useMutation({
     mutationFn: async (user: UserFormModalData) => {
-      return await api.post<User>("users", user, {
-        Authorization: token ?? "",
-      });
+      return await api.post<User>("users", user);
     },
 
     onSuccess: (data) => {

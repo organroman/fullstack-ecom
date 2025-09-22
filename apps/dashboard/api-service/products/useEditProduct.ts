@@ -13,7 +13,6 @@ export function useEditProduct({
   closeDialog,
   queryClient,
   view,
-  token,
 }: UseProductWithIdProps) {
   const editProductMutation = useMutation<Product, Error, ProductFormModalData>(
     {
@@ -28,9 +27,7 @@ export function useEditProduct({
           },
           images: images,
         };
-        return await api.put<Product>(`products/${product.id}`, payload, {
-          Authorization: token ?? "",
-        });
+        return await api.put<Product>(`products/${product.id}`, payload);
       },
 
       onSuccess: () => {

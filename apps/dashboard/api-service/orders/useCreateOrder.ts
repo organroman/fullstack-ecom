@@ -11,12 +11,10 @@ interface OrderFormData {
 
 interface useCreateOrderProps {
   queryClient: QueryClient;
-  token: string | null;
   handleSuccess?: (data: Order) => void;
 }
 
 export function useCreateOrder({
-  token,
   queryClient,
   handleSuccess,
 }: useCreateOrderProps) {
@@ -38,9 +36,7 @@ export function useCreateOrder({
         items: mappedItems,
       };
 
-      const order = await api.post<Order>("orders", payload, {
-        Authorization: token ?? "",
-      });
+      const order = await api.post<Order>("orders", payload);
 
       return order;
     },

@@ -5,7 +5,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { DataTable } from "@/components/DataTable";
 import Header from "@/components/Header";
 
-import { useToken } from "@/components/providers/token-provider";
 import { usersColumns } from "@/features/users/components/UsersColumns";
 import UsersFormModal from "@/features/users/components/UsersFormModal";
 import UserRolesSelector from "@/components/UserRolesSelector";
@@ -28,7 +27,6 @@ const UsersClient = () => {
   const limit = Number(searchParams.get("limit") || 10);
   const search = searchParams.get("search") || "";
   const role = searchParams.get("role") || "";
-  const token = useToken();
 
   const {
     searchPhrase,
@@ -51,14 +49,12 @@ const UsersClient = () => {
     limit,
     search,
     role,
-    token,
   });
   const { users = [], totalPages, total } = data || {};
 
   const { createUserMutation } = useCreateUser({
     closeDialog,
     queryClient,
-    token,
   });
 
   const handleFilterChange = (role: string) => {

@@ -4,7 +4,6 @@ import { EOrderStatus, Order, OrderItem } from "@/types/types";
 import api from "..";
 
 interface UseUpdateOrderStatusProps {
-  token: string | null;
   queryClient: QueryClient;
   order: Order | {};
 }
@@ -16,7 +15,6 @@ export type UpdateOrderMutationParams = {
 };
 
 export function useUpdateOrder({
-  token,
   queryClient,
   order,
 }: UseUpdateOrderStatusProps) {
@@ -42,19 +40,15 @@ export function useUpdateOrder({
           }));
 
       const { user, items, ...rest } = order;
-      return await api.put<Order>(
-        `orders/${order.id}`,
-        {
-          order: {
-            rest,
-            status: status || order.status,
-            delivery_address: delivery_address || order.delivery_address,
-            user_id: order.user.id,
-          },
-          items: orderItems,
+      return await api.put<Order>(`orders/${order.id}`, {
+        order: {
+          rest,
+          status: status || order.status,
+          delivery_address: delivery_address || order.delivery_address,
+          user_id: order.user.id,
         },
-        { Authorization: token ?? "" }
-      );
+        items: orderItems,
+      });
     },
     onSuccess: () => {
       toast.success("Order updated");

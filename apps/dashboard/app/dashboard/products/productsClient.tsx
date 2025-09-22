@@ -7,7 +7,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 
 import Header from "@/components/Header";
-import { useToken } from "@/components/providers/token-provider";
 
 import ProductFormModal from "@/features/products/components/ProductFormModal";
 import ProductsGridView from "@/features/products/components/ProductsGridView";
@@ -23,7 +22,6 @@ const ProductsClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
-  const token = useToken();
 
   const view = (searchParams.get("view") || "table") as View;
 
@@ -33,7 +31,6 @@ const ProductsClient = () => {
     view,
     closeDialog,
     queryClient,
-    token,
   });
 
   const updateQueryParams = (

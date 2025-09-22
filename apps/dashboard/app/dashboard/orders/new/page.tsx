@@ -12,7 +12,6 @@ import { useCreateOrder } from "@/api-service/orders/useCreateOrder";
 
 import Header from "@/components/Header";
 
-import { useToken } from "@/components/providers/token-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog } from "@/components/ui/dialog";
@@ -35,7 +34,6 @@ import UsersFormModal from "@/features/users/components/UsersFormModal";
 import { useDialog } from "@/hooks/use-modal";
 import { useDebounce } from "@/lib/utils-client";
 
-
 type Item = {
   product: Product;
   quantity: number;
@@ -46,7 +44,6 @@ const NewOrderPage = () => {
   const [customer, setCustomer] = useState<User | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const token = useToken();
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -67,7 +64,6 @@ const NewOrderPage = () => {
 
   const { data, isLoading, error } = useInfiniteProducts({
     search: debouncedSearchPhrase,
-    token,
   });
   const allProducts = data?.pages.flatMap((page) => page.products) || [];
 
@@ -80,13 +76,11 @@ const NewOrderPage = () => {
     limit: 10,
     search: debouncedSearchPhrase,
     role: "",
-    token,
   });
 
   const { createUserMutation } = useCreateUser({
     closeDialog: createUserCloseDialog,
     queryClient,
-    token,
     handleOnSuccess(data) {
       setCustomer(data);
     },
@@ -94,7 +88,6 @@ const NewOrderPage = () => {
 
   const { createOrderMutation } = useCreateOrder({
     queryClient,
-    token,
     handleSuccess(data) {
       router.push(`/dashboard/orders/${data.id}`);
     },

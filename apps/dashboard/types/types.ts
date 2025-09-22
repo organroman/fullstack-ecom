@@ -156,7 +156,6 @@ export type UserFormModalData = {
 export interface UseQueryProps {
   closeDialog: () => void;
   queryClient: QueryClient;
-  token: string | null;
 }
 
 export interface UseProductProps extends UseQueryProps {
@@ -173,7 +172,6 @@ export interface DashboardIndicator {
 }
 
 export interface DashboardIndicatorProps {
-  token: string | null;
   start: string;
   end: string;
 }

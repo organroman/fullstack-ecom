@@ -8,7 +8,6 @@ export function useCreateProduct({
   view,
   closeDialog,
   queryClient,
-  token,
 }: UseProductProps) {
   const mutation = useMutation<Product, Error, ProductFormModalData>({
     mutationFn: async ({
@@ -28,9 +27,7 @@ export function useCreateProduct({
         images,
       };
 
-      return await api.post<Product>("products", payload, {
-        Authorization: token ?? "",
-      });
+      return await api.post<Product>("products", payload);
     },
 
     onSuccess: () => {

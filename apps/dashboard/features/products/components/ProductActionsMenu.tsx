@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 
 import { Dialog } from "@/components/ui/dialog";
 import DropdownActionsMenu from "@/components/DropdownActionsMenu";
-import { useToken } from "@/components/providers/token-provider";
 
 import ProductForm from "./ProductFormModal";
 import Modal from "@/components/Modal";
@@ -17,7 +16,6 @@ import { useEditProduct } from "@/api-service/products/useEditProduct";
 const ProductActionsMenu = ({ product }: { product: Product }) => {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
-  const token = useToken();
 
   const {
     dialogOpen: isEditDialogOpen,
@@ -38,14 +36,12 @@ const ProductActionsMenu = ({ product }: { product: Product }) => {
     closeDialog: closeEditDialog,
     queryClient,
     view,
-    token,
   });
 
   const { deleteProductMutation } = useDeleteProduct({
     closeDialog: closeDeleteDialog,
     queryClient,
     view,
-    token,
   });
 
   return (

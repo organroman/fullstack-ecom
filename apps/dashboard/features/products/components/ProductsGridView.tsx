@@ -7,16 +7,15 @@ import { Loader } from "lucide-react";
 import LoadingPage from "@/app/loading";
 import ProductCard from "./ProductCard";
 import { useInfiniteProducts } from "@/api-service/products/useInfiniteProducts";
-import { useToken } from "@/components/providers/token-provider";
+
 import { useSearchParams } from "next/navigation";
 
 const ProductsGridView = () => {
-  const token = useToken();
   const searchParams = useSearchParams();
 
   const search = searchParams.get("search") || "";
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteProducts({ search, token });
+    useInfiniteProducts({ search });
 
   const allProducts = data?.pages.flatMap((page) => page.products) || [];
 

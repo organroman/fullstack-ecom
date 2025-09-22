@@ -17,7 +17,6 @@ import { Product, View } from "@/types/types";
 import { useDeleteProductImage } from "@/api-service/products/useDeleteProductImage";
 import { useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { useToken } from "../providers/token-provider";
 
 type UseFormFilesArrayUploaderProps<T extends FieldValues> = {
   name: ArrayPath<T>;
@@ -41,12 +40,10 @@ const UseFormFilesArrayUploader = <T extends FieldValues>({
   const searchParams = useSearchParams();
   const view = (searchParams.get("view") || "table") as View;
   const queryClient = useQueryClient();
-  const token = useToken();
 
   const { deleteProductImageMutation } = useDeleteProductImage({
     view,
     queryClient,
-    token,
   });
 
   const [isFilesLoading, setIsFilesLoading] = useState<boolean>(false);

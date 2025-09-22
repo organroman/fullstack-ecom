@@ -5,14 +5,12 @@ interface UsePaginatedProductsProps {
   page: number;
   limit: number;
   search: string;
-  token: string | null;
 }
 
 export function usePaginatedProducts({
   page,
   limit,
   search,
-  token,
 }: UsePaginatedProductsProps) {
   return useQuery({
     queryKey: ["products", page, limit, search],
@@ -27,9 +25,7 @@ export function usePaginatedProducts({
       }
 
       const query = queryParams.toString();
-      return await api.get<Products>(`products?${query}`, {
-        Authorization: token ?? "",
-      });
+      return await api.get<Products>(`products?${query}`);
     },
   });
 }

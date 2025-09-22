@@ -4,13 +4,9 @@ import { Products } from "@/types/types";
 
 interface UseInfiniteProductsProps {
   search: string;
-  token: string | null;
 }
 
-export function useInfiniteProducts({
-  search,
-  token,
-}: UseInfiniteProductsProps) {
+export function useInfiniteProducts({ search }: UseInfiniteProductsProps) {
   return useInfiniteQuery({
     queryKey: ["products-infinite", search],
     queryFn: async ({ pageParam }) => {
@@ -24,9 +20,7 @@ export function useInfiniteProducts({
       }
 
       const query = queryParams.toString();
-      return await api.get<Products>(`products?${query}`, {
-        Authorization: token ?? "",
-      });
+      return await api.get<Products>(`products?${query}`);
     },
     getNextPageParam: (lastPage) => {
       const { page, totalPages } = lastPage;

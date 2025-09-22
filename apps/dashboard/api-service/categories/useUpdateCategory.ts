@@ -3,11 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import api from "@/api-service";
 
-export function useUpdateCategory({
-  closeDialog,
-  queryClient,
-  token,
-}: UseQueryProps) {
+export function useUpdateCategory({ closeDialog, queryClient }: UseQueryProps) {
   const editCategoryMutation = useMutation<
     Category,
     Error,
@@ -15,9 +11,7 @@ export function useUpdateCategory({
   >({
     mutationFn: async (data) => {
       const payload = { ...data, display_order: parseInt(data.display_order) };
-      return await api.put<Category>(`categories/${data.slug}`, payload, {
-        Authorization: token ?? "",
-      });
+      return await api.put<Category>(`categories/${data.slug}`, payload);
     },
 
     onSuccess: () => {

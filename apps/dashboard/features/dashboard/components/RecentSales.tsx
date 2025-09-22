@@ -11,7 +11,6 @@ import React from "react";
 import RecentSalesCard from "./RecentSalesCard";
 import { DashboardTabsProps } from "@/types/types";
 import { useGetRecentSalesByPeriod } from "@/api-service/dashboard/useGetRecentSalesByPeriod ";
-import { useToken } from "@/components/providers/token-provider";
 import dayjs from "dayjs";
 import { Loader } from "lucide-react";
 
@@ -24,12 +23,10 @@ const AVATAR_URLS = [
 ];
 
 const RecentSales = ({ date }: DashboardTabsProps) => {
-  const token = useToken();
   const start = dayjs(date?.from).format("YYYY-MM-DD");
   const end = dayjs(date?.to).format("YYYY-MM-DD");
 
   const { data, isLoading, error } = useGetRecentSalesByPeriod({
-    token,
     start,
     end,
   });

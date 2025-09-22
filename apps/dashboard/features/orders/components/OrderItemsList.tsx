@@ -7,7 +7,6 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { Dialog } from "@/components/ui/dialog";
 import Modal from "@/components/Modal";
-import { useToken } from "@/components/providers/token-provider";
 
 import ProductSelector from "./ProductSelector";
 
@@ -37,8 +36,6 @@ const OrderItemsList = ({ order }: OrderItemsListProps) => {
     setDialogOpen: removeItemSetDialogOpen,
   } = useDialog();
 
-  const token = useToken();
-
   const [search, setSearch] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [productToRemove, setProductToRemove] = useState<OrderItem | null>(
@@ -49,11 +46,10 @@ const OrderItemsList = ({ order }: OrderItemsListProps) => {
 
   const { data, isLoading, error } = useInfiniteProducts({
     search: debouncedSearchPhrase,
-    token,
   });
   const allProducts = data?.pages.flatMap((page) => page.products) || [];
 
-  const { updateOrderMutation } = useUpdateOrder({ token, order, queryClient });
+  const { updateOrderMutation } = useUpdateOrder({ order, queryClient });
 
   const totalAmountOfOrder = order?.items.reduce(
     (acc: number, item: OrderItem) => acc + item.price * item.quantity,

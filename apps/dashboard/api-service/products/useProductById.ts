@@ -4,16 +4,13 @@ import { Product } from "@/types/types";
 
 interface UseProductById {
   productId: number;
-  token: string | null;
 }
 
-export function useProductById({ productId, token }: UseProductById) {
+export function useProductById({ productId }: UseProductById) {
   return useQuery<Product, Error, Product>({
     queryKey: ["product", productId],
     queryFn: async () => {
-      return await api.get<Product>(`products/${productId}`, {
-        Authorization: token ?? "",
-      });
+      return await api.get<Product>(`products/${productId}`);
     },
   });
 }

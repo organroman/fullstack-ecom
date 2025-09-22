@@ -8,17 +8,13 @@ import api from "@/api-service";
 export function useDeleteProductImage({
   queryClient,
   view,
-  token,
 }: {
   view: View;
   queryClient: QueryClient;
-  token: string | null;
 }) {
   const deleteProductImageMutation = useMutation({
     mutationFn: async (id: number) => {
-      return await api.delete(`products/images/${id}`, {
-        Authorization: token ?? "",
-      });
+      return await api.delete(`products/images/${id}`);
     },
 
     onSuccess: () => {

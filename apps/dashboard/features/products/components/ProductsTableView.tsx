@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { DataTable } from "@/components/DataTable";
 import { productColumns } from "./ProductsColumns";
 import { usePaginatedProducts } from "@/api-service/products/usePaginatedProducts";
-import { useToken } from "@/components/providers/token-provider";
+
 import ErrorPage from "@/app/error";
 
 interface ProductsTableViewProps {
@@ -29,13 +29,11 @@ const ProductsTableView = ({
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit") || 10);
   const search = searchParams.get("search") || "";
-  const token = useToken();
 
   const { data, isLoading, error } = usePaginatedProducts({
     page,
     limit,
     search,
-    token,
   });
 
   const { products = [], totalPages = 0, total = 0 } = data || {};

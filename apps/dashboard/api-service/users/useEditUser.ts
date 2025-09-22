@@ -4,21 +4,13 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import api from "@/api-service";
 
-export function useEditUser({
-  closeDialog,
-  queryClient,
-  token,
-}: UseQueryProps) {
+export function useEditUser({ closeDialog, queryClient }: UseQueryProps) {
   const editUserMutation = useMutation({
     mutationFn: async (user: UserFormModalData) => {
-      return await api.put<User>(
-        `users/${user.id}`,
-        {
-          ...user,
-          id: String(user?.id),
-        },
-        { Authorization: token ?? "" }
-      );
+      return await api.put<User>(`users/${user.id}`, {
+        ...user,
+        id: String(user?.id),
+      });
     },
 
     onSuccess: () => {

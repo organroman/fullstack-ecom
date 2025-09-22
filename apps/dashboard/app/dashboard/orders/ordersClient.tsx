@@ -13,12 +13,10 @@ import { usePaginatedOrders } from "@/api-service/orders/useGetPaginatedOrders";
 
 import { useUpdateQueryParams } from "@/hooks/use-update-query-params";
 import ErrorPage from "@/app/error";
-import { useToken } from "@/components/providers/token-provider";
 
 const OrdersClient = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = useToken();
 
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit") || 10);
@@ -31,7 +29,6 @@ const OrdersClient = () => {
     limit,
     search,
     status,
-    token,
   });
 
   const { orders = [], totalPages = 0, total = 0 } = data || {};

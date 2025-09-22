@@ -18,7 +18,6 @@ import UsersFormModal from "@/features/users/components/UsersFormModal";
 import { useCreateUser } from "@/api-service/users/useCreateUser";
 import ErrorPage from "@/app/error";
 import { useGetUserById } from "@/api-service/users/useGetUserById";
-import { useToken } from "@/components/providers/token-provider";
 
 interface UserIdClientProps {
   userId: string;
@@ -28,19 +27,17 @@ interface UserIdClientProps {
 
 const UserIdClient = ({ userId, isAllowedToEdit, role }: UserIdClientProps) => {
   const queryClient = useQueryClient();
-  const token = useToken();
   const {
     data: user,
     isLoading,
     error,
-  } = useGetUserById({ userId: Number(userId), token });
+  } = useGetUserById({ userId: Number(userId) });
 
   const { dialogOpen, setDialogOpen, closeDialog } = useDialog();
 
   const { createUserMutation } = useCreateUser({
     closeDialog,
     queryClient,
-    token,
   });
 
   if (isLoading) {

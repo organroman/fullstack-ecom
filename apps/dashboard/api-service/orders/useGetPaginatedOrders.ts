@@ -7,7 +7,6 @@ interface UseGetPaginatedOrders {
   limit: number;
   search: string;
   status: string;
-  token: string | null;
 }
 
 export function usePaginatedOrders({
@@ -15,7 +14,6 @@ export function usePaginatedOrders({
   limit,
   search,
   status,
-  token,
 }: UseGetPaginatedOrders) {
   return useQuery<Orders>({
     queryKey: ["orders", page, limit, search, status],
@@ -34,9 +32,7 @@ export function usePaginatedOrders({
       }
       const query = queryParams.toString();
 
-      return await api.get<Orders>(`orders?${query}`, {
-        Authorization: token ?? "",
-      });
+      return await api.get<Orders>(`orders?${query}`);
 
       // await fetchOrders(page, limit, search, status)
     },

@@ -7,7 +7,6 @@ interface usePaginatedUsersProps {
   limit: number;
   search: string;
   role: string;
-  token: string | null;
 }
 
 export function usePaginatedUsers({
@@ -15,7 +14,6 @@ export function usePaginatedUsers({
   limit,
   search,
   role,
-  token,
 }: usePaginatedUsersProps) {
   return useQuery({
     queryKey: ["users", page, limit, search, role],
@@ -35,9 +33,7 @@ export function usePaginatedUsers({
 
       const query = queryParams.toString();
 
-      return await api.get<Users>(`users?${query}`, {
-        Authorization: token ?? "",
-      });
+      return await api.get<Users>(`users?${query}`);
     },
   });
 }

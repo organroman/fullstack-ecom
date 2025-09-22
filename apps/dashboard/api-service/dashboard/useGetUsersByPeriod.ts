@@ -2,11 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import api from "..";
 import { DashboardIndicator, DashboardIndicatorProps } from "@/types/types";
 
-export function useGetUsersByPeriod({
-  start,
-  end,
-  token,
-}: DashboardIndicatorProps) {
+export function useGetUsersByPeriod({ start, end }: DashboardIndicatorProps) {
   return useQuery({
     queryKey: ["usersTotal", start, end],
     queryFn: async () => {
@@ -21,9 +17,7 @@ export function useGetUsersByPeriod({
       }
       const query = queryParams.toString();
 
-      return await api.get<DashboardIndicator>(`dashboard/users?${query}`, {
-        Authorization: token ?? "",
-      });
+      return await api.get<DashboardIndicator>(`dashboard/users?${query}`);
     },
   });
 }

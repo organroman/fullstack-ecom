@@ -47,7 +47,7 @@ const ProductFormModal = ({
   const searchParams = useSearchParams();
   const search = searchParams.get("search") || "";
 
-  const { data, isLoading } = useGetCategories({ search, token: null });
+  const { data, isLoading } = useGetCategories({ search });
   const { categories = [] } = data || {};
 
   const onSubmit = (formData: ProductFormModalData) => {

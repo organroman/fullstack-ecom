@@ -5,7 +5,6 @@ import { DashboardIndicator, DashboardIndicatorProps } from "@/types/types";
 export function useGetTotalSalesByPeriod({
   start,
   end,
-  token,
 }: DashboardIndicatorProps) {
   return useQuery({
     queryKey: ["salesTotal", start, end],
@@ -22,10 +21,7 @@ export function useGetTotalSalesByPeriod({
       const query = queryParams.toString();
 
       return await api.get<DashboardIndicator>(
-        `dashboard/sales-total?${query}`,
-        {
-          Authorization: token ?? "",
-        }
+        `dashboard/sales-total?${query}`
       );
     },
   });

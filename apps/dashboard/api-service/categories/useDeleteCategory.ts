@@ -3,16 +3,10 @@ import { toast } from "sonner";
 import { Category, UseQueryProps } from "@/types/types";
 import api from "@/api-service";
 
-export function useDeleteCategory({
-  closeDialog,
-  queryClient,
-  token,
-}: UseQueryProps) {
+export function useDeleteCategory({ closeDialog, queryClient }: UseQueryProps) {
   const deleteCategoryMutation = useMutation({
     mutationFn: async (slug: string) => {
-      return await api.delete<Category>(`categories/${slug}`, {
-        Authorization: token ?? "",
-      });
+      return await api.delete<Category>(`categories/${slug}`);
     },
 
     onSuccess: () => {

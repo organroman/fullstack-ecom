@@ -9,13 +9,10 @@ export function useDeleteProduct({
   closeDialog,
   queryClient,
   view,
-  token,
 }: UseProductProps) {
   const deleteProductMutation = useMutation({
     mutationFn: async (id: number) => {
-      return await api.delete<Product>(`products/${id}`, {
-        Authorization: token ?? "",
-      });
+      return await api.delete<Product>(`products/${id}`);
     },
 
     onSuccess: () => {

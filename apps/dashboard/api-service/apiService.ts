@@ -1,4 +1,5 @@
 import { API_URL } from "./config";
+import Cookies from "js-cookie";
 
 const defaultHeaders = {
   "Content-Type": "application/json",
@@ -24,10 +25,15 @@ const makeRequest = async <T>(
   }
 
   const isBodyAllowed = method !== "GET" && method !== "DELETE";
+  const token = Cookies.get("auth-token");
 
   const response = await fetch(`${API_URL}/${path}`, {
     method,
-    headers: { ...defaultHeaders, ...headers },
+    headers: {
+      ...defaultHeaders,
+      ...headers,
+      ...(token && { Authorization: token }),
+    },
     body: isBodyAllowed && body ? JSON.stringify(body) : undefined,
   });
 
