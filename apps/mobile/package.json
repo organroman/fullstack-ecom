@@ -6,7 +6,7 @@
     "android": "DARK_MODE=media expo start --android",
     "ios": "DARK_MODE=media expo start --ios",
     "web": "DARK_MODE=media expo start --web",
-    "postinstall": "patch-package",
+    "postinstall": "if [ -d patches ] && [ -d node_modules/react-native-css-interop ]; then npx patch-package; else echo 'no patches to apply'; fi",
     "build:web": "expo export --platform web --non-interactive"
   },
   "dependencies": {
