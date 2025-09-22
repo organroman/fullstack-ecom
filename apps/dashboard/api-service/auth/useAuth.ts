@@ -1,4 +1,4 @@
-import { login, register } from "@/api/auth";
+import { login, register } from "@/api-service/auth";
 import Cookies from "js-cookie";
 
 export async function handleLogin(email: string, password: string) {

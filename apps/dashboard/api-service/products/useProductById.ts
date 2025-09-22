@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import api from "@/api";
+import api from "@/api-service";
 import { Product } from "@/types/types";
 
 interface UseProductById {

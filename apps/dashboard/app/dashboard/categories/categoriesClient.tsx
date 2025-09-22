@@ -11,8 +11,8 @@ import ErrorPage from "@/app/error";
 import { categoriesColumns } from "@/features/categories/components/CategoriesColumns";
 import CategoryFormModal from "@/features/categories/components/CategoryFormModal";
 
-import { useGetCategories } from "@/api/categories/useGetCategories";
-import { useCreateCategory } from "@/api/categories/useCreateCategory";
+import { useGetCategories } from "@/api-service/categories/useGetCategories";
+import { useCreateCategory } from "@/api-service/categories/useCreateCategory";
 
 import { useDialog } from "@/hooks/use-modal";
 import { useUpdateQueryParams } from "@/hooks/use-update-query-params";

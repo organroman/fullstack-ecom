@@ -20,7 +20,7 @@ import { PERMISSIONS } from "@/lib/permissions";
 
 import AvatarMenu from "./AvatarMenu";
 import { Separator } from "./ui/separator";
-import { useGetUserById } from "@/api/users/useGetUserById";
+import { useGetUserById } from "@/api-service/users/useGetUserById";
 
 const routes = [
   {

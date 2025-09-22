@@ -11,8 +11,8 @@ import ProductForm from "./ProductFormModal";
 import Modal from "@/components/Modal";
 import { useDialog } from "@/hooks/use-modal";
 
-import { useDeleteProduct } from "@/api/products/useDeleteProduct";
-import { useEditProduct } from "@/api/products/useEditProduct";
+import { useDeleteProduct } from "@/api-service/products/useDeleteProduct";
+import { useEditProduct } from "@/api-service/products/useEditProduct";
 
 const ProductActionsMenu = ({ product }: { product: Product }) => {
   const queryClient = useQueryClient();

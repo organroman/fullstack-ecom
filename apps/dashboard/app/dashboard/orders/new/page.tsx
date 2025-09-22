@@ -5,10 +5,10 @@ import { Loader, PlusIcon, SaveIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useInfiniteProducts } from "@/api/products/useInfiniteProducts";
-import { useCreateUser } from "@/api/users/useCreateUser";
-import { usePaginatedUsers } from "@/api/users/useGetPaginatedUsers";
-import { useCreateOrder } from "@/api/orders/useCreateOrder";
+import { useInfiniteProducts } from "@/api-service/products/useInfiniteProducts";
+import { useCreateUser } from "@/api-service/users/useCreateUser";
+import { usePaginatedUsers } from "@/api-service/users/useGetPaginatedUsers";
+import { useCreateOrder } from "@/api-service/orders/useCreateOrder";
 
 import Header from "@/components/Header";
 

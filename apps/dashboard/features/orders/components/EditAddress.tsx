@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 
 import OrderDetail from "./OrderDetail";
 
-import { UpdateOrderMutationParams } from "@/api/orders/useUpdateOrder";
+import { UpdateOrderMutationParams } from "@/api-service/orders/useUpdateOrder";
 
 interface EditAddressProps {
   order: Order;

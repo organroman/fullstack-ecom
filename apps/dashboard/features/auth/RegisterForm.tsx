@@ -28,7 +28,7 @@ import { Button } from "@/components/ui/button";
 
 import { SignUpFormData } from "@/types/types";
 import { signUpSchema } from "@/lib/schema";
-import { register as signUp } from "@/api/auth";
+import { register as signUp } from "@/api-service/auth";
 
 const RegisterForm = () => {
   const form = useForm<SignUpFormData>({

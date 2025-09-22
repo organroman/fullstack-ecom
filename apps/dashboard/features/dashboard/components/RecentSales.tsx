@@ -10,7 +10,7 @@ import {
 import React from "react";
 import RecentSalesCard from "./RecentSalesCard";
 import { DashboardTabsProps } from "@/types/types";
-import { useGetRecentSalesByPeriod } from "@/api/dashboard/useGetRecentSalesByPeriod ";
+import { useGetRecentSalesByPeriod } from "@/api-service/dashboard/useGetRecentSalesByPeriod ";
 import { useToken } from "@/components/providers/token-provider";
 import dayjs from "dayjs";
 import { Loader } from "lucide-react";

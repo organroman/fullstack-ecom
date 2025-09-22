@@ -14,8 +14,8 @@ import ErrorPage from "@/app/error";
 import { useDialog } from "@/hooks/use-modal";
 import { useUpdateQueryParams } from "@/hooks/use-update-query-params";
 
-import { usePaginatedUsers } from "@/api/users/useGetPaginatedUsers";
-import { useCreateUser } from "@/api/users/useCreateUser";
+import { usePaginatedUsers } from "@/api-service/users/useGetPaginatedUsers";
+import { useCreateUser } from "@/api-service/users/useCreateUser";
 
 const UsersClient = () => {
   const router = useRouter();

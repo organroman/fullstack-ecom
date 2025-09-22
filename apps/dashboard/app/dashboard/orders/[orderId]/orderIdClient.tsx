@@ -17,8 +17,8 @@ import OrderDetail from "@/features/orders/components/OrderDetail";
 import StatusChangeSelector from "@/features/orders/components/StatusChangeSelector";
 import EditAddress from "@/features/orders/components/EditAddress";
 
-import { useUpdateOrder } from "@/api/orders/useUpdateOrder";
-import { useGetOrderById } from "@/api/orders/useGetOrderById";
+import { useUpdateOrder } from "@/api-service/orders/useUpdateOrder";
+import { useGetOrderById } from "@/api-service/orders/useGetOrderById";
 import OrderItemsList from "@/features/orders/components/OrderItemsList";
 
 const OrderIdClient = () => {

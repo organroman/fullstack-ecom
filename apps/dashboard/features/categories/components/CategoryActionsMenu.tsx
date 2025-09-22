@@ -8,8 +8,8 @@ import DropdownActionsMenu from "@/components/DropdownActionsMenu";
 import Modal from "@/components/Modal";
 import { useDialog } from "@/hooks/use-modal";
 import CategoryFormModal from "./CategoryFormModal";
-import { useUpdateCategory } from "@/api/categories/useUpdateCategory";
-import { useDeleteCategory } from "@/api/categories/useDeleteCategory";
+import { useUpdateCategory } from "@/api-service/categories/useUpdateCategory";
+import { useDeleteCategory } from "@/api-service/categories/useDeleteCategory";
 import { useToken } from "@/components/providers/token-provider";
 
 const CategoryActionMenu = ({ category }: { category: Category }) => {

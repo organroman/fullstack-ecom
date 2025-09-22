@@ -11,8 +11,8 @@ import { useToken } from "@/components/providers/token-provider";
 
 import ProductSelector from "./ProductSelector";
 
-import { useInfiniteProducts } from "@/api/products/useInfiniteProducts";
-import { useUpdateOrder } from "@/api/orders/useUpdateOrder";
+import { useInfiniteProducts } from "@/api-service/products/useInfiniteProducts";
+import { useUpdateOrder } from "@/api-service/orders/useUpdateOrder";
 
 import { useDialog } from "@/hooks/use-modal";
 import { useDebounce } from "@/lib/utils-client";

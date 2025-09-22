@@ -8,7 +8,7 @@ import { Dialog } from "@/components/ui/dialog";
 
 import UsersFormModal from "./UsersFormModal";
 import { useDialog } from "@/hooks/use-modal";
-import { useEditUser } from "@/api/users/useEditUser";
+import { useEditUser } from "@/api-service/users/useEditUser";
 import { useToken } from "@/components/providers/token-provider";
 import ErrorPage from "@/app/error";
 

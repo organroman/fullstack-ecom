@@ -32,8 +32,8 @@ import ProductActionsMenu from "@/features/products/components/ProductActionsMen
 import { useDialog } from "@/hooks/use-modal";
 import LoadingPage from "@/app/loading";
 
-import { useCreateProduct } from "@/api/products/useCreateProduct";
-import { useProductById } from "@/api/products/useProductById";
+import { useCreateProduct } from "@/api-service/products/useCreateProduct";
+import { useProductById } from "@/api-service/products/useProductById";
 
 import { cn } from "@/lib/utils";
 

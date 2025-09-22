@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { User } from "@/types/types";
-import api from "@/api";
+import api from "..";
 
 interface useGetUserByIdProps {
   userId: number;

@@ -4,13 +4,14 @@ import { CreditCardIcon, DollarSignIcon, UsersIcon } from "lucide-react";
 import OverviewIndicatorCard from "./OverviewIndicatorCard";
 import { Chart } from "./Chart";
 import RecentSales from "./RecentSales";
-import { DateRange } from "react-day-picker";
-import { useGetRevenueByPeriod } from "@/api/dashboard/useGetRevenueByPeriod";
+
 import { useToken } from "@/components/providers/token-provider";
 import dayjs from "dayjs";
-import { useGetUsersByPeriod } from "@/api/dashboard/useGetUsersByPeriod";
-import { useGetTotalSalesByPeriod } from "@/api/dashboard/useGetTotalSalesByPeriod";
+
 import { DashboardTabsProps } from "@/types/types";
+import { useGetRevenueByPeriod } from "@/api-service/dashboard/useGetRevenueByPeriod";
+import { useGetUsersByPeriod } from "@/api-service/dashboard/useGetUsersByPeriod";
+import { useGetTotalSalesByPeriod } from "@/api-service/dashboard/useGetTotalSalesByPeriod";
 
 const DashboardTabs = ({ date }: DashboardTabsProps) => {
   const token = useToken();

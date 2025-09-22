@@ -3,7 +3,7 @@ import { UseQueryProps, User, UserFormModalData } from "@/types/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import api from "@/api";
+import api from "@/api-service";
 
 interface CreateUserProps extends UseQueryProps {
   handleOnSuccess?: (data: User) => void;

@@ -15,9 +15,9 @@ import UserRolesSelector from "@/components/UserRolesSelector";
 import Header from "@/components/Header";
 import { useDialog } from "@/hooks/use-modal";
 import UsersFormModal from "@/features/users/components/UsersFormModal";
-import { useCreateUser } from "@/api/users/useCreateUser";
+import { useCreateUser } from "@/api-service/users/useCreateUser";
 import ErrorPage from "@/app/error";
-import { useGetUserById } from "@/api/users/useGetUserById";
+import { useGetUserById } from "@/api-service/users/useGetUserById";
 import { useToken } from "@/components/providers/token-provider";
 
 interface UserIdClientProps {

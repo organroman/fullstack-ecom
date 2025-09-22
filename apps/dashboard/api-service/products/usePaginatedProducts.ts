@@ -1,24 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import { Users } from "@/types/types";
-import api from "@/api";
-
-interface usePaginatedUsersProps {
+import api from "@/api-service";
+import { Products } from "@/types/types";
+interface UsePaginatedProductsProps {
   page: number;
   limit: number;
   search: string;
-  role: string;
   token: string | null;
 }
 
-export function usePaginatedUsers({
+export function usePaginatedProducts({
   page,
   limit,
   search,
-  role,
   token,
-}: usePaginatedUsersProps) {
+}: UsePaginatedProductsProps) {
   return useQuery({
-    queryKey: ["users", page, limit, search, role],
+    queryKey: ["products", page, limit, search],
     queryFn: async () => {
       const queryParams = new URLSearchParams({
         page: page.toString(),
@@ -29,13 +26,8 @@ export function usePaginatedUsers({
         queryParams.append("search", search);
       }
 
-      if (role) {
-        queryParams.append("role", role);
-      }
-
       const query = queryParams.toString();
-
-      return await api.get<Users>(`users?${query}`, {
+      return await api.get<Products>(`products?${query}`, {
         Authorization: token ?? "",
       });
     },

@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import api from "@/api";
+import api from "@/api-service";
 import { Products } from "@/types/types";
 
 interface UseInfiniteProductsProps {

@@ -3,7 +3,7 @@ import { Product, UseProductProps } from "@/types/types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import api from "@/api";
+import api from "@/api-service";
 
 export function useDeleteProduct({
   closeDialog,

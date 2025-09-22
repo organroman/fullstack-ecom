@@ -13,7 +13,7 @@ import { useToken } from "@/components/providers/token-provider";
 import DropdownActionsMenu from "@/components/DropdownActionsMenu";
 import StatusChangeSelector from "./StatusChangeSelector";
 
-import { useUpdateOrder } from "@/api/orders/useUpdateOrder";
+import { useUpdateOrder } from "@/api-service/orders/useUpdateOrder";
 
 interface OrderActionsMenuProps {
   order: Order;

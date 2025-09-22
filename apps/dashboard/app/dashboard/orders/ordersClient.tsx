@@ -9,7 +9,7 @@ import Header from "@/components/Header";
 import { ordersColumns } from "@/features/orders/components/OrdersColumns";
 import OrdersFilter from "@/features/orders/components/OrdersFilter";
 
-import { usePaginatedOrders } from "@/api/orders/useGetPaginatedOrders";
+import { usePaginatedOrders } from "@/api-service/orders/useGetPaginatedOrders";
 
 import { useUpdateQueryParams } from "@/hooks/use-update-query-params";
 import ErrorPage from "@/app/error";

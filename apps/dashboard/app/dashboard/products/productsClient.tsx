@@ -15,7 +15,7 @@ import ProductsTableView from "@/features/products/components/ProductsTableView"
 
 import { useDialog } from "@/hooks/use-modal";
 
-import { useCreateProduct } from "@/api/products/useCreateProduct";
+import { useCreateProduct } from "@/api-service/products/useCreateProduct";
 
 import { getDataFromLS } from "@/lib/utils";
 

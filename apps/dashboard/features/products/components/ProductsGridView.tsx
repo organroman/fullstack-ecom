@@ -6,7 +6,7 @@ import { Loader } from "lucide-react";
 
 import LoadingPage from "@/app/loading";
 import ProductCard from "./ProductCard";
-import { useInfiniteProducts } from "@/api/products/useInfiniteProducts";
+import { useInfiniteProducts } from "@/api-service/products/useInfiniteProducts";
 import { useToken } from "@/components/providers/token-provider";
 import { useSearchParams } from "next/navigation";
 

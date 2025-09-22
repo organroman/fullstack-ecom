@@ -9,7 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useUploadImage } from "@/api/upload/queries/useUploadImage";
+import { useUploadImage } from "@/api-service/upload/queries/useUploadImage";
 import { ImageIcon, ImageUpIcon, Loader, TrashIcon } from "lucide-react";
 
 type UseFormUploaderProps<T extends FieldValues> = {
