@@ -30,7 +30,7 @@ app.use(
       "http://localhost:8081",
       "http://localhost:3000",
       "https://fullstack-ecom-j1kc.onrender.com",
-      "fullstack-ecom-dashboard-r9r31eyb7-organromans-projects.vercel.app",
+      "https://fullstack-ecom-dashboard.vercel.app/",
     ],
   })
 );
