@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "..";
-import { DashboardIndicator, DashboardIndicatorProps } from "@/types/types";
+import { DashboardIndicatorProps } from "@/types/types";
 
 interface RecentSale {
   orderId: number;
@@ -17,7 +17,6 @@ interface RecentSales {
 export function useGetRecentSalesByPeriod({
   start,
   end,
-  token,
 }: DashboardIndicatorProps) {
   return useQuery({
     queryKey: ["salesRecent", start, end],
@@ -33,9 +32,7 @@ export function useGetRecentSalesByPeriod({
       }
       const query = queryParams.toString();
 
-      return await api.get<RecentSales>(`dashboard/sales-recent?${query}`, {
-        Authorization: token ?? "",
-      });
+      return await api.get<RecentSales>(`dashboard/sales-recent?${query}`);
     },
   });
 }
