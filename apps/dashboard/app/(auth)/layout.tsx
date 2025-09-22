@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { cookies } from "next/headers";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   const pathname = usePathname();
+
   return (
     <main className="min-h-screen w-full">
       <div className="mx-auto max-w-screen-2xl p-4">

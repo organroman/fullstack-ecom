@@ -2,8 +2,8 @@
 
 import { View } from "@/types/types";
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+
 import { useQueryClient } from "@tanstack/react-query";
 
 import Header from "@/components/Header";
@@ -16,14 +16,13 @@ import { useDialog } from "@/hooks/use-modal";
 
 import { useCreateProduct } from "@/api-service/products/useCreateProduct";
 
-import { getDataFromLS } from "@/lib/utils";
+import { useQueryParams } from "@/hooks/use-query-params";
 
 const ProductsClient = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
 
-  const view = (searchParams.get("view") || "table") as View;
+  const { setParam, getParam, query, ready } = useQueryParams();
+  const view = getParam("view") as View;
 
   const [searchPhrase, setSearchPhrase] = useState<string>("");
   const { dialogOpen, setDialogOpen, closeDialog } = useDialog();
@@ -33,47 +32,15 @@ const ProductsClient = () => {
     queryClient,
   });
 
-  const updateQueryParams = (
-    newView: string,
-    newSearch?: string,
-    newPage?: number,
-    newLimit?: number
-  ) => {
-    const params = new URLSearchParams(searchParams.toString());
-    newPage ? params.set("page", newPage?.toString()) : params.delete("page");
-    newLimit
-      ? params.set("limit", newLimit?.toString())
-      : params.delete("limit");
-
-    params.set("view", newView);
-
-    newSearch
-      ? params.set("search", newSearch?.toString())
-      : params.delete("search");
-
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    const storedView = getDataFromLS("products-view") || "grid";
-
-    if (!searchParams.get("view")) params.set("view", storedView);
-
-    if (params.toString() !== searchParams.toString()) {
-      router.replace(`?${params.toString()}`, { scroll: false });
-    }
-  }, [searchParams, router]);
-
   const handleView = () => {
     const newView = view === "grid" ? "table" : "grid";
 
-    updateQueryParams(newView);
+    setParam("view", newView);
     localStorage.setItem("products-view", JSON.stringify(newView));
   };
 
   const handleSearch = (newSearch: string) => {
-    updateQueryParams(view, newSearch);
+    setParam("search", newSearch);
   };
 
   return (
@@ -99,7 +66,7 @@ const ProductsClient = () => {
       {view === "grid" ? (
         <ProductsGridView />
       ) : (
-        <ProductsTableView view={view} updateQueryParams={updateQueryParams} />
+        <ProductsTableView query={query} setParam={setParam} ready={ready} />
       )}
     </div>
   );

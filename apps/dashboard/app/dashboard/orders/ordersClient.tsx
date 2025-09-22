@@ -1,6 +1,4 @@
 "use client";
-
-import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { DataTable } from "@/components/DataTable";
@@ -11,46 +9,37 @@ import OrdersFilter from "@/features/orders/components/OrdersFilter";
 
 import { usePaginatedOrders } from "@/api-service/orders/useGetPaginatedOrders";
 
-import { useUpdateQueryParams } from "@/hooks/use-update-query-params";
 import ErrorPage from "@/app/error";
+import { useQueryParams } from "@/hooks/use-query-params";
 
 const OrdersClient = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { page, limit, setParam, getParam, query, ready } = useQueryParams();
 
-  const page = Number(searchParams.get("page")) || 1;
-  const limit = Number(searchParams.get("limit") || 10);
-  const search = searchParams.get("search") || "";
-  const status = searchParams.get("status") || "";
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    getParam("status") || "All"
+  );
+  const [search, setSearch] = useState("");
 
-  const [selectedStatus, setSelectedStatus] = useState<string>(status || "All");
   const { data, isLoading, error } = usePaginatedOrders({
-    page,
-    limit,
-    search,
-    status,
+    query,
+    enabled: ready,
   });
-
   const { orders = [], totalPages = 0, total = 0 } = data || {};
-
-  const {
-    searchPhrase,
-    setSearchPhrase,
-    handlePageChange,
-    handleLimitChange,
-    handleStatusChange,
-    handleSearch,
-  } = useUpdateQueryParams({
-    search,
-    searchParams,
-    page,
-    limit,
-    router,
-  });
 
   const handleFilterChange = (status: string) => {
     setSelectedStatus(status);
-    handleStatusChange(status);
+    setParam("status", status);
+  };
+
+  const handleSearch = (value: string) => {
+    setParam("search", value);
+  };
+  const handlePageChange = (newPage: number) => {
+    setParam("page", newPage);
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    setParam("limit", newLimit);
   };
 
   if (error) {
@@ -61,8 +50,8 @@ const OrdersClient = () => {
     <div className="flex flex-col gap-4 h-full">
       <Header
         title="Orders"
-        searchPhrase={searchPhrase}
-        setSearchPhrase={setSearchPhrase}
+        searchPhrase={search}
+        setSearchPhrase={setSearch}
         onSearch={handleSearch}
         filterComponent={
           <OrdersFilter

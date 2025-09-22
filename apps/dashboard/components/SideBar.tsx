@@ -2,7 +2,7 @@
 
 import { cn, hasPermission } from "@/lib/utils";
 
-import Link from "next/link";
+
 import { usePathname, useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
 import {
@@ -77,12 +77,15 @@ const SideBar = ({ role, userId, token }: SideBarProps) => {
 
   return (
     <aside className="h-full p-4 py-8 w-full border-r flex flex-col gap-4 dark:bg-zinc-900 bg-zinc-100">
-      <Link href="/dashboard" className="flex flex-row items-center gap-2">
+      <div
+        onClick={() => router.push("/dashboard")}
+        className="flex flex-row items-center gap-2"
+      >
         <img src="/logo.svg" alt="logo" width={48} height={48} />
         <span className="text-2xl text-neutral-800 dark:text-slate-200">
           E-comm
         </span>
-      </Link>
+      </div>
       <Separator />
       {isLoading ? (
         <Loader className="animate-spin" />
