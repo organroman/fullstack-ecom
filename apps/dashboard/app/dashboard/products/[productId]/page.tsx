@@ -1,8 +1,6 @@
-export const dynamic = "force-static";
-
 import ProductDetailsPage from "./productIdClient";
 
-function ProductIdPage({
+async function ProductIdPage({
   params: { productId },
 }: {
   params: { productId: string };
