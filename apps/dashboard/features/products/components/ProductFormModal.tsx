@@ -1,6 +1,6 @@
 "use client";
 
-import { Category, ProductFormModalData, Product } from "@/types/types";
+import { ProductFormModalData, Product } from "@/types/types";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,6 +48,8 @@ const ProductFormModal = ({
   const search = searchParams.get("search") || "";
 
   const { data, isLoading } = useGetCategories({ search });
+
+  const categories = data?.categories || [];
 
   const onSubmit = (formData: ProductFormModalData) => {
     productMutation.mutate(
@@ -102,7 +104,7 @@ const ProductFormModal = ({
                 {isLoading ? (
                   <Loader className="size-4 animate-spin" />
                 ) : (
-                  data?.map((category: Category) => (
+                  categories?.map((category) => (
                     <SelectItem
                       key={category.slug}
                       value={category.id.toString()}

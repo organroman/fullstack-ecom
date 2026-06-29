@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "@/api-service";
-import { Category } from "@/types/types";
+import { Categories } from "@/types/types";
 
 interface UseGetCategoriesParams {
   search: string;
@@ -18,7 +18,7 @@ export function useGetCategories({ search }: UseGetCategoriesParams) {
 
       const query = queryParams.toString();
 
-      return await api.get<Category[]>(`categories?${query}`);
+      return await api.get<Categories>(`categories?${query}`);
     },
   });
 }
