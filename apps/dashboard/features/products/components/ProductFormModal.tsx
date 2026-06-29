@@ -48,7 +48,6 @@ const ProductFormModal = ({
   const search = searchParams.get("search") || "";
 
   const { data, isLoading } = useGetCategories({ search });
-  const { categories = [] } = data || {};
 
   const onSubmit = (formData: ProductFormModalData) => {
     productMutation.mutate(
@@ -64,7 +63,7 @@ const ProductFormModal = ({
         onSuccess: () => {
           form.control._reset();
         },
-      }
+      },
     );
   };
 
@@ -103,7 +102,7 @@ const ProductFormModal = ({
                 {isLoading ? (
                   <Loader className="size-4 animate-spin" />
                 ) : (
-                  categories?.map((category: Category) => (
+                  data?.map((category: Category) => (
                     <SelectItem
                       key={category.slug}
                       value={category.id.toString()}
