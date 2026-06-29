@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { capitalizeFirstLetter, cn } from "@/lib/utils";
 import { USER_ROLES } from "@/lib/constants";
 
 interface UserRolesSelectorProps {
@@ -8,6 +8,7 @@ interface UserRolesSelectorProps {
   onChange?: (role: string) => void;
   isDisplaySelectItemAll?: boolean;
   isDisabled?: boolean;
+  triggerClassname?: string;
 }
 
 const UserRolesSelector = ({
@@ -15,6 +16,7 @@ const UserRolesSelector = ({
   onChange,
   isDisplaySelectItemAll,
   isDisabled,
+  triggerClassname,
 }: UserRolesSelectorProps) => {
   const [selectedRole, setSelectedRole] = useState<string>(role || "All");
 
@@ -32,9 +34,10 @@ const UserRolesSelector = ({
       value={selectedRole}
       onValueChange={handleChange}
       disabled={isDisabled}
-    
     >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger
+        className={cn("w-[180px]", triggerClassname && triggerClassname)}
+      >
         {selectedRole === "All"
           ? "Select a role"
           : capitalizeFirstLetter(selectedRole)}

@@ -30,8 +30,8 @@ const LoginForm = () => {
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "jhonDoe1@gmail.com",
+      password: "admin123",
     },
   });
 
@@ -90,7 +90,7 @@ const LoginForm = () => {
                       {...field}
                       type="password"
                       name="password"
-                      placeholder="Enter your email"
+                      placeholder="Enter your password"
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />

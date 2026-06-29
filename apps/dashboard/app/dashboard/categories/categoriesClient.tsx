@@ -30,7 +30,8 @@ const CategoriesClient = () => {
     queryClient,
   });
 
-  const { categories = [] } = data || {};
+  // const { categories } = data || {};
+  // console.log("🚀 ~ categories:", categories);
   const {
     searchPhrase,
     setSearchPhrase,
@@ -67,7 +68,7 @@ const CategoriesClient = () => {
 
       <div className="h-full border overflow-y-auto rounded-md">
         <DataTable
-          data={categories}
+          data={data || []}
           columns={categoriesColumns}
           totalItems={10}
           totalPages={1}

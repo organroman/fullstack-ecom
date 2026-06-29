@@ -60,7 +60,7 @@ const UserIdClient = ({ userId, isAllowedToEdit, role }: UserIdClientProps) => {
           dialogContent: <UsersFormModal userMutation={createUserMutation} />,
         }}
       />
-      <Card className="mx-auto max-w-[768px] sm:max-w[460px] border shadow-md dark:shadow-slate-500">
+      <Card className="mx-auto w-full max-w-[768px] sm:max-w[460px] border shadow-md dark:shadow-slate-500">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>User Profile</CardTitle>
           {isAllowedToEdit && (
@@ -80,7 +80,11 @@ const UserIdClient = ({ userId, isAllowedToEdit, role }: UserIdClientProps) => {
               <Input id="name" value={user?.name} readOnly />
             </div>
             <Select>
-              <UserRolesSelector role={role} isDisabled />
+              <UserRolesSelector
+                role={user?.role ?? "admin"}
+                isDisabled
+                triggerClassname="w-full"
+              />
             </Select>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="Email" className="text-xs">

@@ -56,7 +56,7 @@ export async function changePassword(req: Request, res: Response) {
       .where(eq(usersTable.id, id));
 
     if (!user) {
-      res.status(401).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
       return;
     }
 

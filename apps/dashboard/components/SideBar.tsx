@@ -2,7 +2,6 @@
 
 import { cn, hasPermission } from "@/lib/utils";
 
-
 import { usePathname, useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
 import {

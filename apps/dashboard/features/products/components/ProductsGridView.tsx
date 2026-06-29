@@ -19,6 +19,7 @@ const ProductsGridView = () => {
 
   const allProducts = data?.pages.flatMap((page) => page.products) || [];
 
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const handleObserver = useCallback(
@@ -28,13 +29,14 @@ const ProductsGridView = () => {
         fetchNextPage();
       }
     },
-    [fetchNextPage, hasNextPage]
+    [fetchNextPage, hasNextPage, isFetchingNextPage]
   );
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
-      root: null,
-      rootMargin: "0px",
+      root: scrollContainerRef.current,
+      // rootMargin: "0px",
+      rootMargin: "0px 0px 200px 0px",
       threshold: 1.0,
     });
 
@@ -50,8 +52,11 @@ const ProductsGridView = () => {
   }
 
   return (
-    <div className=" overflow-y-auto">
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 items-center gap-4 overflow-y-auto ">
+    <div
+      ref={scrollContainerRef}
+      className="overflow-y-auto max-h-[calc(100vh-100px)]"
+    >
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-1 items-center gap-4">
         {allProducts?.map((product: Product) => (
           <ProductCard
             key={product.id}
@@ -66,7 +71,7 @@ const ProductsGridView = () => {
         </div>
       )}
 
-      <div ref={observerRef} className="h-2" />
+      <div ref={observerRef} className="h-4" />
     </div>
   );
 };
