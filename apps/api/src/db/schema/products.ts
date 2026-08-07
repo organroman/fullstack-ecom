@@ -37,7 +37,7 @@ export const createProductSchema = createInsertSchema(productsTable).omit({
 });
 
 export const createProductImagesSchema = createInsertSchema(
-  productImagesTable
+  productImagesTable,
 ).omit({
   id: true,
   product_id: true,
@@ -48,4 +48,17 @@ export const createProductWithImagesSchema = z.object({
   images: z.array(createProductImagesSchema),
 });
 
+export const updateProductSchema = createInsertSchema(productsTable).omit({
+  id: true,
+  created_at: true,
+  updated_at: true,
+});
 
+export const updateProductImageSchema = createInsertSchema(productImagesTable)
+  .omit({ product_id: true, created_at: true, updated_at: true })
+  .extend({ id: z.number().int().positive().optional() });
+
+export const updateProductWithImagesSchema = z.object({
+  product: updateProductSchema,
+  images: z.array(updateProductImageSchema),
+});

@@ -8,7 +8,7 @@ import express, {
 import cors from "cors";
 import qs from "qs";
 
-import productsRoutes from "./routes/products/index.js";
+import productsRoutes from "./routes/products/products.route.js";
 import ordersRoutes from "./routes/orders/index.js";
 import authRoutes from "./routes/auth/index.js";
 import usersRoutes from "./routes/users/index.js";

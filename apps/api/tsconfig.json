@@ -11,7 +11,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "sourceMap": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "ignoreDeprecations": "6.0"
   },
   "include": ["src/**/*"],
   "exclude": [

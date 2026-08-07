@@ -7,7 +7,7 @@ import {
   updateProduct,
   deleteProduct,
   deleteImage,
-} from "./productsController.js";
+} from "./products.controller.js";
 import { validateData } from "../../middlewares/validationMiddleware.js";
 import { createProductWithImagesSchema } from "../../db/schema/products.js";
 import { verifySeller, verifyToken } from "../../middlewares/authMiddleware.js";
