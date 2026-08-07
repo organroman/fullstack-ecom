@@ -6,7 +6,7 @@ import {
   getTotalRevenueByPeriod,
   getTotalSalesByPeriod,
   getTotalUsersByPeriod,
-} from "./dashboardController";
+} from "./dashboard.controller";
 
 const router = Router();
 

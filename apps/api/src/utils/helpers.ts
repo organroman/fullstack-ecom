@@ -7,6 +7,22 @@ export const timestamps = {
   deleted_at: timestamp(),
 };
 
+export function parseDateRangeQuery(
+  query: Record<string, unknown>,
+): { start: string; end: string } | null {
+  const { start, end } = query;
+
+  if (typeof start !== "string" || typeof end !== "string") {
+    return null;
+  }
+
+  if (!dayjs(start).isValid() || !dayjs(end).isValid()) {
+    return null;
+  }
+
+  return { start, end };
+}
+
 export const getCurrentDatesAndPreviousMonthDates = (
   start: string,
   end: string
