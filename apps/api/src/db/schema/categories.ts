@@ -1,6 +1,6 @@
 import { pgTable, integer, varchar, text, pgEnum } from "drizzle-orm/pg-core";
 import { timestamps } from "../../utils/helpers";
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const categoriesStatusEnum = pgEnum("categoriesStatus", [
   "ACTIVE",
@@ -29,3 +29,5 @@ export const updateCategorySchema = createInsertSchema(categoriesTable)
     created_at: true,
   })
   .partial();
+
+export const categoryResponseSchema = createSelectSchema(categoriesTable);

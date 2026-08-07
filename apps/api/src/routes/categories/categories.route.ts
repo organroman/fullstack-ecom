@@ -10,7 +10,7 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
-} from "./categoriesController.js";
+} from "./categories.controller.js";
 
 const router = Router();
 
@@ -24,13 +24,13 @@ router.post(
 );
 
 router.put(
-  "/:id",
+  "/:slug",
   verifyToken,
   verifySeller,
   validateData(updateCategorySchema),
   updateCategory
 );
 
-router.delete("/:id", verifyToken, verifySeller, deleteCategory);
+router.delete("/:slug", verifyToken, verifySeller, deleteCategory);
 
 export default router;
