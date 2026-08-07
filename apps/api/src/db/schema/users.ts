@@ -22,7 +22,11 @@ export const usersTable = pgTable("users", {
 export const createUserSchema = createInsertSchema(usersTable).omit({
   id: true,
   created_at: true,
+  updated_at: true,
+  deleted_at: true,
 });
+
+export const registerUserSchema = createUserSchema.omit({ role: true });
 
 export const loginSchema = createInsertSchema(usersTable).pick({
   email: true,
@@ -36,5 +40,9 @@ export const updateUserSchema = createInsertSchema(usersTable)
   .partial();
 
 export const changePasswordSchema = createInsertSchema(usersTable).pick({
+  password: true,
+});
+
+export const userResponseSchema = createInsertSchema(usersTable).omit({
   password: true,
 });

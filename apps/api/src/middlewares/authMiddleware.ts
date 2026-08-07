@@ -18,7 +18,7 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
   }
 
   try {
-    const decoded = jwt.verify(token, "your-secret") as TokenPayload;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as TokenPayload;
     if (!decoded?.userId) {
       res.status(401).json({ error: "Access denied" });
       return;

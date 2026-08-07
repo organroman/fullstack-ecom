@@ -92,7 +92,7 @@ export async function listOrders(req: Request, res: Response) {
       return;
     }
 
-    const decoded = jwt.verify(token, "your-secret") as TokenPayload;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as TokenPayload;
     const userId = Number(decoded.userId);
     const role = decoded.role;
 

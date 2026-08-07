@@ -69,7 +69,7 @@ export async function changePassword(req: Request, res: Response) {
 
     const token = jwt.sign(
       { userId: user.id, role: user.role },
-      "your-secret",
+      process.env.JWT_SECRET!,
       { expiresIn: "30d" }
     );
 
@@ -96,7 +96,7 @@ export async function listUsers(req: Request, res: Response) {
       return;
     }
 
-    const decoded = jwt.verify(token, "your-secret") as TokenPayload;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as TokenPayload;
 
     const userRole = decoded.role;
 
