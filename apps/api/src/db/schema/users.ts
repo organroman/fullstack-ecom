@@ -36,6 +36,11 @@ export const loginSchema = createInsertSchema(usersTable).pick({
 export const updateUserSchema = createInsertSchema(usersTable)
   .omit({
     id: true,
+    role: true,
+    password: true,
+    created_at: true,
+    updated_at: true,
+    deleted_at: true,
   })
   .partial();
 

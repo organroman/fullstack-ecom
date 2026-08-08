@@ -47,3 +47,25 @@ export function verifySeller(req: Request, res: Response, next: NextFunction) {
 
   next();
 }
+
+export function verifySelfOrElevated(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const targetId = Number(req.params.id);
+
+  if (ALLOWED_ROLES.includes(req.role) || req.userId === targetId) {
+    return next();
+  }
+
+  res.status(403).json({ error: "Access denied" });
+}
+
+export function verifyAdmin(req: Request, res: Response, next: NextFunction) {
+  if (req.role === "ADMIN") {
+    return next();
+  }
+
+  res.status(403).json({ error: "Access denied" });
+}

@@ -11,7 +11,7 @@ import qs from "qs";
 import productsRoutes from "./routes/products/products.route.js";
 import ordersRoutes from "./routes/orders/index.js";
 import authRoutes from "./routes/auth/auth.route.js";
-import usersRoutes from "./routes/users/index.js";
+import usersRoutes from "./routes/users/users.route.js";
 import categoriesRoutes from "./routes/categories/categories.route.js";
 import uploadRoutes from "./routes/upload/index.js";
 import dashboardRoutes from "./routes/dashboard/dashboard.route.js";

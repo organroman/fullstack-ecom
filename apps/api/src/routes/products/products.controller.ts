@@ -63,9 +63,6 @@ export async function getProductById(req: Request, res: Response) {
     res.status(500).send({ message: "Something went wrong" });
   }
 }
-type ImageType = {
-  image_link: string;
-};
 
 export async function createProduct(req: Request, res: Response) {
   try {
