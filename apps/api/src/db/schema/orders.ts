@@ -48,17 +48,26 @@ export const orderItemsTable = pgTable("order_items", {
 
 export const insertOrderSchema = createInsertSchema(ordersTable).omit({
   id: true,
-  user_id: true,
-  delivery_address: true,
-  contact_phone: true,
   status: true,
   created_at: true,
   updated_at: true,
+  deleted_at: true,
 });
 
 export const insertOrderItemsSchema = createInsertSchema(orderItemsTable).omit({
   id: true,
   order_id: true,
+  price: true,
+});
+
+export const updateOrderSchema = createInsertSchema(ordersTable).pick({
+  status: true,
+  delivery_address: true,
+  contact_phone: true,
+});
+
+export const updateOrderItemsSchema = createInsertSchema(orderItemsTable).omit({
+  price: true,
 });
 
 export const insertOrderWithItemsSchema = z.object({
@@ -66,7 +75,9 @@ export const insertOrderWithItemsSchema = z.object({
   items: z.array(insertOrderItemsSchema),
 });
 
-export const updateOrderSchema = z.object({
-  order: insertOrderSchema,
-  items: z.array(insertOrderItemsSchema),
+export const updateOrderWithItemsSchema = z.object({
+  order: updateOrderSchema,
+  items: z.array(updateOrderItemsSchema),
 });
+
+export const orderStatusSchema = z.enum(orderStatusEnum.enumValues);

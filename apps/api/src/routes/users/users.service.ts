@@ -10,6 +10,7 @@ import bcryptjs from "bcryptjs";
 import { usersTable } from "../../db/schema/users.js";
 import { and, eq, ilike, or } from "drizzle-orm";
 import { db } from "../../db/index.js";
+import { HttpError } from "../../utils/httpError.js";
 
 export async function updateUser(
   id: number,
@@ -127,20 +128,20 @@ export async function changePassword(
   id: number,
   oldPassword: string,
   newPassword: string,
-): Promise<(SafeUser & { token: string }) | null> {
+): Promise<SafeUser & { token: string }> {
   const [user] = await db
     .select()
     .from(usersTable)
     .where(eq(usersTable.id, id));
 
   if (!user) {
-    return null;
+    throw new HttpError("User not found", 404);
   }
 
   const isMatch = await bcryptjs.compare(oldPassword, user.password);
 
   if (!isMatch) {
-    return null;
+    throw new HttpError("Wrong old password", 401);
   }
 
   const hashedPassword = await bcryptjs.hash(newPassword, 10);
@@ -167,5 +168,9 @@ export async function changePassword(
     { expiresIn: "30d" },
   );
 
-  return updatedUser ? { ...updatedUser, token } : null;
+  if (!updatedUser) {
+    throw new HttpError("User not found", 404);
+  }
+
+  return { ...updatedUser, token };
 }

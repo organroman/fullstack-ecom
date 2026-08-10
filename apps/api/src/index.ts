@@ -9,7 +9,7 @@ import cors from "cors";
 import qs from "qs";
 
 import productsRoutes from "./routes/products/products.route.js";
-import ordersRoutes from "./routes/orders/index.js";
+import ordersRoutes from "./routes/orders/orders.route.js";
 import authRoutes from "./routes/auth/auth.route.js";
 import usersRoutes from "./routes/users/users.route.js";
 import categoriesRoutes from "./routes/categories/categories.route.js";

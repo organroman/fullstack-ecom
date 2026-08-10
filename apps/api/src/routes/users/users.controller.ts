@@ -8,6 +8,7 @@ import {
   getUserById as getUserByIdService,
   changePassword as changePasswordService,
 } from "./users.service.js";
+import { getErrorMessage, getStatusCode } from "../../utils/httpError.js";
 
 export async function updateUser(req: Request, res: Response) {
   try {
@@ -56,15 +57,10 @@ export async function changePassword(req: Request, res: Response) {
       password,
     );
 
-    if (!updatedUserWithToken) {
-      res.status(400).send({ message: "Password could not be changed" });
-      return;
-    }
-
     res.status(200).json(updatedUserWithToken);
   } catch (error) {
     console.error(`Error in changePassword controller:`, error);
-    res.status(500).send({ message: "Something went wrong" });
+    res.status(getStatusCode(error)).send({ message: getErrorMessage(error) });
   }
 }
 

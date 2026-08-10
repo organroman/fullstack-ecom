@@ -69,3 +69,4 @@ export function verifyAdmin(req: Request, res: Response, next: NextFunction) {
 
   res.status(403).json({ error: "Access denied" });
 }
+

@@ -11,7 +11,7 @@ import {
   getOrderById,
   listOrders,
   updateOrder,
-} from "./ordersController.js";
+} from "./orders.controller.js";
 
 const router = Router();
 
