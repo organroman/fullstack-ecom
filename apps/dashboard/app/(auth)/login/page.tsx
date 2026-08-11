@@ -2,11 +2,22 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import LoginForm from "@/features/auth/LoginForm";
+import { getRoleAndUserFromToken } from "@/lib/utils";
 
 const LoginPage = () => {
   const usersToken = cookies().get("auth-token")?.value;
 
-  if (usersToken) {
+  let userData;
+
+  try {
+    if (usersToken) {
+      userData = getRoleAndUserFromToken(usersToken);
+    }
+  } catch {
+    userData = null;
+  }
+
+  if (userData) {
     redirect("/dashboard");
   }
   return <LoginForm />;

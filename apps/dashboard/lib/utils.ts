@@ -21,7 +21,7 @@ export const getRoleAndUserFromToken = (token: string) => {
     throw new Error("Invalid token provided");
   }
 
-  const decoded = jwt.verify(token, "your-secret") as TokenPayload;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET!) as TokenPayload;
 
   if (!decoded.role) {
     throw new Error("Invalid token payload: missing role");

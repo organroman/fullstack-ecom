@@ -16,7 +16,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     redirect("/login");
   }
 
-  const userData = getRoleAndUserFromToken(usersToken);
+  let userData: ReturnType<typeof getRoleAndUserFromToken>;
+
+  try {
+    userData = getRoleAndUserFromToken(usersToken);
+  } catch {
+    redirect("/login");
+  }
 
   return (
     <div className="h-screen overflow-hidden">
